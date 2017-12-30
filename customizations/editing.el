@@ -77,4 +77,4 @@
 (setq mac-command-modifier 'meta)
 
 ;; Make <C-return> to switch between windows
-(global-set-key (kbd "<C-return>") 'other-window)
+(global-set-key (kbd "M-o") 'other-window)
