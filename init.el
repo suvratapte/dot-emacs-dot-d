@@ -33,7 +33,7 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-;; Define he following variables to remove the compile-log warnings
+;; Define the following variables to remove the compile-log warnings
 ;; when defining ido-ubiquitous
 (defvar ido-cur-item nil)
 (defvar ido-default-item nil)
@@ -150,9 +150,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(coffee-tab-width 2)
+ '(custom-safe-themes
+   (quote
+    ("eea01f540a0f3bc7c755410ea146943688c4e29bea74a29568635670ab22f9bc" default)))
  '(package-selected-packages
    (quote
-    (cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit ido-ubiquitous exec-path-from-shell))))
+    (color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit ido-ubiquitous exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
