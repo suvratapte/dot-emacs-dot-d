@@ -60,3 +60,7 @@
 
 ;; no bell
 (setq ring-bell-function 'ignore)
+
+
+;; My edits
+(set-cursor-color "#ff0000")
