@@ -87,7 +87,11 @@
     ace-jump-mode
 
     ;; shows all the keys after pressing a prefix key
-    which-key))
+    which-key
+
+    ;; just a theme
+    monokai-alt-theme
+    ))
 
 ;; On macOS, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
