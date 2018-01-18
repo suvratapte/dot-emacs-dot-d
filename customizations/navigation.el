@@ -28,7 +28,7 @@
 ;; http://www.emacswiki.org/emacs/InteractivelyDoThings
 (ido-mode t)
 
-;; This allows partial matches, e.g. "tl" will match "Tyrion Lannister"
+;; This allows partial matches, e.g. "uzh" will match "Ustad Zakir Hussain"
 (setq ido-enable-flex-matching t)
 
 ;; Turn this behavior off because it's annoying
