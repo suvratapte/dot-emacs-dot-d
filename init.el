@@ -83,10 +83,10 @@
     magit
 
     ;; makes navigation easier by enabling jumping using head-chars.
-    ;; Head-char is the starting character of the word (where you want to jump)
-    ace-jump-mode))
+    ;; Head-char is the starting character of the word (where you want to jump).
+    ace-jump-mode
 
-;; On OS X, an Emacs instance started from the graphical user
+;; On macOS, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
 ;; terminal window, because OS X does not run a shell during the
 ;; login. Obviously this will lead to unexpected results when
