@@ -72,9 +72,8 @@
 
 (setq electric-indent-mode nil)
 
-;; Make the command key behave as 'meta'
+;; make the command key behave as 'meta'
 (setq mac-command-modifier 'meta)
 
-;; Make <C-return> to switch between windows
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-M-;") 'ace-jump-mode)
