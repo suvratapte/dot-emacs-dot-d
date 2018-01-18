@@ -82,8 +82,8 @@
     ;; git integration
     magit
 
-    ;; makes navigation easier by enabling jumping using head-chars.
-    ;; Head-char is the starting character of the word (where you want to jump).
+    ;; makes navigation easier by enabling jumping using head-chars
+    ;; head-char is the starting character of the word (where you want to jump)
     ace-jump-mode
 
     ;; shows all the keys after pressing a prefix key
