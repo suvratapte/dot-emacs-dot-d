@@ -72,8 +72,6 @@
 
 (setq electric-indent-mode nil)
 
-;; My edits
-
 ;; Make the command key behave as 'meta'
 (setq mac-command-modifier 'meta)
 
