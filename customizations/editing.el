@@ -76,4 +76,9 @@
 (setq mac-command-modifier 'meta)
 
 (global-set-key (kbd "M-o") 'other-window)
+
 (global-set-key (kbd "C-M-;") 'ace-jump-mode)
+
+;; this mode refreshes buffer contents if the corresponding file is
+;; changed on the disk
+(global-auto-revert-mode t)
