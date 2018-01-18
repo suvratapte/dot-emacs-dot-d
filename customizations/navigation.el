@@ -59,3 +59,6 @@
 
 ;; projectile everywhere!
 (projectile-global-mode)
+
+;; shows all the key-bindings after pressing a prefix key
+(which-key-mode t)
