@@ -104,6 +104,9 @@
 (if (eq system-type 'darwin)
     (add-to-list 'my-packages 'exec-path-from-shell))
 
+(when (cl-some (lambda (p) (not (package-installed-p p))) my-packages)
+  (package-refresh-contents))
+
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
