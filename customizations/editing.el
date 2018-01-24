@@ -94,3 +94,6 @@
 
 ;; use swiper as default search
 (global-set-key (kbd "C-s") 'swiper)
+
+;; always indent
+(global-aggressive-indent-mode 1)
