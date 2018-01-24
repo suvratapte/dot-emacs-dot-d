@@ -82,3 +82,12 @@
 ;; this mode refreshes buffer contents if the corresponding file is
 ;; changed on the disk
 (global-auto-revert-mode t)
+
+;; enable ivy-mode
+(ivy-mode 1)
+
+;; ivy should use virual buffers
+(setq ivy-use-virtual-buffers t)
+
+;; allow minibuffer commands while in a minibuffer
+(setq enable-recursive-minibuffers t)
