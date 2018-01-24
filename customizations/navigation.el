@@ -28,6 +28,8 @@
 ;; http://www.emacswiki.org/emacs/InteractivelyDoThings
 (ido-mode t)
 
+(ido-everywhere t)
+
 ;; This allows partial matches, e.g. "uzh" will match "Ustad Zakir Hussain"
 (setq ido-enable-flex-matching t)
 
