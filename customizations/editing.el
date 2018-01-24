@@ -91,3 +91,6 @@
 
 ;; allow minibuffer commands while in a minibuffer
 (setq enable-recursive-minibuffers t)
+
+;; use swiper as default search
+(global-set-key (kbd "C-s") 'swiper)
