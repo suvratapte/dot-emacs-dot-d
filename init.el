@@ -106,6 +106,9 @@
 
     ;; always indent
     aggressive-indent
+
+    ;; make package management and configuration much easier and well grouped
+    use-package
     ))
 
 ;; On macOS, an Emacs instance started from the graphical user
@@ -185,7 +188,7 @@
     ("eea01f540a0f3bc7c755410ea146943688c4e29bea74a29568635670ab22f9bc" default)))
  '(package-selected-packages
    (quote
-    (aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit ido-ubiquitous exec-path-from-shell))))
+    (use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit ido-ubiquitous exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
