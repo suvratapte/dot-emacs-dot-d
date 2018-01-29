@@ -182,3 +182,23 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(eval-and-compile
+  (add-to-list 'use-package-keywords :doc t)
+  (defun use-package-handler/:doc (name-symbol _keyword _docstring rest state)
+    "An identity handler for :doc.
+     Currently, the value for this keyword is being ignored.
+     This is done just to pass the compilation when :doc is included
+
+     Argument NAME-SYMBOL is the first argument to `use-package' in a declaration.
+     Argument KEYWORD here is simply :doc.
+     Argument DOCSTRING is the value supplied for :doc keyword.
+     Argument REST is the list of rest of the  keywords.
+     Argument STATE is maintained by `use-package' as it processes symbols."
+
+    ;; just process the next keywords
+    (use-package-process-keywords name-symbol rest state)))
+
+
+;; Package configuration with 'use-package'
+(require 'use-package)
