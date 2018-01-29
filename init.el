@@ -24,10 +24,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; colorful parenthesis matching
-    rainbow-delimiters
-
-    ;; edit html tags like sexps
+  '(;; edit html tags like sexps
     tagedit
 
     ;; git integration
@@ -234,3 +231,9 @@
   :config
   ;; Use it everywhere
   (projectile-global-mode t))
+
+(use-package rainbow-delimiters
+  :doc "Colorful paranthesis matching"
+  :ensure t
+  :config
+  (rainbow-delimiters-mode t))
