@@ -32,11 +32,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; key bindings and code colorization for Clojure
-    ;; https://github.com/clojure-emacs/clojure-mode
-    clojure-mode
-
-    ;; extra syntax highlighting for clojure
+  '(;; extra syntax highlighting for clojure
     clojure-mode-extra-font-locking
 
     ;; integration with a Clojure REPL
@@ -212,3 +208,12 @@
   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
   (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
   (add-hook 'scheme-mode-hook #'enable-paredit-mode))
+
+
+(use-package clojure-mode
+  :doc "A major mode for editing Clojure code"
+  :ensure t
+  :init
+  ;; This is useful for working with camel-case tokens, like names of
+  ;; Java classes (e.g. JavaClassName)
+  (add-hook 'clojure-mode-hook #'subword-mode))
