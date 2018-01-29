@@ -1,11 +1,4 @@
 ;;;;
-;; Clojure
-;;;;
-
-;; A little more syntax highlighting
-(require 'clojure-mode-extra-font-locking)
-
-;;;;
 ;; Cider
 ;;;;
 

@@ -32,10 +32,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; extra syntax highlighting for clojure
-    clojure-mode-extra-font-locking
-
-    ;; integration with a Clojure REPL
+  '(;; integration with a Clojure REPL
     ;; https://github.com/clojure-emacs/cider
     cider
 
@@ -217,3 +214,8 @@
   ;; This is useful for working with camel-case tokens, like names of
   ;; Java classes (e.g. JavaClassName)
   (add-hook 'clojure-mode-hook #'subword-mode))
+
+(use-package clojure-mode-extra-font-locking
+  :doc "Extra syntax highlighting for clojure"
+  :ensure t)
+
