@@ -2,9 +2,6 @@
 ;; Clojure
 ;;;;
 
-;; Enable paredit for Clojure
-(add-hook 'clojure-mode-hook 'enable-paredit-mode)
-
 ;; This is useful for working with camel-case tokens, like names of
 ;; Java classes (e.g. JavaClassName)
 (add-hook 'clojure-mode-hook 'subword-mode)
@@ -48,12 +45,8 @@
 ;; Attempt to jump at the symbol under the point without having to press RET
 (setq cider-prompt-for-symbol nil)
 
-;; enable paredit in your REPL
-(add-hook 'cider-repl-mode-hook 'paredit-mode)
-
 ;; Use clojure mode for other extensions
 (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
-
