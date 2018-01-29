@@ -24,12 +24,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; Enhances M-x to allow easier execution of commands. Provides
-    ;; a filterable list of possible commands in the minibuffer
-    ;; http://www.emacswiki.org/emacs/Smex
-    smex
-
-    ;; project navigation
+  '(;; project navigation
     projectile
 
     ;; colorful parenthesis matching
@@ -227,3 +222,11 @@
   ;; for selecting buffer and file names
   (ido-mode 1)
   (ido-everywhere 1))
+
+(use-package smex
+  :doc "Enhance M-x to allow easier execution of commands"
+  :ensure t
+  :config
+  (setq smex-save-file (concat user-emacs-directory ".smex-items"))
+  (smex-initialize)
+  :bind ("M-x" . smex))
