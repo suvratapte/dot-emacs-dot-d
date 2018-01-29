@@ -24,10 +24,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; project navigation
-    projectile
-
-    ;; colorful parenthesis matching
+  '(;; colorful parenthesis matching
     rainbow-delimiters
 
     ;; edit html tags like sexps
@@ -230,3 +227,10 @@
   (setq smex-save-file (concat user-emacs-directory ".smex-items"))
   (smex-initialize)
   :bind ("M-x" . smex))
+
+(use-package projectile
+  :doc "Project navigation"
+  :ensure t
+  :config
+  ;; Use it everywhere
+  (projectile-global-mode t))
