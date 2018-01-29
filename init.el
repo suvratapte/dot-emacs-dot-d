@@ -20,24 +20,11 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-;; Define the following variables to remove the compile-log warnings
-;; when defining ido-ubiquitous
-(defvar ido-cur-item nil)
-(defvar ido-default-item nil)
-(defvar ido-cur-list nil)
-(defvar predicate nil)
-(defvar inherit-input-method nil)
-
 ;; The packages you want installed. You can also install these
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; allow ido usage in as many contexts as possible. see
-    ;; customizations/navigation.el line 23 for a description
-    ;; of ido
-    ido-ubiquitous
-
-    ;; Enhances M-x to allow easier execution of commands. Provides
+  '(;; Enhances M-x to allow easier execution of commands. Provides
     ;; a filterable list of possible commands in the minibuffer
     ;; http://www.emacswiki.org/emacs/Smex
     smex
@@ -157,7 +144,7 @@
     ("eea01f540a0f3bc7c755410ea146943688c4e29bea74a29568635670ab22f9bc" default)))
  '(package-selected-packages
    (quote
-    (use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit ido-ubiquitous exec-path-from-shell))))
+    (ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -230,3 +217,13 @@
   (setq cider-repl-wrap-history t)
   ;; Attempt to jump at the symbol under the point without having to press RET
   (setq cider-prompt-for-symbol nil))
+
+
+(use-package ido-completing-read+
+  :doc "Allow ido usage in as many contexts as possible"
+  :ensure t
+  :config
+  ;; This enables ido in all contexts where it could be useful, not just
+  ;; for selecting buffer and file names
+  (ido-mode 1)
+  (ido-everywhere 1))
