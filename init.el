@@ -32,11 +32,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; integration with a Clojure REPL
-    ;; https://github.com/clojure-emacs/cider
-    cider
-
-    ;; allow ido usage in as many contexts as possible. see
+  '(;; allow ido usage in as many contexts as possible. see
     ;; customizations/navigation.el line 23 for a description
     ;; of ido
     ido-ubiquitous
@@ -150,9 +146,6 @@
 ;; For editing lisps
 (load "elisp-editing.el")
 
-;; Langauage-specific
-(load "setup-clojure.el")
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -219,3 +212,21 @@
   :doc "Extra syntax highlighting for clojure"
   :ensure t)
 
+(use-package cider
+  :doc "Integration with a Clojure REPL cider"
+  :ensure t
+  :init
+  ;; Enable minibuffer documentation
+  (add-hook 'cider-mode-hook 'eldoc-mode)
+  :config
+  ;; Go right to the REPL buffer when it's finished connecting
+  (setq cider-repl-pop-to-buffer-on-connect t)
+  ;; When there's a cider error, show its buffer and switch to it
+  (setq cider-show-error-buffer t)
+  (setq cider-auto-select-error-buffer t)
+  ;; Where to store the cider history.
+  (setq cider-repl-history-file "~/.emacs.d/cider-history")
+  ;; Wrap when navigating history.
+  (setq cider-repl-wrap-history t)
+  ;; Attempt to jump at the symbol under the point without having to press RET
+  (setq cider-prompt-for-symbol nil))
