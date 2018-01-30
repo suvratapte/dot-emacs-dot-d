@@ -24,10 +24,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; edit html tags like sexps
-    tagedit
-
-    ;; git integration
+  '(;; git integration
     magit
 
     ;; makes navigation easier by enabling jumping using head-chars
