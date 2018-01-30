@@ -24,10 +24,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; git integration
-    magit
-
-    ;; makes navigation easier by enabling jumping using head-chars
+  '(;; makes navigation easier by enabling jumping using head-chars
     ;; head-char is the starting character of the word (where you want to jump)
     ace-jump-mode
 
@@ -234,3 +231,8 @@
   :ensure t
   :config
   (rainbow-delimiters-mode t))
+
+(use-package magit
+  :doc "Git integration for Emacs"
+  :ensure t
+  :bind ("C-x g" . magit-status))
