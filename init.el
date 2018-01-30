@@ -24,11 +24,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; makes navigation easier by enabling jumping using head-chars
-    ;; head-char is the starting character of the word (where you want to jump)
-    ace-jump-mode
-
-    ;; shows all the keys after pressing a prefix key
+  '(;; shows all the keys after pressing a prefix key
     which-key
 
     ;; just a theme
@@ -236,3 +232,8 @@
   :doc "Git integration for Emacs"
   :ensure t
   :bind ("C-x g" . magit-status))
+
+(use-package ace-jump-mode
+  :doc "Jump around the visible buffer using 'Head Chars'"
+  :ensure t
+  :bind ("C-M-;" . ace-jump-mode))
