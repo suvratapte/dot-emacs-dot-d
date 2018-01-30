@@ -14,20 +14,6 @@
 ;; This also sets the load path.
 (package-initialize)
 
-;; Download the ELPA archive description if needed.
-;; This informs Emacs about the latest versions of all packages, and
-;; makes them available for download.
-(when (not package-archive-contents)
-  (package-refresh-contents))
-
-;; The packages you want installed. You can also install these
-;; manually with M-x package-install
-;; Add in your own as you wish:
-(defvar my-packages
-  '(;; make package management and configuration much easier and well grouped
-    use-package
-    ))
-
 ;; On macOS, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
 ;; terminal window, because macOS does not run a shell during the
@@ -39,14 +25,10 @@
 (if (eq system-type 'darwin)
     (add-to-list 'my-packages 'exec-path-from-shell))
 
-;; check if all packages are installed, if not, refresh package contents
-(when (cl-some (lambda (p) (not (package-installed-p p))) my-packages)
-  (package-refresh-contents))
-
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
-
+;; Install 'use-package' if it is not installed.
+(when (not (package-installed-p 'use-package))
+  (package-refresh-contents)
+  (package-install use-package))
 
 ;; Place downloaded elisp files in ~/.emacs.d/vendor. You'll then be able
 ;; to load them.
