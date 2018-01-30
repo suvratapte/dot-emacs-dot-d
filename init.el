@@ -24,10 +24,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; makes ido display suggestions vertically
-    ido-vertical-mode
-
-    ;; generic completion mechanism
+  '(;; generic completion mechanism
     ivy
 
     ;; better search
@@ -243,3 +240,9 @@
   :ensure t
   :config
   (load-theme 'monokai-alt t))
+
+(use-package ido-vertical-mode
+  :doc "Show ido vertically"
+  :ensure t
+  :config
+  (ido-vertical-mode t))
