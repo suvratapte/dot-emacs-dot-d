@@ -24,10 +24,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; just a theme
-    monokai-alt-theme
-
-    ;; makes ido display suggestions vertically
+  '(;; makes ido display suggestions vertically
     ido-vertical-mode
 
     ;; generic completion mechanism
@@ -240,3 +237,9 @@
   :ensure t
   :config
   (which-key-mode t))
+
+(use-package monokai-alt-theme
+  :doc "Just another theme"
+  :ensure t
+  :config
+  (load-theme 'monokai-alt t))
