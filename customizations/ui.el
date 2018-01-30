@@ -59,5 +59,3 @@
 
 ;; no bell
 (setq ring-bell-function 'ignore)
-
-(set-cursor-color "#ff0000")

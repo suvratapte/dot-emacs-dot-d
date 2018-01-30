@@ -239,7 +239,10 @@
   :doc "Just another theme"
   :ensure t
   :config
-  (load-theme 'monokai-alt t))
+  (load-theme 'monokai-alt t)
+  ;; The cursor color in this theme is very confusing.
+  ;; Change it to red.
+  (set-cursor-color "#ff0000"))
 
 (use-package ido-vertical-mode
   :doc "Show ido vertically"
