@@ -81,6 +81,3 @@
 
 ;; allow minibuffer commands while in a minibuffer
 (setq enable-recursive-minibuffers t)
-
-;; always indent
-(global-aggressive-indent-mode 1)

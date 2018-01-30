@@ -24,10 +24,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; always indent
-    aggressive-indent
-
-    ;; make package management and configuration much easier and well grouped
+  '(;; make package management and configuration much easier and well grouped
     use-package
     ))
 
@@ -256,3 +253,9 @@
 (use-package counsel
   :doc "Ivy enhanced Emacs commands"
   :ensure t)
+
+(use-package aggressive-indent
+  :doc "Always keep everything indented"
+  :ensure t
+  :config
+  (global-aggressive-indent-mode t))
