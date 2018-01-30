@@ -24,16 +24,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; generic completion mechanism
-    ivy
-
-    ;; better search
-    swiper
-
-    ;; ivy enhanced versions of Emacs commands
-    counsel
-
-    ;; always indent
+  '(;; always indent
     aggressive-indent
 
     ;; make package management and configuration much easier and well grouped
@@ -249,3 +240,19 @@
   :ensure t
   :config
   (ido-vertical-mode t))
+
+(use-package ivy
+  :doc "A generic completion mechanism"
+  :ensure t
+  :config
+  (ivy-mode t)
+  (setq ivy-use-virtual-buffers t))
+
+(use-package swiper
+  :doc "A better search"
+  :ensure t
+  :bind ("C-s" . swiper))
+
+(use-package counsel
+  :doc "Ivy enhanced Emacs commands"
+  :ensure t)

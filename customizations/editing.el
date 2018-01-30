@@ -79,17 +79,8 @@
 ;; changed on the disk
 (global-auto-revert-mode t)
 
-;; enable ivy-mode
-(ivy-mode 1)
-
-;; ivy should use virual buffers
-(setq ivy-use-virtual-buffers t)
-
 ;; allow minibuffer commands while in a minibuffer
 (setq enable-recursive-minibuffers t)
-
-;; use swiper as default search
-(global-set-key (kbd "C-s") 'swiper)
 
 ;; always indent
 (global-aggressive-indent-mode 1)
