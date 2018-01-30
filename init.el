@@ -24,10 +24,7 @@
 ;; manually with M-x package-install
 ;; Add in your own as you wish:
 (defvar my-packages
-  '(;; shows all the keys after pressing a prefix key
-    which-key
-
-    ;; just a theme
+  '(;; just a theme
     monokai-alt-theme
 
     ;; makes ido display suggestions vertically
@@ -237,3 +234,9 @@
   :doc "Jump around the visible buffer using 'Head Chars'"
   :ensure t
   :bind ("C-M-;" . ace-jump-mode))
+
+(use-package which-key
+  :doc "Prompt the next possible key bindings after a short wait"
+  :ensure t
+  :config
+  (which-key-mode t))

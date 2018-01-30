@@ -46,6 +46,3 @@
 
 ;; Shows a list of buffers
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-
-;; shows all the key-bindings after pressing a prefix key
-(which-key-mode t)
