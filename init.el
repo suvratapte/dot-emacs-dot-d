@@ -82,9 +82,11 @@
  '(custom-safe-themes
    (quote
     ("eea01f540a0f3bc7c755410ea146943688c4e29bea74a29568635670ab22f9bc" default)))
+ '(global-auto-revert-mode t)
+ '(ido-vertical-mode t)
  '(package-selected-packages
    (quote
-    (ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
+    (git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -241,3 +243,7 @@
   :ensure t
   :config
   (global-aggressive-indent-mode t))
+
+(use-package git-timemachine
+  :doc "Go through git history in a file"
+  :ensure t)
