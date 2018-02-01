@@ -86,7 +86,7 @@
  '(ido-vertical-mode t)
  '(package-selected-packages
    (quote
-    (git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
+    (git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -247,3 +247,9 @@
 (use-package git-timemachine
   :doc "Go through git history in a file"
   :ensure t)
+
+(use-package git-gutter
+  :doc "See the diff against the HEAD"
+  :ensure t
+  :config
+  (global-git-gutter-mode t))
