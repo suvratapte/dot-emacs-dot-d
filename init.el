@@ -94,6 +94,11 @@
  ;; If there is more than one, they won't work right.
  )
 
+
+;; Package configuration with 'use-package'
+(require 'use-package)
+
+
 (eval-and-compile
   (add-to-list 'use-package-keywords :doc t)
   (defun use-package-handler/:doc (name-symbol _keyword _docstring rest state)
@@ -110,9 +115,6 @@
     ;; just process the next keywords
     (use-package-process-keywords name-symbol rest state)))
 
-
-;; Package configuration with 'use-package'
-(require 'use-package)
 
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
