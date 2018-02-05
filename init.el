@@ -242,12 +242,6 @@
   :doc "Go through git history in a file"
   :ensure t)
 
-(use-package git-gutter
-  :doc "See the diff against the HEAD"
-  :ensure t
-  :config
-  (global-git-gutter-mode t))
-
 (use-package multiple-cursors
   :doc "A minor mode for editing with multiple cursors"
   :ensure t
