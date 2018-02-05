@@ -11,3 +11,4 @@ backups
 /elpa/
 /eshell/
 /themes/
+/.mc-lists.el
