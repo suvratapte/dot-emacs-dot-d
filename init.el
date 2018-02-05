@@ -254,7 +254,9 @@
   :bind
   (("C->" . mc/mark-next-like-this)
    ("C-<" . mc/mark-previous-like-this)
-   ("C-c >" . mc/mark-all-like-this)))
+   ("C-c >" . mc/mark-all-like-this))
+  :config
+  (setq mc/always-run-for-all t))
 
 (if (eq system-type 'darwin)
     (use-package exec-path-from-shell
