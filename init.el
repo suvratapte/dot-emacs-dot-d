@@ -14,17 +14,6 @@
 ;; This also sets the load path.
 (package-initialize)
 
-;; On macOS, an Emacs instance started from the graphical user
-;; interface will have a different environment than a shell in a
-;; terminal window, because macOS does not run a shell during the
-;; login. Obviously this will lead to unexpected results when
-;; calling external utilities like make from Emacs.
-;; This library works around this problem by copying important
-;; environment variables from the user's shell.
-;; https://github.com/purcell/exec-path-from-shell
-(if (eq system-type 'darwin)
-    (add-to-list 'my-packages 'exec-path-from-shell))
-
 ;; Don't use the compiled code if its the older package
 (setq load-prefer-newer t)
 
@@ -266,3 +255,15 @@
   (("C->" . mc/mark-next-like-this)
    ("C-<" . mc/mark-previous-like-this)
    ("C-c >" . mc/mark-all-like-this)))
+
+(if (eq system-type 'darwin)
+    (use-package exec-path-from-shell
+      :doc "MacOS does not start a shell at login.
+            This makes sure that the env variable
+            of shell and GUI Emacs look the same."
+      :ensure t
+      :config
+      (when (memq window-system '(mac ns))
+        (exec-path-from-shell-initialize)
+        (exec-path-from-shell-copy-envs
+         '("PATH")))))
