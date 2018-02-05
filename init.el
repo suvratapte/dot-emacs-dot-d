@@ -25,6 +25,9 @@
 (if (eq system-type 'darwin)
     (add-to-list 'my-packages 'exec-path-from-shell))
 
+;; Don't use the compiled code if its the older package
+(setq load-prefer-newer t)
+
 ;; Install 'use-package' if it is not installed.
 (when (not (package-installed-p 'use-package))
   (package-refresh-contents)
