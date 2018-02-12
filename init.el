@@ -248,6 +248,11 @@
   :config
   (setq mc/always-run-for-all t))
 
+(use-package esup
+  :doc "Emacs Start Up Profiler (esup) benchmarks Emacs
+        startup time without leaving Emacs."
+  :ensure t)
+
 (if (eq system-type 'darwin)
     (use-package exec-path-from-shell
       :doc "MacOS does not start a shell at login.
