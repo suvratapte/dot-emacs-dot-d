@@ -259,6 +259,7 @@
             This makes sure that the env variable
             of shell and GUI Emacs look the same."
       :ensure t
+      :defer 5
       :config
       (when (memq window-system '(mac ns))
         (exec-path-from-shell-initialize)
