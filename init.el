@@ -244,7 +244,8 @@
   :bind
   (("C->" . mc/mark-next-like-this)
    ("C-<" . mc/mark-previous-like-this)
-   ("C-c >" . mc/mark-all-like-this))
+   ("C-c a" . mc/mark-all-like-this)
+   ("C-c h" . mc-hide-unmatched-lines-mode))
   :config
   (setq mc/always-run-for-all t))
 
