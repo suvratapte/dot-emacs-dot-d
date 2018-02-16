@@ -148,7 +148,9 @@
   ;; Wrap when navigating history.
   (setq cider-repl-wrap-history t)
   ;; Attempt to jump at the symbol under the point without having to press RET
-  (setq cider-prompt-for-symbol nil))
+  (setq cider-prompt-for-symbol nil)
+  :bind
+  (("C-c C-l" . cider-repl-clear-buffer)))
 
 
 (use-package ido-completing-read+
