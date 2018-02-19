@@ -26,7 +26,7 @@
 (add-to-list 'load-path "~/.emacs.d/themes")
 
 ;; increase font size for better readability
-(set-face-attribute 'default nil :height 120)
+(set-face-attribute 'default nil :height 130)
 
 ;; These settings relate to how emacs interacts with your operating system
 (setq ;; makes killing/yanking interact with the clipboard
@@ -59,3 +59,7 @@
 
 ;; no bell
 (setq ring-bell-function 'ignore)
+
+;; use the 'Source Code Pro' font if available
+(when (member "Source Code Pro" (font-family-list))
+  (set-frame-font "Source Code Pro"))
