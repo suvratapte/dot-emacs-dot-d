@@ -206,8 +206,8 @@
   :config
   (load-theme 'monokai-alt t)
   ;; The cursor color in this theme is very confusing.
-  ;; Change it to red.
-  (set-cursor-color "#ff0000"))
+  ;; Change it to green
+  (set-cursor-color "#9ce22e"))
 
 (use-package ido-vertical-mode
   :doc "Show ido vertically"
