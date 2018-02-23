@@ -160,8 +160,8 @@
   :config
   ;; This enables ido in all contexts where it could be useful, not just
   ;; for selecting buffer and file names
-  (ido-mode 1)
-  (ido-everywhere 1))
+  (ido-mode t)
+  (ido-everywhere t))
 
 (use-package smex
   :doc "Enhance M-x to allow easier execution of commands"
