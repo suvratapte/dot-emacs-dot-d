@@ -229,7 +229,9 @@
 
 (use-package counsel
   :doc "Ivy enhanced Emacs commands"
-  :ensure t)
+  :ensure t
+  :bind (("M-x" . counsel-M-x)
+         ("C-x C-f" . counsel-find-file)))
 
 (use-package aggressive-indent
   :doc "Always keep everything indented"
