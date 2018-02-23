@@ -150,7 +150,8 @@
   ;; Attempt to jump at the symbol under the point without having to press RET
   (setq cider-prompt-for-symbol nil)
   :bind
-  (("C-c C-l" . cider-repl-clear-buffer)))
+  (:map cider-repl-mode-map
+        ("C-c M-o" . cider-repl-clear-buffer)))
 
 
 (use-package ido-completing-read+
