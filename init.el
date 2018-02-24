@@ -182,7 +182,7 @@
   :doc "Colorful paranthesis matching"
   :ensure t
   :config
-  (rainbow-delimiters-mode t))
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (use-package magit
   :doc "Git integration for Emacs"
