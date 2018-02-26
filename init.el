@@ -103,7 +103,6 @@
     ;; just process the next keywords
     (use-package-process-keywords name-symbol rest state)))
 
-
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
   :ensure t
@@ -117,7 +116,6 @@
   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
   (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
   (add-hook 'scheme-mode-hook #'enable-paredit-mode))
-
 
 (use-package clojure-mode
   :doc "A major mode for editing Clojure code"
@@ -152,7 +150,6 @@
   :bind
   (:map cider-repl-mode-map
         ("C-c M-o" . cider-repl-clear-buffer)))
-
 
 (use-package ido-completing-read+
   :doc "Allow ido usage in as many contexts as possible"
@@ -250,7 +247,8 @@
   (("C->" . mc/mark-next-like-this)
    ("C-<" . mc/mark-previous-like-this)
    ("C-c a" . mc/mark-all-like-this)
-   ("C-c h" . mc-hide-unmatched-lines-mode))
+   ("C-c h" . mc-hide-unmatched-lines-mode)
+   ("C-c l" . mc/edit-lines))
   :config
   (setq mc/always-run-for-all t))
 
