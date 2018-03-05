@@ -44,10 +44,6 @@
 ;; below, Emacs knows where to look for the corresponding file.
 (add-to-list 'load-path "~/.emacs.d/customizations")
 
-;; These customizations make it easier for you to navigate files,
-;; switch buffers, and choose options from the minibuffer.
-(load "navigation.el")
-
 ;; These customizations change the way emacs looks and disable/enable
 ;; some user interface elements
 (load "ui.el")
@@ -86,7 +82,6 @@
 ;; Package configuration with 'use-package'
 (require 'use-package)
 
-
 (eval-and-compile
   (add-to-list 'use-package-keywords :doc t)
   (defun use-package-handler/:doc (name-symbol _keyword _docstring rest state)
@@ -102,6 +97,25 @@
 
     ;; just process the next keywords
     (use-package-process-keywords name-symbol rest state)))
+
+
+(use-package uniquify
+  :doc "Naming convention for files with same names"
+  :config
+  (setq uniquify-buffer-name-style 'forward))
+
+(use-package recentf
+  :doc "Recent buffers in a new Emacs session"
+  :config
+  (setq recentf-auto-cleanup 'never
+        recentf-max-saved-items 1000
+        recentf-save-file (concat user-emacs-directory ".recentf"))
+  (recentf-mode t))
+
+(use-package ibuffer
+  :doc "Better buffer management"
+  :bind
+  ("C-x C-b" . ibuffer))
 
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
@@ -158,7 +172,12 @@
   ;; This enables ido in all contexts where it could be useful, not just
   ;; for selecting buffer and file names
   (ido-mode t)
-  (ido-everywhere t))
+  (ido-everywhere t)
+  ;; This allows partial matches, e.g. "uzh" will match "Ustad Zakir Hussain"
+  (setq ido-enable-flex-matching t)
+  (setq ido-use-filename-at-point nil)
+  ;; Includes buffer names of recently open files, even if they're not open now
+  (setq ido-use-virtual-buffers t))
 
 (use-package smex
   :doc "Enhance M-x to allow easier execution of commands"
