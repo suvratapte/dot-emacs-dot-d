@@ -114,8 +114,7 @@
 
 (use-package ibuffer
   :doc "Better buffer management"
-  :bind
-  ("C-x C-b" . ibuffer))
+  :bind ("C-x C-b" . ibuffer))
 
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
@@ -161,9 +160,8 @@
   (setq cider-repl-wrap-history t)
   ;; Attempt to jump at the symbol under the point without having to press RET
   (setq cider-prompt-for-symbol nil)
-  :bind
-  (:map cider-repl-mode-map
-        ("C-c M-o" . cider-repl-clear-buffer)))
+  :bind (:map cider-repl-mode-map
+              ("C-c M-o" . cider-repl-clear-buffer)))
 
 (use-package ido-completing-read+
   :doc "Allow ido usage in as many contexts as possible"
@@ -264,12 +262,11 @@
 (use-package multiple-cursors
   :doc "A minor mode for editing with multiple cursors"
   :ensure t
-  :bind
-  (("C->" . mc/mark-next-like-this)
-   ("C-<" . mc/mark-previous-like-this)
-   ("C-c a" . mc/mark-all-like-this)
-   ("C-c h" . mc-hide-unmatched-lines-mode)
-   ("C-c l" . mc/edit-lines))
+  :bind (("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c a" . mc/mark-all-like-this)
+         ("C-c h" . mc-hide-unmatched-lines-mode)
+         ("C-c l" . mc/edit-lines))
   :config
   (setq mc/always-run-for-all t))
 
