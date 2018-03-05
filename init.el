@@ -98,9 +98,6 @@
 ;; No need for ~ files when editing
 (setq create-lockfiles nil)
 
-;; For editing lisps
-(load "elisp-editing.el")
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -206,6 +203,11 @@
   (setq cider-prompt-for-symbol nil)
   :bind (:map cider-repl-mode-map
               ("C-c M-o" . cider-repl-clear-buffer)))
+
+(use-package eldoc
+  :doc "Easily accessible documentation for Elisp"
+  :config
+  (global-eldoc-mode t))
 
 (use-package ido-completing-read+
   :doc "Allow ido usage in as many contexts as possible"
