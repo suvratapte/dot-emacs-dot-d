@@ -1,6 +1,5 @@
-;;;;
-;; Packages
-;;;;
+;; Go straight to scratch buffer on startup
+(setq inhibit-startup-message t)
 
 ;; Define package repositories
 (require 'package)
@@ -93,11 +92,11 @@
 ;; Full path in the title bar
 (setq-default frame-title-format "Emacs (%f)")
 
-;; These customizations make editing a bit nicer.
-(load "editing.el")
+;; Change all yes/no questions to y/n type
+(fset 'yes-or-no-p 'y-or-n-p)
 
-;; Hard-to-categorize customizations
-(load "misc.el")
+;; No need for ~ files when editing
+(setq create-lockfiles nil)
 
 ;; For editing lisps
 (load "elisp-editing.el")
