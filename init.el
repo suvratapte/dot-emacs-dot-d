@@ -236,7 +236,9 @@
   :ensure t
   :config
   (ivy-mode t)
-  (setq ivy-use-virtual-buffers t))
+  (setq ivy-use-virtual-buffers t)
+  :bind (("C-x b" . ivy-switch-buffer)
+         ("C-x B" . ivy-switch-buffer-other-window)))
 
 (use-package swiper
   :doc "A better search"
