@@ -374,7 +374,7 @@
   :ensure t)
 
 (setq org-list-demote-modify-bullet
-      '(("+" . "-") ("-" . "+") ("*" . "+")))
+      '(("+" . "-") ("-" . "+")))
 (setq org-src-fontify-natively t)
 
 (if (eq system-type 'darwin)
