@@ -80,6 +80,9 @@
 ;; No cursor blinking
 (blink-cursor-mode 0)
 
+;; Set column width
+(setq-default fill-column 90)
+
 ;; Full path in the title bar
 (setq-default frame-title-format "Emacs (%f)")
 
