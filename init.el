@@ -376,19 +376,29 @@
         startup time without leaving Emacs."
   :ensure t)
 
-(setq org-list-demote-modify-bullet
-      '(("+" . "-") ("-" . "+")))
-(setq org-src-fontify-natively t)
+(use-package org
+  :config
+  (setq org-list-demote-modify-bullet
+        '(("+" . "-") ("-" . "+")))
 
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "WORKING(w)" "WAITING(W)" "|" "DONE(d)" "CANCELLED(c)")))
+  ;; Enable source code highlighting in org-mode.
+  (setq org-src-fontify-natively t)
 
-(setq org-todo-keyword-faces
-      '(("TODO" :foreground "red" :weight bold)
-        ("WORKING" :foreground "orange" :weight bold)
-        ("WAITING" :foreground "lightblue" :weight bold)
-        ("DONE" :foreground "SeaGreen4" :weight bold)
-        ("CANCELLED" :foreground "SeaGreen4" :weight bold)))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "WORKING(w)" "TALK-TO-VEDANG(v)" "WAITING(W)" "ASSIGNED-BACK(a)" "|" "DONE(d)" "CANCELLED(c)")))
+
+  (setq org-todo-keyword-faces
+        '(("TODO" :foreground "red" :weight bold)
+          ("WORKING" :foreground "orange" :weight bold)
+          ("TALK-TO-VEDANG" :foreground "cyan" :weight bold)
+          ("WAITING" :foreground "pink1" :weight bold)
+          ("ASSIGNED-BACK" :foreground "SlateBlue1" :weight bold)
+          ("DONE" :foreground "chartreuse1" :weight bold)
+          ("CANCELLED" :foreground "yellow" :weight bold)))
+
+  :bind (:map org-mode-map
+              ("C-t" . org-todo)))
+
 
 (if (eq system-type 'darwin)
     (use-package exec-path-from-shell
