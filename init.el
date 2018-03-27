@@ -380,6 +380,16 @@
       '(("+" . "-") ("-" . "+")))
 (setq org-src-fontify-natively t)
 
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "WORKING(w)" "WAITING(W)" "|" "DONE(d)" "CANCELLED(c)")))
+
+(setq org-todo-keyword-faces
+      '(("TODO" :foreground "red" :weight bold)
+        ("WORKING" :foreground "orange" :weight bold)
+        ("WAITING" :foreground "lightblue" :weight bold)
+        ("DONE" :foreground "SeaGreen4" :weight bold)
+        ("CANCELLED" :foreground "SeaGreen4" :weight bold)))
+
 (if (eq system-type 'darwin)
     (use-package exec-path-from-shell
       :doc "MacOS does not start a shell at login.
