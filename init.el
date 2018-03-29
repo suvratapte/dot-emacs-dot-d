@@ -384,8 +384,18 @@
   ;; Enable source code highlighting in org-mode.
   (setq org-src-fontify-natively t)
 
+  ;; '!' after the hotkey tells org-mode to add a LOGBOOK entry for every
+  ;; status change.
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "WORKING(w)" "TALK-TO-VEDANG(v)" "WAITING(W)" "ASSIGNED-BACK(a)" "|" "DONE(d)" "CANCELLED(c)")))
+        '((sequence "TODO(t/!)" "WORKING(w/!)" "TALK-TO-VEDANG(v/!)"
+                    "WAITING(W/!)" "ASSIGNED-BACK(a/!)" "|" "DONE(d/!)"
+                    "CANCELLED(c/!)")))
+
+  ;; Use logbook
+  (setq org-log-into-drawer t)
+
+  ;; Add 'closed' log when marked done
+  (setq org-log-done t)
 
   (setq org-todo-keyword-faces
         '(("TODO" :foreground "red" :weight bold)
@@ -395,6 +405,10 @@
           ("ASSIGNED-BACK" :foreground "SlateBlue1" :weight bold)
           ("DONE" :foreground "chartreuse1" :weight bold)
           ("CANCELLED" :foreground "yellow" :weight bold)))
+
+  (setq org-agenda-files
+        (quote
+         ("~/workspace/repository-of-things/work/oncall.org")))
 
   :bind (:map org-mode-map
               ("C-t" . org-todo)))
