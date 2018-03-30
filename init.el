@@ -406,6 +406,23 @@
           ("DONE" :foreground "chartreuse1" :weight bold)
           ("CANCELLED" :foreground "yellow" :weight bold)))
 
+  (global-set-key (kbd "C-c c") 'org-capture)
+
+  ;; Capture directories
+  (setq org-personal-directory "~/workspace/repository-of-things/org/personal"
+        org-work-directory "~/workspace/repository-of-things/org/work")
+
+  ;; Capture files
+  (setq org-default-reading-list-file (concat org-personal-directory "/reading-list.org")
+        org-default-oncall-file (concat org-work-directory "/oncall.org"))
+
+  (setq org-capture-templates
+        '(("r" "Reading list item" entry (file org-default-reading-list-file)
+           "* TODO %^{Description}\n  %?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
+          ("o" "Oncall ticket" entry (file org-default-oncall-file)
+           "* TODO %^{Type|ONCALL|CSR}-%^{Ticket number} - %^{Description}
+  :LOGBOOK:\n  - Added - %U\n  :END: " :prepend t)))
+
   (setq org-agenda-files
         (quote
          ("~/workspace/repository-of-things/work/oncall.org")))
