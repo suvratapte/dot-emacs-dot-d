@@ -421,7 +421,8 @@
            "* TODO %^{Description}\n  %?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
           ("o" "Oncall ticket" entry (file org-default-oncall-file)
            "* TODO %^{Type|ONCALL|CSR}-%^{Ticket number} - %^{Description}
-  :LOGBOOK:\n  - Added - %U\n  :END: " :prepend t)))
+  :LOGBOOK:\n  - Added - %U\n  :END:
+  Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)))
 
   (setq org-agenda-files
         (quote
