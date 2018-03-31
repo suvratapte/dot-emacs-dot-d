@@ -315,6 +315,13 @@
   :config
   (which-key-mode t))
 
+(use-package smart-mode-line
+  :ensure t
+  :config
+  (setq sml/theme 'dark
+        sml/no-confirm-load-theme t)
+  (sml/setup))
+
 (use-package monokai-alt-theme
   :doc "Just another theme"
   :ensure t
