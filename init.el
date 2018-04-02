@@ -210,6 +210,19 @@
   :doc "Better buffer management"
   :bind ("C-x C-b" . ibuffer))
 
+(use-package company
+  :doc "COMplete ANYthing"
+  :ensure t
+  :bind (:map
+         global-map
+         ("TAB" . company-complete-common-or-cycle)
+         :map company-active-map
+         ("C-n" . company-select-next-or-abort)
+         ("C-p" . company-select-previous-or-abort))
+  :config
+  (setq company-idle-delay 0.3)
+  (global-company-mode t))
+
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
   :ensure t
