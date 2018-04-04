@@ -29,7 +29,7 @@
 ;;
 ;; (require 'yaml-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-;; 
+;;
 ;; Adding this code will make Emacs enter yaml mode whenever you open
 ;; a .yml file
 (add-to-list 'load-path "~/.emacs.d/vendor")
@@ -443,7 +443,8 @@
 
   ;; Capture files
   (setq org-default-reading-list-file (concat org-personal-directory "/reading-list.org")
-        org-default-oncall-file (concat org-work-directory "/oncall.org"))
+        org-default-oncall-file (concat org-work-directory "/oncall.org")
+        org-default-meeting-notes-file (concat org-work-directory "/meeting-notes.org"))
 
   (setq org-capture-templates
         '(("r" "Reading list item" entry (file org-default-reading-list-file)
@@ -451,7 +452,10 @@
           ("o" "Oncall ticket" entry (file org-default-oncall-file)
            "* TODO %^{Type|ONCALL|CSR}-%^{Ticket number} - %^{Description}
   :LOGBOOK:\n  - Added - %U\n  :END:
-  Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)))
+  Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
+          ("m" "Meeting notes" entry (file org-default-meeting-notes-file)
+           "* - Agenda: %^{Agenda}\n  - Attendees: Suvrat, %^{Attendees}
+  - Date: %U\n  - Notes:\n    + %?\n  - Action items\n    + ")))
 
   (setq org-agenda-files
         (quote
