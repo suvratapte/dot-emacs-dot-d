@@ -150,6 +150,8 @@
 ;; Allow minibuffer commands while in a minibuffer
 (setq enable-recursive-minibuffers t)
 
+;; Delete whitespace just when you save
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
