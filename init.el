@@ -415,7 +415,7 @@
   ;; '!' after the hotkey tells org-mode to add a LOGBOOK entry for every
   ;; status change.
   (setq org-todo-keywords
-        '((sequence "TODO(t/!)" "WORKING(w/!)" "TALK-TO-VEDANG(v/!)"
+        '((sequence "TODO(t/!)" "WORKING(w/!)" "PAUSED(v/!)"
                     "WAITING(W/!)" "ASSIGNED-BACK(a/!)" "|" "DONE(d/!)"
                     "CANCELLED(c/!)")))
 
@@ -428,7 +428,7 @@
   (setq org-todo-keyword-faces
         '(("TODO" :foreground "red" :weight bold)
           ("WORKING" :foreground "orange" :weight bold)
-          ("TALK-TO-VEDANG" :foreground "cyan" :weight bold)
+          ("PAUSED" :foreground "Brown" :weight bold)
           ("WAITING" :foreground "pink1" :weight bold)
           ("ASSIGNED-BACK" :foreground "SlateBlue1" :weight bold)
           ("DONE" :foreground "chartreuse1" :weight bold)
