@@ -416,7 +416,7 @@
   ;; status change.
   (setq org-todo-keywords
         '((sequence "TODO(t/!)" "WORKING(w/!)" "PAUSED(v/!)"
-                    "WAITING(W/!)" "ASSIGNED-BACK(a/!)" "|" "DONE(d/!)"
+                    "WAITING(W/!)" "|" "DONE(d/!)"
                     "CANCELLED(c/!)")))
 
   ;; Use logbook
@@ -428,9 +428,8 @@
   (setq org-todo-keyword-faces
         '(("TODO" :foreground "red" :weight bold)
           ("WORKING" :foreground "orange" :weight bold)
-          ("PAUSED" :foreground "Brown" :weight bold)
+          ("PAUSED" :foreground "SlateBlue1" :weight bold)
           ("WAITING" :foreground "pink1" :weight bold)
-          ("ASSIGNED-BACK" :foreground "SlateBlue1" :weight bold)
           ("DONE" :foreground "chartreuse1" :weight bold)
           ("CANCELLED" :foreground "yellow" :weight bold)))
 
