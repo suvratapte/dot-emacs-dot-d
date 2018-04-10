@@ -166,7 +166,7 @@
  '(ido-vertical-mode t)
  '(package-selected-packages
    (quote
-    (multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
+    (go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -418,7 +418,7 @@
   ;; '!' after the hotkey tells org-mode to add a LOGBOOK entry for every
   ;; status change.
   (setq org-todo-keywords
-        '((sequence "TODO(t/!)" "WORKING(w/!)" "PAUSED(v/!)"
+        '((sequence "TODO(t/!)" "WORKING(w/!)" "PAUSED(p/!)"
                     "WAITING(W/!)" "|" "DONE(d/!)"
                     "CANCELLED(c/!)")))
 
