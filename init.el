@@ -382,27 +382,30 @@
   :doc "Go through git history in a file"
   :ensure t)
 
+(use-package region-bindings-mode
+  :doc "Define bindings only when a region is selected."
+  :ensure t
+  :config
+  (region-bindings-mode-enable))
+
 (use-package multiple-cursors
   :doc "A minor mode for editing with multiple cursors"
   :ensure t
   :config
-  (setq mc/always-run-for-all t))
+  (setq mc/always-run-for-all t)
+  :bind
+  ;; Use multiple cursor bindings only when a region is active
+  (:map region-bindings-mode-map
+        ("C->" . mc/mark-next-like-this)
+        ("C-<" . mc/mark-previous-like-this)
+        ("C-c a" . mc/mark-all-like-this)
+        ("C-c h" . mc-hide-unmatched-lines-mode)
+        ("C-c l" . mc/edit-lines)))
 
 (use-package esup
   :doc "Emacs Start Up Profiler (esup) benchmarks Emacs
         startup time without leaving Emacs."
   :ensure t)
-
-(use-package region-bindings-mode
-  :doc "Define bindings only when a region is selected."
-  :ensure t
-  :config
-  (region-bindings-mode t)
-  (define-key region-bindings-mode-map "C->" 'mc/mark-next-like-this)
-  (define-key region-bindings-mode-map "C-<" 'mc/mark-previous-like-this)
-  (define-key region-bindings-mode-map "C-c a" 'mc/mark-all-like-this)
-  (define-key region-bindings-mode-map "C-c h" 'mc-hide-unmatched-lines-mode)
-  (define-key region-bindings-mode-map "C-c l" 'mc/edit-lines))
 
 (use-package org
   :config
