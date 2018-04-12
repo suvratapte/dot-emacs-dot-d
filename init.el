@@ -271,8 +271,12 @@
   (setq cider-repl-wrap-history t)
   ;; Attempt to jump at the symbol under the point without having to press RET
   (setq cider-prompt-for-symbol nil)
-  :bind (:map cider-repl-mode-map
-              ("C-c M-o" . cider-repl-clear-buffer)))
+  :bind (:map
+         cider-mode-map
+         ("C-c d" . cider-debug-defun-at-point)
+         :map
+         cider-repl-mode-map
+         ("C-c M-o" . cider-repl-clear-buffer)))
 
 (use-package eldoc
   :doc "Easily accessible documentation for Elisp"
