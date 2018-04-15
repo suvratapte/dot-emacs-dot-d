@@ -54,8 +54,9 @@
 (set-face-attribute 'default nil :height 130)
 
 ;; Use the 'Source Code Pro' font if available
-(when (member "Source Code Pro" (font-family-list))
-  (set-frame-font "Source Code Pro"))
+(when (not (eq system-type 'windows-nt ))
+  (when (member "Source Code Pro" (font-family-list))
+    (set-frame-font "Source Code Pro")))
 
 ;; These settings relate to how emacs interacts with your operating system
 (setq ;; makes killing/yanking interact with the clipboard
