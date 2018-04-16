@@ -272,6 +272,8 @@
   (setq cider-repl-wrap-history t)
   ;; Attempt to jump at the symbol under the point without having to press RET
   (setq cider-prompt-for-symbol nil)
+  ;; Always pretty print
+  (setq cider-repl-use-pretty-printing t)
   :bind (:map
          cider-mode-map
          ("C-c d" . cider-debug-defun-at-point)
