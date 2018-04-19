@@ -463,12 +463,12 @@
   :LOGBOOK:\n  - Added - %U\n  :END:
   Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
           ("m" "Meeting notes" entry (file org-default-meeting-notes-file)
-           "* - Agenda: %^{Agenda}\n  - Attendees: Suvrat, %^{Attendees}
+           "* Agenda: %^{Agenda}\n  - Attendees: Suvrat, %^{Attendees}
   - Date: %U\n  - Notes:\n    + %?\n  - Action items\n    + ")))
 
-  (setq org-agenda-files
-        (quote
-         ("~/workspace/repository-of-things/work/oncall.org")))
+  (setq org-agenda-files (list org-default-oncall-file
+                               org-default-reading-list-file
+                               org-default-meeting-notes-file))
 
   :bind (:map org-mode-map
               ("C-t" . org-todo)))
