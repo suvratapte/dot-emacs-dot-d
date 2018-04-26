@@ -453,13 +453,18 @@
   ;; Capture files
   (setq org-default-reading-list-file (concat org-personal-directory "/reading-list.org")
         org-default-oncall-file (concat org-work-directory "/oncall.org")
-        org-default-meeting-notes-file (concat org-work-directory "/meeting-notes.org"))
+        org-default-meeting-notes-file (concat org-work-directory "/meeting-notes.org")
+        org-default-hscore-file (concat org-work-directory "/hscore.org"))
 
   (setq org-capture-templates
         '(("r" "Reading list item" entry (file org-default-reading-list-file)
            "* TODO %^{Description}\n  %?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
           ("o" "Oncall ticket" entry (file org-default-oncall-file)
            "* TODO %^{Type|ONCALL|CSR}-%^{Ticket number} - %^{Description}
+  :LOGBOOK:\n  - Added - %U\n  :END:
+  Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
+          ("h" "HSCore task" entry (file org-default-hscore-file)
+           "* TODO %^{Type|HSC}-%^{Ticket number} - %^{Description}
   :LOGBOOK:\n  - Added - %U\n  :END:
   Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
           ("m" "Meeting notes" entry (file org-default-meeting-notes-file)
