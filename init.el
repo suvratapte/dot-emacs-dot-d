@@ -248,7 +248,33 @@
   :init
   ;; This is useful for working with camel-case tokens, like names of
   ;; Java classes (e.g. JavaClassName)
-  (add-hook 'clojure-mode-hook #'subword-mode))
+  (add-hook 'clojure-mode-hook #'subword-mode)
+
+  ;; Show 'ƒ' instead of 'fn' in clojure mode
+  (defun prettify-fns ()
+    (font-lock-add-keywords
+     nil `(("(\\(fn\\)[\[[:space:]]"
+            (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                      "ƒ")
+                      nil))))))
+  (add-hook 'clojure-mode-hook 'prettify-fns)
+
+  ;; Show lambda instead of '#' in '#(...)'
+  (defun prettify-reader-macros ()
+    (font-lock-add-keywords
+     nil `(("\\(#\\)("
+            (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                      ,(make-char 'greek-iso8859-7 107))
+                      nil))))))
+  (add-hook 'clojure-mode-hook 'prettify-reader-macros)
+
+  ;; Show '∈' instead of '#' in '#{}' (sets)
+  (defun prettify-sets ()
+    (font-lock-add-keywords
+     nil `(("\\(#\\){"
+            (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                      "∈")
+                      nil)))))))
 
 (use-package clojure-mode-extra-font-locking
   :doc "Extra syntax highlighting for clojure"
