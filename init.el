@@ -258,6 +258,7 @@
                                       "ƒ")
                       nil))))))
   (add-hook 'clojure-mode-hook 'prettify-fns)
+  (add-hook 'cider-repl-mode-hook 'prettify-fns)
 
   ;; Show lambda instead of '#' in '#(...)'
   (defun prettify-reader-macros ()
@@ -267,6 +268,7 @@
                                       ,(make-char 'greek-iso8859-7 107))
                       nil))))))
   (add-hook 'clojure-mode-hook 'prettify-reader-macros)
+  (add-hook 'cider-repl-mode-hook 'prettify-reader-macros)
 
   ;; Show '∈' instead of '#' in '#{}' (sets)
   (defun prettify-sets ()
@@ -274,7 +276,9 @@
      nil `(("\\(#\\){"
             (0 (progn (compose-region (match-beginning 1) (match-end 1)
                                       "∈")
-                      nil)))))))
+                      nil))))))
+  (add-hook 'clojure-mode-hook 'prettify-sets)
+  (add-hook 'cider-repl-mode-hook 'prettify-sets))
 
 (use-package clojure-mode-extra-font-locking
   :doc "Extra syntax highlighting for clojure"
