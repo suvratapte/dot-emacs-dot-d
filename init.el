@@ -43,9 +43,6 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
-;; Show line numbers everywhere
-(global-linum-mode t)
-
 ;; Custom themes path configuration
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (add-to-list 'load-path "~/.emacs.d/themes")
@@ -263,14 +260,14 @@
   (add-hook 'cider-repl-mode-hook 'prettify-fns)
 
   ;; Show lambda instead of '#' in '#(...)'
-  (defun prettify-reader-macros ()
+  (defun prettify-anonymous-fns ()
     (font-lock-add-keywords
      nil `(("\\(#\\)("
             (0 (progn (compose-region (match-beginning 1) (match-end 1)
                                       ,(make-char 'greek-iso8859-7 107))
                       nil))))))
-  (add-hook 'clojure-mode-hook 'prettify-reader-macros)
-  (add-hook 'cider-repl-mode-hook 'prettify-reader-macros)
+  (add-hook 'clojure-mode-hook 'prettify-anonymous-fns)
+  (add-hook 'cider-repl-mode-hook 'prettify-anonymous-fns)
 
   ;; Show '∈' instead of '#' in '#{}' (sets)
   (defun prettify-sets ()
@@ -493,7 +490,7 @@
   :LOGBOOK:\n  - Added - %U\n  :END:
   Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
           ("m" "Meeting notes" entry (file org-default-meeting-notes-file)
-           "* Agenda: %^{Agenda}\n  - Attendees: Suvrat, %^{Attendees}
+           "* %^{Agenda}\n  - Attendees: Suvrat, %^{Attendees}
   - Date: %U\n  - Notes:\n    + %?\n  - Action items\n    + ")))
 
   (setq org-agenda-files (list org-default-oncall-file
