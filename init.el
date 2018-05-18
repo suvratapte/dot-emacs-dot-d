@@ -173,7 +173,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(font-lock-doc-face ((t (:foreground "tan3")))))
+ '(font-lock-doc-face ((t (:foreground "tan3"))))
+ '(org-level-1 ((t (:foreground "gray80" :weight bold :height 1.1))))
+ '(org-tag ((t (:foreground "MediumPurple1" :weight bold)))))
 
 
 ;; Package configuration with 'use-package'
@@ -366,13 +368,6 @@
   :ensure t
   :config
   (which-key-mode t))
-
-(use-package smart-mode-line
-  :ensure t
-  :config
-  (setq sml/theme 'dark
-        sml/no-confirm-load-theme t)
-  (sml/setup))
 
 (use-package monokai-alt-theme
   :doc "Just another theme"
