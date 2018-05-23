@@ -164,14 +164,14 @@
  '(ido-vertical-mode t)
  '(package-selected-packages
    (quote
-    (go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
+    (undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(font-lock-doc-face ((t (:foreground "tan3"))))
- '(org-level-1 ((t (:foreground "gray80" :weight bold :height 1.1))))
+ '(org-level-1 ((t (:foreground "RoyalBlue1" :weight bold :height 1.1))))
  '(org-tag ((t (:foreground "MediumPurple1" :weight bold)))))
 
 
@@ -436,6 +436,12 @@
         startup time without leaving Emacs."
   :ensure t)
 
+(use-package undo-tree
+  :doc "Git like undo"
+  :ensure t
+  :config
+  (global-undo-tree-mode t))
+
 (use-package org
   :config
   (setq org-list-demote-modify-bullet
@@ -495,7 +501,8 @@
 
   (setq org-agenda-files (list org-default-oncall-file
                                org-default-reading-list-file
-                               org-default-meeting-notes-file))
+                               org-default-meeting-notes-file
+                               org-default-hscore-file))
 
   :bind (:map org-mode-map
               ("C-t" . org-todo)))
