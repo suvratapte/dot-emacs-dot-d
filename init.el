@@ -157,10 +157,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(coffee-tab-width 2)
+ '(column-number-mode t)
  '(custom-safe-themes
    (quote
     ("eea01f540a0f3bc7c755410ea146943688c4e29bea74a29568635670ab22f9bc" default)))
  '(global-auto-revert-mode t)
+ '(global-hl-line-mode t)
  '(ido-vertical-mode t)
  '(package-selected-packages
    (quote
@@ -171,8 +173,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(font-lock-doc-face ((t (:foreground "tan3"))))
+ '(mode-line ((t (:background "MediumOrchid3" :foreground "black" :box (:line-width 3 :color "MediumOrchid3") :weight normal))))
+ '(mode-line-buffer-id ((t (:foreground "black" :weight bold))))
+ '(mode-line-inactive ((t (:background "MediumOrchid3" :foreground "grey75" :box (:line-width 3 :color "MediumOrchid3") :weight normal))))
  '(org-level-1 ((t (:foreground "RoyalBlue1" :weight bold :height 1.1))))
- '(org-tag ((t (:foreground "MediumPurple1" :weight bold)))))
+ '(org-tag ((t (:foreground "MediumOrchid3" :weight bold)))))
 
 
 ;; Package configuration with 'use-package'
@@ -373,7 +378,9 @@
   (load-theme 'monokai-alt t)
   ;; The cursor color in this theme is very confusing.
   ;; Change it to green
-  (set-cursor-color "#9ce22e"))
+  (set-cursor-color "#9ce22e")
+  ;; Show (line,column) in mode-line
+  (column-number-mode t))
 
 (use-package ido-vertical-mode
   :doc "Show ido vertically"
