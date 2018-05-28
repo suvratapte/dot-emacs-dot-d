@@ -173,11 +173,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(font-lock-doc-face ((t (:foreground "tan3"))))
- '(mode-line ((t (:background "MediumOrchid3" :foreground "black" :box (:line-width 3 :color "MediumOrchid3") :weight normal))))
+ '(mode-line ((t (:background "#9ce22e" :foreground "black" :box (:line-width 3 :color "#9ce22e") :weight normal))))
  '(mode-line-buffer-id ((t (:foreground "black" :weight bold))))
- '(mode-line-inactive ((t (:background "MediumOrchid3" :foreground "grey75" :box (:line-width 3 :color "MediumOrchid3") :weight normal))))
- '(org-level-1 ((t (:foreground "RoyalBlue1" :weight bold :height 1.1))))
- '(org-tag ((t (:foreground "MediumOrchid3" :weight bold)))))
+ '(mode-line-inactive ((t (:background "#9ce22e" :foreground "grey50" :box (:line-width 3 :color "#9ce22e") :weight normal))))
+ '(org-level-1 ((t (:foreground "RoyalBlue1" :weight bold))))
+ '(org-tag ((t (:foreground "#9ce22e" :weight bold)))))
 
 
 ;; Package configuration with 'use-package'
