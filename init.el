@@ -451,6 +451,9 @@
 
 (use-package org
   :config
+  ;; Enable spell check in org
+  (add-hook 'org-mode-hook 'turn-on-flyspell)
+
   (setq org-list-demote-modify-bullet
         '(("+" . "-") ("-" . "+")))
 
