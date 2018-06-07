@@ -43,10 +43,6 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
-;; Custom themes path configuration
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(add-to-list 'load-path "~/.emacs.d/themes")
-
 ;; Set font size
 (set-face-attribute 'default nil :height 130)
 
