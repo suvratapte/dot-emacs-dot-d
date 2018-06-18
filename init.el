@@ -408,7 +408,7 @@
   :doc "Always keep everything indented"
   :ensure t
   :config
-  (global-aggressive-indent-mode t))
+  (add-hook 'before-save-hook 'aggressive-indent-indent-defun))
 
 (use-package git-timemachine
   :doc "Go through git history in a file"
