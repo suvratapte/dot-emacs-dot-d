@@ -44,10 +44,10 @@
   (scroll-bar-mode -1))
 
 ;; Set font size
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 150)
 
 ;; Use the 'Source Code Pro' font if available
-(when (not (eq system-type 'windows-nt ))
+(when (not (eq system-type 'windows-nt))
   (when (member "Source Code Pro" (font-family-list))
     (set-frame-font "Source Code Pro")))
 
@@ -70,9 +70,6 @@
 
  ;; Mouse yank commands yank at point instead of at click.
  mouse-yank-at-point t)
-
-;; No cursor blinking
-(blink-cursor-mode 0)
 
 ;; Set column width
 (setq-default fill-column 90)
@@ -116,6 +113,7 @@
   (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
 
 (global-set-key (kbd "C-;") 'toggle-comment-on-line)
+(global-set-key (kbd "C-c i") 'imenu)
 
 ;; Use 2 spaces for tabs
 (defun die-tabs ()
@@ -136,6 +134,25 @@
 (setq mac-command-modifier 'meta)
 
 (global-set-key (kbd "M-o") 'other-window)
+
+(defun focus (&optional arg var line)
+  "Brings the current window in the middle of the screen. Covering 2/3 of the frame width."
+  (interactive "P")
+  (delete-other-windows)
+  (let* ((window-width (window-body-width))
+         (focus-window-width (truncate (* window-width (/ 2.0 3.0))))
+         (side-padding-width (/ (- window-width focus-window-width) 2)))
+    (split-window-right)
+    (split-window-right)
+    (shrink-window-horizontally (truncate (* (window-body-width) (/ 1.0 3.0))))
+    (windmove-right)
+    (enlarge-window-horizontally (window-body-width))
+    (windmove-right)
+    (switch-to-buffer "*blank*")
+    (windmove-left)
+    (windmove-left)
+    (switch-to-buffer "*blank*")
+    (windmove-right)))
 
 ;; This mode refreshes buffer contents if the corresponding file is
 ;; changed on the disk
@@ -162,7 +179,7 @@
  '(ido-vertical-mode t)
  '(package-selected-packages
    (quote
-    (undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
+    (gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -401,14 +418,23 @@
 (use-package counsel
   :doc "Ivy enhanced Emacs commands"
   :ensure t
-  :bind (("M-x" . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)))
+  :bind (("M-x" . counsel-M-x)))
 
 (use-package aggressive-indent
   :doc "Always keep everything indented"
   :ensure t
   :config
   (add-hook 'before-save-hook 'aggressive-indent-indent-defun))
+
+(use-package git-gutter
+  :doc "Shows modified lines"
+  :ensure t
+  :config
+  (global-git-gutter-mode t)
+  (set-face-background 'git-gutter:modified "yellow")
+  (set-face-foreground 'git-gutter:added "green")
+  (set-face-foreground 'git-gutter:deleted "red")
+  :bind (("C-x C-g" . git-gutter)))
 
 (use-package git-timemachine
   :doc "Go through git history in a file"
@@ -438,12 +464,6 @@
   :doc "Emacs Start Up Profiler (esup) benchmarks Emacs
         startup time without leaving Emacs."
   :ensure t)
-
-(use-package undo-tree
-  :doc "Git like undo"
-  :ensure t
-  :config
-  (global-undo-tree-mode t))
 
 (use-package org
   :config
@@ -481,14 +501,15 @@
   (global-set-key (kbd "C-c a") 'org-agenda)
 
   ;; Capture directories
-  (setq org-personal-directory "~/workspace/repository-of-things/org/personal"
-        org-work-directory "~/workspace/repository-of-things/org/work")
+  (setq org-personal-directory "~/workspace/repository-of-things/personal"
+        org-work-directory "~/workspace/repository-of-things/work")
 
   ;; Capture files
   (setq org-default-reading-list-file (concat org-personal-directory "/reading-list.org")
         org-default-oncall-file (concat org-work-directory "/oncall.org")
         org-default-meeting-notes-file (concat org-work-directory "/meeting-notes.org")
-        org-default-hscore-file (concat org-work-directory "/hscore.org"))
+        org-default-hscore-file (concat org-work-directory "/hscore.org")
+        org-default-personal-todo-file (concat org-personal-directory "/todo.org"))
 
   (setq org-capture-templates
         '(("r" "Reading list item" entry (file org-default-reading-list-file)
@@ -503,13 +524,15 @@
   Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
           ("m" "Meeting notes" entry (file org-default-meeting-notes-file)
            "* %^{Agenda}\n  - Attendees: Suvrat, %^{Attendees}
-  - Date: %U\n  - Notes:\n    + %?\n  - Action items\n    + ")))
+  - Date: %U\n  - Notes:\n    + %?\n  - Action items\n    + ")
+          ("p" "Personal todo item" entry (file org-default-personal-todo-file)
+           "* TODO %^{Description}%?\n:LOGBOOK:\n  - Added: %U\n  :END:")))
 
   (setq org-agenda-files (list org-default-oncall-file
                                org-default-reading-list-file
                                org-default-meeting-notes-file
-                               org-default-hscore-file))
-
+                               org-default-hscore-file
+                               org-default-personal-todo-file))
   :bind (:map org-mode-map
               ("C-t" . org-todo)))
 
