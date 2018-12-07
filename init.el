@@ -413,7 +413,10 @@
 (use-package swiper
   :doc "A better search"
   :ensure t
-  :bind ("C-s" . swiper))
+  :bind (("C-s" . isearch-forward-regexp)
+         ("C-r" . isearch-backward-regexp)
+         ("C-M-s" . isearch-forward)
+         ("C-M-r" . isearch-backward)))
 
 (use-package counsel
   :doc "Ivy enhanced Emacs commands"
@@ -523,7 +526,7 @@
   :LOGBOOK:\n  - Added - %U\n  :END:
   Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
           ("m" "Meeting notes" entry (file org-default-meeting-notes-file)
-           "* %^{Agenda}\n  - Attendees: Suvrat, %^{Attendees}
+           "* %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
   - Date: %U\n  - Notes:\n    + %?\n  - Action items\n    + ")
           ("p" "Personal todo item" entry (file org-default-personal-todo-file)
            "* TODO %^{Description}%?\n:LOGBOOK:\n  - Added: %U\n  :END:")))
@@ -549,3 +552,6 @@
         (exec-path-from-shell-initialize)
         (exec-path-from-shell-copy-envs
          '("PATH")))))
+
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
