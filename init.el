@@ -173,13 +173,17 @@
  '(column-number-mode t)
  '(custom-safe-themes
    (quote
-    ("eea01f540a0f3bc7c755410ea146943688c4e29bea74a29568635670ab22f9bc" default)))
+    ("b0551b46b1632185f69d4e9fb8510fdcc209bfbc56f6830270983483a7b46ba9" "1c082c9b84449e54af757bcae23617d11f563fc9f33a832a8a2813c4d7dfb652" "4697a2d4afca3f5ed4fdf5f715e36a6cac5c6154e105f3596b44a4874ae52c45" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" "7e78a1030293619094ea6ae80a7579a562068087080e01c2b8b503b27900165c" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "6b2636879127bf6124ce541b1b2824800afc49c6ccd65439d6eb987dbf200c36" "eea01f540a0f3bc7c755410ea146943688c4e29bea74a29568635670ab22f9bc" default)))
  '(global-auto-revert-mode t)
  '(global-hl-line-mode t)
  '(ido-vertical-mode t)
+ '(magit-todos-mode t nil (magit-todos))
+ '(org-modules
+   (quote
+    (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m)))
  '(package-selected-packages
    (quote
-    (gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme cider clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
+    (ag dumb-jump doom-themes magit-org-todos magit-todos lsp-java auto-complete-auctex gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -189,6 +193,7 @@
  '(mode-line ((t (:background "#9ce22e" :foreground "black" :box (:line-width 3 :color "#9ce22e") :weight normal))))
  '(mode-line-buffer-id ((t (:foreground "black" :weight bold))))
  '(mode-line-inactive ((t (:background "#9ce22e" :foreground "grey50" :box (:line-width 3 :color "#9ce22e") :weight normal))))
+ '(org-done ((t (:foreground "chartreuse1" :weight bold))))
  '(org-level-1 ((t (:foreground "RoyalBlue1" :weight bold))))
  '(org-tag ((t (:foreground "#9ce22e" :weight bold)))))
 
@@ -321,6 +326,8 @@
   (setq cider-prompt-for-symbol nil)
   ;; Always pretty print
   (setq cider-repl-use-pretty-printing t)
+  ;; Enable logging in *nrepl-messages* buffer
+  (setq nrepl-log-messages t)
   :bind (:map
          cider-mode-map
          ("C-c d" . cider-debug-defun-at-point)
@@ -427,7 +434,17 @@
   :doc "Always keep everything indented"
   :ensure t
   :config
-  (add-hook 'before-save-hook 'aggressive-indent-indent-defun))
+  (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
+
+  ;; Have a way to save without indentation.
+  (defun save-without-aggresive-indentation ()
+    (interactive)
+    (let ((hooks before-save-hook))
+      (setq before-save-hook (remove 'aggressive-indent-indent-defun before-save-hook))
+      (save-buffer)
+      (setq before-save-hook hooks)))
+
+  :bind (("C-c s" . save-without-aggresive-indentation)))
 
 (use-package git-gutter
   :doc "Shows modified lines"
@@ -476,6 +493,9 @@
   (setq org-list-demote-modify-bullet
         '(("+" . "-") ("-" . "+")))
 
+  ;; Hide leading stars
+  (setq org-hide-leading-stars t)
+
   ;; Enable source code highlighting in org-mode.
   (setq org-src-fontify-natively t)
 
@@ -488,6 +508,9 @@
 
   ;; Use logbook
   (setq org-log-into-drawer t)
+
+  ;; Use clocking
+  (setq org-clock-into-drawer "CLOCKING")
 
   ;; Add 'closed' log when marked done
   (setq org-log-done t)
@@ -508,11 +531,12 @@
         org-work-directory "~/workspace/repository-of-things/work")
 
   ;; Capture files
-  (setq org-default-reading-list-file (concat org-personal-directory "/reading-list.org")
-        org-default-oncall-file (concat org-work-directory "/oncall.org")
-        org-default-meeting-notes-file (concat org-work-directory "/meeting-notes.org")
-        org-default-hscore-file (concat org-work-directory "/hscore.org")
-        org-default-personal-todo-file (concat org-personal-directory "/todo.org"))
+  (setq org-reading-list-file (concat org-personal-directory "/reading-list.org")
+        org-oncall-file (concat org-work-directory "/oncall.org")
+        org-meeting-notes-file (concat org-work-directory "/meeting-notes.org")
+        org-hscore-file (concat org-work-directory "/hscore.org")
+        org-personal-todo-file (concat org-personal-directory "/todo.org")
+        org-habits-file (concat org-personal-directory "/habits.org"))
 
   (setq org-capture-templates
         '(("r" "Reading list item" entry (file org-default-reading-list-file)
@@ -535,9 +559,8 @@
                                org-default-reading-list-file
                                org-default-meeting-notes-file
                                org-default-hscore-file
-                               org-default-personal-todo-file))
-  :bind (:map org-mode-map
-              ("C-t" . org-todo)))
+                               org-default-personal-todo-file
+                               org-habits-file)))
 
 
 (if (eq system-type 'darwin)
