@@ -183,7 +183,7 @@
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m)))
  '(package-selected-packages
    (quote
-    (ag dumb-jump doom-themes magit-org-todos magit-todos lsp-java auto-complete-auctex gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
+    (clj-refactor cider ag dumb-jump doom-themes magit-org-todos magit-todos lsp-java auto-complete-auctex gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -308,7 +308,10 @@
 
 (use-package cider
   :doc "Integration with a Clojure REPL cider"
-  :ensure t
+  ;; Cider has reached 0.20.x but clj-refactor only supports upto 0.18.0. Manually
+  ;; download cider-0.18.0 by checking out the tag on github and place it in
+  ;; `~/.emacs.d/elpa/` so that the `load-path` tag below, works.
+  :load-path "~/.emacs.d/elpa/cider-0.18.0"
   :init
   ;; Enable minibuffer documentation
   (add-hook 'cider-mode-hook 'eldoc-mode)
@@ -334,6 +337,16 @@
          :map
          cider-repl-mode-map
          ("C-c M-o" . cider-repl-clear-buffer)))
+
+(use-package clj-refactor
+  :ensure t
+  :config
+  (defun my-clojure-mode-hook ()
+    (clj-refactor-mode 1)
+    (yas-minor-mode 1) ; for adding require/use/import statements
+    ;; This choice of keybinding leaves cider-macroexpand-1 unbound
+    (cljr-add-keybindings-with-prefix "C-c C-m"))
+  (add-hook 'clojure-mode-hook #'my-clojure-mode-hook))
 
 (use-package eldoc
   :doc "Easily accessible documentation for Elisp"
@@ -515,6 +528,18 @@
   ;; Add 'closed' log when marked done
   (setq org-log-done t)
 
+  ;; Org modules
+  (setq org-modules (quote (org-bbdb
+                            org-bibtex
+                            org-docview
+                            org-gnus
+                            org-habit
+                            org-info
+                            org-irc
+                            org-mhe
+                            org-rmail
+                            org-w3m)))
+
   (setq org-todo-keyword-faces
         '(("TODO" :foreground "red" :weight bold)
           ("WORKING" :foreground "orange" :weight bold)
@@ -539,27 +564,27 @@
         org-habits-file (concat org-personal-directory "/habits.org"))
 
   (setq org-capture-templates
-        '(("r" "Reading list item" entry (file org-default-reading-list-file)
+        '(("r" "Reading list item" entry (file org-reading-list-file)
            "* TODO %^{Description}\n  %?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
-          ("o" "Oncall ticket" entry (file org-default-oncall-file)
+          ("o" "Oncall ticket" entry (file org-oncall-file)
            "* TODO %^{Type|ONCALL|CSR}-%^{Ticket number} - %^{Description}
   :LOGBOOK:\n  - Added - %U\n  :END:
   Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
-          ("h" "HSCore task" entry (file org-default-hscore-file)
+          ("h" "HSCore task" entry (file org-hscore-file)
            "* TODO %^{Type|HSC}-%^{Ticket number} - %^{Description}
   :LOGBOOK:\n  - Added - %U\n  :END:
   Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
-          ("m" "Meeting notes" entry (file org-default-meeting-notes-file)
+          ("m" "Meeting notes" entry (file org-meeting-notes-file)
            "* %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
   - Date: %U\n  - Notes:\n    + %?\n  - Action items\n    + ")
-          ("p" "Personal todo item" entry (file org-default-personal-todo-file)
+          ("p" "Personal todo item" entry (file org-personal-todo-file)
            "* TODO %^{Description}%?\n:LOGBOOK:\n  - Added: %U\n  :END:")))
 
-  (setq org-agenda-files (list org-default-oncall-file
-                               org-default-reading-list-file
-                               org-default-meeting-notes-file
-                               org-default-hscore-file
-                               org-default-personal-todo-file
+  (setq org-agenda-files (list org-oncall-file
+                               org-reading-list-file
+                               org-meeting-notes-file
+                               org-hscore-file
+                               org-personal-todo-file
                                org-habits-file)))
 
 
