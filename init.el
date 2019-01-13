@@ -43,8 +43,8 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
-;; Set font size
-(set-face-attribute 'default nil :height 150)
+;; Set fotn size
+(set-face-attribute 'default nil :height 140)
 
 ;; Use the 'Source Code Pro' font if available
 (when (not (eq system-type 'windows-nt))
@@ -183,7 +183,7 @@
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m)))
  '(package-selected-packages
    (quote
-    (clj-refactor cider ag dumb-jump doom-themes magit-org-todos magit-todos lsp-java auto-complete-auctex gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
+    (pdf-tools web-mode clj-refactor cider ag dumb-jump doom-themes magit-org-todos magit-todos lsp-java auto-complete-auctex gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -446,9 +446,7 @@
 (use-package aggressive-indent
   :doc "Always keep everything indented"
   :ensure t
-  :config
-  (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
-
+  :preface
   ;; Have a way to save without indentation.
   (defun save-without-aggresive-indentation ()
     (interactive)
@@ -456,6 +454,9 @@
       (setq before-save-hook (remove 'aggressive-indent-indent-defun before-save-hook))
       (save-buffer)
       (setq before-save-hook hooks)))
+
+  :config
+  (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
 
   :bind (("C-c s" . save-without-aggresive-indentation)))
 
@@ -515,9 +516,8 @@
   ;; '!' after the hotkey tells org-mode to add a LOGBOOK entry for every
   ;; status change.
   (setq org-todo-keywords
-        '((sequence "TODO(t/!)" "WORKING(w/!)" "PAUSED(p/!)"
-                    "WAITING(W/!)" "|" "DONE(d/!)"
-                    "CANCELLED(c/!)")))
+        '((sequence "TODO(t!)" "WORKING(w!)" "PAUSED(p!)" "BLOCKED(b!)" "NEXT(n!)"
+                    "|" "DONE(d@!)" "CANCELLED(c!)")))
 
   ;; Use logbook
   (setq org-log-into-drawer t)
@@ -544,9 +544,27 @@
         '(("TODO" :foreground "red" :weight bold)
           ("WORKING" :foreground "orange" :weight bold)
           ("PAUSED" :foreground "SlateBlue1" :weight bold)
-          ("WAITING" :foreground "pink1" :weight bold)
+          ("BLOCKED" :foreground "pink1" :weight bold)
+          ("NEXT" :foreground "cyan1" :weight bold)
           ("DONE" :foreground "chartreuse1" :weight bold)
           ("CANCELLED" :foreground "yellow" :weight bold)))
+
+  (setq org-agenda-custom-commands
+        '(("i" "My Agenda"
+          ((todo "WORKING"
+                 ((org-agenda-overriding-header "Currently working")))
+           (todo "NEXT"
+                 ((org-agenda-overriding-header "Next tasks")))
+           (alltodo ""
+                    ((org-agenda-overriding-header "Today and tomorrow")
+                     (org-agenda-skip-function
+                      '(org-agenda-skip-entry-if 'notscheduled))))
+           (alltodo ""
+                    ((org-agenda-overriding-header "Unscheduled")
+                     (org-agenda-skip-function
+                      '(org-agenda-skip-entry-if 'scheduled)))))
+          nil nil)))
+
 
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-c a") 'org-agenda)
@@ -569,11 +587,11 @@
           ("o" "Oncall ticket" entry (file org-oncall-file)
            "* TODO %^{Type|ONCALL|CSR}-%^{Ticket number} - %^{Description}
   :LOGBOOK:\n  - Added - %U\n  :END:
-  Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
+  - Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
           ("h" "HSCore task" entry (file org-hscore-file)
            "* TODO %^{Type|HSC}-%^{Ticket number} - %^{Description}
   :LOGBOOK:\n  - Added - %U\n  :END:
-  Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
+  - Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
           ("m" "Meeting notes" entry (file org-meeting-notes-file)
            "* %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
   - Date: %U\n  - Notes:\n    + %?\n  - Action items\n    + ")
@@ -588,18 +606,56 @@
                                org-habits-file)))
 
 
+(use-package pdf-tools
+  :doc "Better pdf viewing"
+  :ensure t
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :bind (:map pdf-view-mode-map
+              ("j" . image-next-line)
+              ("k" . image-previous-line)))
+
+
+;; Thanks to - Narendra Joshi (https://gitlab.com/narendraj9/dot-emacs)
+(defun upload-region (beg end)
+  "Upload the contents of the selected region in current buffer.
+   It uses transfer.sh Link to the uploaded file is copied to
+   clipboard.  Creates a temp file if the buffer isn't associted
+   witha file.  Argument BEG beginning point for region.
+   Argument END ending point for region."
+  (interactive "r")
+  (let* ((buf-file-path (buffer-file-name))
+         (file-path (or buf-file-path
+                        (create-file-for-buffer)))
+         (file-name (file-name-nondirectory file-path))
+         (upload-url (format "https://transfer.sh/%s"
+                             file-name))
+         (url-request-method "PUT")
+         (url-request-data (buffer-substring-no-properties beg end))
+         (url-callback (lambda (_)
+                         (search-forward "\n\n")
+                         (let ((url-link (buffer-substring (point)
+                                                           (point-max))))
+                           (kill-new url-link)
+                           (message "Link copied to clipboard: %s"
+                                    (s-trim url-link))
+                           (kill-buffer (current-buffer))))))
+    (url-retrieve upload-url url-callback)))
+
+
 (if (eq system-type 'darwin)
     (use-package exec-path-from-shell
       :doc "MacOS does not start a shell at login.
             This makes sure that the env variable
             of shell and GUI Emacs look the same."
       :ensure t
-      :defer 5
       :config
       (when (memq window-system '(mac ns))
         (exec-path-from-shell-initialize)
         (exec-path-from-shell-copy-envs
-         '("PATH")))))
+         '("PATH" "ANDROID_HOME" "LEIN_USERNAME" "LEIN_PASSPHRASE"
+           "LEIN_JVM_OPTS" "NPM_TOKEN" "LANGUAGE" "LANG" "LC_ALL"
+           "MOBY_ENV" "JAVA_8_HOME" "JAVA_7_HOME" "JAVA_HOME" "PS1"
+           "NVM_DIR" "GPG_TTY")))))
 
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
