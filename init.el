@@ -189,6 +189,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(font-lock-comment-face ((t (:foreground "tan3"))))
  '(font-lock-doc-face ((t (:foreground "tan3"))))
  '(mode-line ((t (:background "#9ce22e" :foreground "black" :box (:line-width 3 :color "#9ce22e") :weight normal))))
  '(mode-line-buffer-id ((t (:foreground "black" :weight bold))))
@@ -262,7 +263,9 @@
   (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
   (add-hook 'scheme-mode-hook #'enable-paredit-mode)
   :config
-  (show-paren-mode t))
+  (show-paren-mode t)
+  :bind (("M-[" . paredit-wrap-square)
+         ("M-{" . paredit-wrap-curly)))
 
 (use-package clojure-mode
   :doc "A major mode for editing Clojure code"
