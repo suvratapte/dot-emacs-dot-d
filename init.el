@@ -58,10 +58,10 @@
  ;; I'm actually not sure what this does but it's recommended?
  x-select-enable-primary t
 
- ;; Save clipboard strings into kill ring before replacing them.
- ;; When one selects something in another program to paste it into Emacs,
- ;; but kills something in Emacs before actually pasting it,
- ;; this selection is gone unless this variable is non-nil
+ ;; Save clipboard strings into kill ring before replacing them. When
+ ;; one selects something in another program to paste it into Emacs, but
+ ;; kills something in Emacs before actually pasting it, this selection
+ ;; is gone unless this variable is non-nil
  save-interprogram-paste-before-kill t
 
  ;; Shows all options when running apropos. For more info,
@@ -72,7 +72,7 @@
  mouse-yank-at-point t)
 
 ;; Set column width
-(setq-default fill-column 90)
+(setq-default fill-column 72)
 
 ;; Full path in the title bar
 (setq-default frame-title-format "Emacs (%f)")
@@ -183,7 +183,7 @@
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m)))
  '(package-selected-packages
    (quote
-    (pdf-tools web-mode clj-refactor cider ag dumb-jump doom-themes magit-org-todos magit-todos lsp-java auto-complete-auctex gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
+    (highlight-symbol pdf-tools web-mode clj-refactor cider ag dumb-jump doom-themes magit-org-todos magit-todos lsp-java auto-complete-auctex gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -266,6 +266,15 @@
   (show-paren-mode t)
   :bind (("M-[" . paredit-wrap-square)
          ("M-{" . paredit-wrap-curly)))
+
+(use-package highlight-symbol
+  :doc "Highlight and jump to symbols"
+  :ensure t
+  :config
+  (highlight-symbol-mode t)
+  (setq highlight-symbol-idle-delay 0.5)
+  :bind (("M-n" . highlight-symbol-next)
+         ("M-p" . highlight-symbol-prev)))
 
 (use-package clojure-mode
   :doc "A major mode for editing Clojure code"
@@ -554,19 +563,18 @@
 
   (setq org-agenda-custom-commands
         '(("i" "My Agenda"
-          ((todo "WORKING"
-                 ((org-agenda-overriding-header "Currently working")))
-           (todo "NEXT"
-                 ((org-agenda-overriding-header "Next tasks")))
-           (alltodo ""
-                    ((org-agenda-overriding-header "Today and tomorrow")
-                     (org-agenda-skip-function
-                      '(org-agenda-skip-entry-if 'notscheduled))))
-           (alltodo ""
-                    ((org-agenda-overriding-header "Unscheduled")
-                     (org-agenda-skip-function
-                      '(org-agenda-skip-entry-if 'scheduled)))))
-          nil nil)))
+           ((agenda ""
+                    ((org-agenda-overriding-header "Agenda")
+                     (org-agenda-span 2)))
+            (todo "WORKING"
+                  ((org-agenda-overriding-header "Currently working")))
+            (todo "NEXT"
+                  ((org-agenda-overriding-header "Next tasks")))
+            (alltodo ""
+                     ((org-agenda-overriding-header "Unscheduled")
+                      (org-agenda-skip-function
+                       '(org-agenda-skip-entry-if 'scheduled)))))
+           nil nil)))
 
 
   (global-set-key (kbd "C-c c") 'org-capture)
