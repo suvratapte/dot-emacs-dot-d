@@ -72,7 +72,7 @@
  mouse-yank-at-point t)
 
 ;; Set column width
-(setq-default fill-column 72)
+(setq-default fill-column 90)
 
 ;; Full path in the title bar
 (setq-default frame-title-format "Emacs (%f)")
@@ -605,7 +605,7 @@
   - Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
           ("m" "Meeting notes" entry (file org-meeting-notes-file)
            "* %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
-  - Date: %U\n  - Notes:\n    + %?\n  - Action items\n    + ")
+  - Date: %U\n  - Notes:\n    + %?\n  - Action items [/]\n    + [ ] ")
           ("p" "Personal todo item" entry (file org-personal-todo-file)
            "* TODO %^{Description}%?\n:LOGBOOK:\n  - Added: %U\n  :END:")))
 
