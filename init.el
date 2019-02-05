@@ -541,16 +541,16 @@
   (setq org-log-done t)
 
   ;; Org modules
-  (setq org-modules (quote (org-bbdb
-                            org-bibtex
-                            org-docview
-                            org-gnus
-                            org-habit
-                            org-info
-                            org-irc
-                            org-mhe
-                            org-rmail
-                            org-w3m)))
+  (setq org-modules '(org-bbdb
+                      org-bibtex
+                      org-docview
+                      org-gnus
+                      org-habit
+                      org-info
+                      org-irc
+                      org-mhe
+                      org-rmail
+                      org-w3m))
 
   (setq org-todo-keyword-faces
         '(("TODO" :foreground "red" :weight bold)
@@ -614,7 +614,25 @@
                                org-meeting-notes-file
                                org-hscore-file
                                org-personal-todo-file
-                               org-habits-file)))
+                               org-habits-file))
+
+  (defun org-move-item-or-tree ()
+    (interactive)
+    (message "Use f, b, n, p to move individual items. Use C-{f,b,n,p} for point movement.")
+    (let ((map (make-sparse-keymap)))
+      (define-key map (kbd "f") 'org-shiftmetaright)
+      (define-key map (kbd "b") 'org-shiftmetaleft)
+      (define-key map (kbd "n") 'org-shiftmetadown)
+      (define-key map (kbd "p") 'org-shiftmetaup)
+      (define-key map (kbd "C-f") 'forward-char)
+      (define-key map (kbd "C-b") 'backward-char)
+      (define-key map (kbd "C-n") 'next-line)
+      (define-key map (kbd "C-p") 'previous-line)
+      (set-transient-map map t)))
+
+  :bind
+  (:map org-mode-map
+        ("C-M-g" . org-move-item-or-tree)))
 
 
 (use-package pdf-tools
