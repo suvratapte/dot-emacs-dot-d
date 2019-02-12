@@ -177,13 +177,12 @@
  '(global-auto-revert-mode t)
  '(global-hl-line-mode t)
  '(ido-vertical-mode t)
- '(magit-todos-mode t nil (magit-todos))
  '(org-modules
    (quote
     (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m)))
  '(package-selected-packages
    (quote
-    (highlight-symbol pdf-tools web-mode clj-refactor cider ag dumb-jump doom-themes magit-org-todos magit-todos lsp-java auto-complete-auctex gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
+    (esup region-bindings-mode highlight-symbol pdf-tools web-mode clj-refactor cider ag dumb-jump doom-themes magit-org-todos lsp-java auto-complete-auctex gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
