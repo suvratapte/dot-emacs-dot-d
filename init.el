@@ -618,12 +618,18 @@
 
   (defun org-move-item-or-tree ()
     (interactive)
-    (message "Use f, b, n, p to move individual items. Use C-{f,b,n,p} for point movement.")
+    (message "Use f, b, n, p to move items with subtrees. %s %s"
+             "F, B, N, P to move items without subtrees."
+             "C-{f,b,n,p} for point movement.")
     (let ((map (make-sparse-keymap)))
       (define-key map (kbd "f") 'org-shiftmetaright)
       (define-key map (kbd "b") 'org-shiftmetaleft)
       (define-key map (kbd "n") 'org-shiftmetadown)
       (define-key map (kbd "p") 'org-shiftmetaup)
+      (define-key map (kbd "F") 'org-metaright)
+      (define-key map (kbd "B") 'org-metaleft)
+      (define-key map (kbd "N") 'org-metadown)
+      (define-key map (kbd "P") 'org-metaup)
       (define-key map (kbd "C-f") 'forward-char)
       (define-key map (kbd "C-b") 'backward-char)
       (define-key map (kbd "C-n") 'next-line)
