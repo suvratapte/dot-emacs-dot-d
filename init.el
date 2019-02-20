@@ -589,7 +589,8 @@
         org-meeting-notes-file (concat org-work-directory "/meeting-notes.org")
         org-hscore-file (concat org-work-directory "/hscore.org")
         org-personal-todo-file (concat org-personal-directory "/todo.org")
-        org-habits-file (concat org-personal-directory "/habits.org"))
+        org-habits-file (concat org-personal-directory "/habits.org")
+        org-til-file (concat org-personal-directory "/til.org"))
 
   (setq org-capture-templates
         '(("r" "Reading list item" entry (file org-reading-list-file)
@@ -606,7 +607,9 @@
            "* %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
   - Date: %U\n  - Notes:\n    + %?\n  - Action items [/]\n    + [ ] ")
           ("p" "Personal todo item" entry (file org-personal-todo-file)
-           "* TODO %^{Description}%?\n:LOGBOOK:\n  - Added: %U\n  :END:")))
+           "* TODO %^{Description}%?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
+          ("t" "Today I learnt" entry (file org-til-file)
+           "* %^{Description}\n  - Source: %?\n  -")))
 
   (setq org-agenda-files (list org-oncall-file
                                org-reading-list-file
