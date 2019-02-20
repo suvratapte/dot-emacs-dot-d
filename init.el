@@ -638,8 +638,9 @@
       (define-key map (kbd "C-p") 'previous-line)
       (set-transient-map map t)))
 
-  :bind
-  (:map org-mode-map
+  :bind (:map global-map
+        ("C-c g" . org-clock-goto)
+        :map org-mode-map
         ("C-M-g" . org-move-item-or-tree)))
 
 
