@@ -1,6 +1,9 @@
 ;; Go straight to scratch buffer on startup
 (setq inhibit-startup-message t)
 
+;; Put `customize' code in
+(setq custom-file "~/.emacs.d/custom-file.el")
+
 ;; Define package repositories
 (require 'package)
 
@@ -71,11 +74,12 @@
  ;; Mouse yank commands yank at point instead of at click.
  mouse-yank-at-point t)
 
-;; Set column width
-(setq-default fill-column 90)
+;; Set column width and display column # in mode line
+(setq-default fill-column 90
+              column-number-mode t)
 
 ;; Full path in the title bar
-(setq-default frame-title-format "Emacs (%f)")
+(setq-default frame-title-format "Suvrat's Emacs (%f)")
 
 ;; Change all yes/no questions to y/n type
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -95,7 +99,7 @@
         try-complete-lisp-symbol))
 
 ;; Highlight current line
-(global-hl-line-mode 1)
+(setq global-hl-line-mode 1)
 
 ;; Don't use hard tabs
 (setq-default indent-tabs-mode nil)
@@ -156,47 +160,13 @@
 
 ;; This mode refreshes buffer contents if the corresponding file is
 ;; changed on the disk
-(global-auto-revert-mode t)
+(setq global-auto-revert-mode t)
 
 ;; Allow minibuffer commands while in a minibuffer
 (setq enable-recursive-minibuffers t)
 
 ;; Delete whitespace just when you save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(coffee-tab-width 2)
- '(column-number-mode t)
- '(custom-safe-themes
-   (quote
-    ("b0551b46b1632185f69d4e9fb8510fdcc209bfbc56f6830270983483a7b46ba9" "1c082c9b84449e54af757bcae23617d11f563fc9f33a832a8a2813c4d7dfb652" "4697a2d4afca3f5ed4fdf5f715e36a6cac5c6154e105f3596b44a4874ae52c45" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "a3fa4abaf08cc169b61dea8f6df1bbe4123ec1d2afeb01c17e11fdc31fc66379" "7e78a1030293619094ea6ae80a7579a562068087080e01c2b8b503b27900165c" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "6b2636879127bf6124ce541b1b2824800afc49c6ccd65439d6eb987dbf200c36" "eea01f540a0f3bc7c755410ea146943688c4e29bea74a29568635670ab22f9bc" default)))
- '(global-auto-revert-mode t)
- '(global-hl-line-mode t)
- '(ido-vertical-mode t)
- '(org-modules
-   (quote
-    (org-bbdb org-bibtex org-docview org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m)))
- '(package-selected-packages
-   (quote
-    (esup region-bindings-mode highlight-symbol pdf-tools web-mode clj-refactor cider ag dumb-jump doom-themes magit-org-todos lsp-java auto-complete-auctex gif-screencast undo-tree go-mode multiple-cursors git-gutter git-timemachine hippie-expand ido-completing-read+ use-package aggressive-indent counsel swiper ivy ido-vertical-mode ace-jump-mode company color-theme-monokai monokai-alt-theme clojure-mode color-identifiers-mode tagedit smex rainbow-delimiters queue projectile paredit magit exec-path-from-shell))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(font-lock-comment-face ((t (:foreground "tan3"))))
- '(font-lock-doc-face ((t (:foreground "tan3"))))
- '(mode-line ((t (:background "#9ce22e" :foreground "black" :box (:line-width 3 :color "#9ce22e") :weight normal))))
- '(mode-line-buffer-id ((t (:foreground "black" :weight bold))))
- '(mode-line-inactive ((t (:background "#9ce22e" :foreground "grey50" :box (:line-width 3 :color "#9ce22e") :weight normal))))
- '(org-done ((t (:foreground "chartreuse1" :weight bold))))
- '(org-level-1 ((t (:foreground "RoyalBlue1" :weight bold))))
- '(org-tag ((t (:foreground "#9ce22e" :weight bold)))))
-
 
 ;; Package configuration with 'use-package'
 (require 'use-package)
@@ -340,7 +310,7 @@
   (setq cider-prompt-for-symbol nil)
   ;; Always pretty print
   (setq cider-repl-use-pretty-printing t)
-  ;; Enable logging in *nrepl-messages* buffer
+  ;; Enable logging client-server messaging in *nrepl-messages* buffer
   (setq nrepl-log-messages t)
   :bind (:map
          cider-mode-map
@@ -358,6 +328,27 @@
     ;; This choice of keybinding leaves cider-macroexpand-1 unbound
     (cljr-add-keybindings-with-prefix "C-c C-m"))
   (add-hook 'clojure-mode-hook #'my-clojure-mode-hook))
+
+;; WIP: A function which will run `cljr-clean-ns' on all modified Clojure files.
+;; ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+;; (defun clean-all-modified-ns ()
+;;   (interactive)
+;;   (let ((extension ".clj")
+;;         ;; `shell-command-to-string` always contains a "\n" at its end. `butlast` is
+;;         ;; used to get rid of the last empty string returned via `split-string`.
+;;         (modified-files (butlast
+;;                          (split-string (shell-command-to-string "git diff --name-only")
+;;                                        "\n"))))
+;;     (if (= (length modified-files) 0)
+;;         (message "No files have changed.")
+;;       (progn
+;;         (dolist (file modified-files)
+;;           (when (string-equal (substring file (- (length file) (length extension)))
+;;                               extension)
+;;             (when (not (string-equal (first (last (split-string file "/")))
+;;                                      "project.clj"))
+;;               (cljr--clean-ns file))))
+;;         (message "Namespaces cleaned! :)")))))
 
 (use-package eldoc
   :doc "Easily accessible documentation for Elisp"
@@ -391,7 +382,8 @@
   :ensure t
   :config
   ;; Use it everywhere
-  (projectile-global-mode t))
+  (projectile-global-mode t)
+  :bind ("C-x f" . projectile-find-file))
 
 (use-package rainbow-delimiters
   :doc "Colorful paranthesis matching"
@@ -424,7 +416,20 @@
   ;; Change it to green
   (set-cursor-color "#9ce22e")
   ;; Show (line,column) in mode-line
-  (column-number-mode t))
+  (column-number-mode t)
+  ;; Customize theme
+  (custom-theme-set-faces
+   'user ;; `user' refers to user settings applied via Customize.
+   '(font-lock-comment-face ((t (:foreground "tan3"))))
+   '(font-lock-doc-face ((t (:foreground "tan3"))))
+   '(mode-line ((t (:background "#9ce22e" :foreground "black"
+                                :box (:line-width 3 :color "#9ce22e") :weight normal))))
+   '(mode-line-buffer-id ((t (:foreground "black" :weight bold))))
+   '(mode-line-inactive ((t (:background "#9ce22e" :foreground "grey50"
+                                         :box (:line-width 3 :color "#9ce22e") :weight normal))))
+   '(org-done ((t (:foreground "chartreuse1" :weight bold))))
+   '(org-level-1 ((t (:foreground "RoyalBlue1" :weight bold))))
+   '(org-tag ((t (:foreground "#9ce22e" :weight bold))))))
 
 (use-package ido-vertical-mode
   :doc "Show ido vertically"
