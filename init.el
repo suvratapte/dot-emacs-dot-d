@@ -702,3 +702,35 @@
 
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
+
+
+(defun insert-comment-with-description (comment-syntax comment)
+  "------------- Inserts a comment like this (till the end of `fill-column' ------------"
+  (let* ((comment-length (length comment))
+         (comment-syntax ";;")
+         (current-column-pos (current-column))
+         (space-on-each-side (/ (- fill-column
+                                   current-column-pos
+                                   comment-length
+                                   (length comment-syntax)
+                                    ;; Single space on each side of comment
+                                   (if (> comment-length 0) 2 0)
+                                   ;; Single space after comment syntax sting
+                                   1)
+                                2)))
+    (if (< space-on-each-side 2)
+        (message "Comment string is too big to fit in one line")
+      (progn
+        (insert comment-syntax)
+        (insert " ")
+        (dotimes (_ space-on-each-side) (insert "-"))
+        (when (> comment-length 0) (insert " "))
+        (insert comment)
+        (when (> comment-length 0) (insert " "))
+        (dotimes (_ (if (= (% comment-length 2) 0)  space-on-each-side (- space-on-each-side 1)))
+          (insert "-"))))))
+
+(defun clj-insert-comment-with-description ()
+  "----------------------- Inserts a Clojure comment like this ----------------------"
+  (interactive)
+  (insert-comment-with-description ";;" (read-from-minibuffer "Comment: ")))
