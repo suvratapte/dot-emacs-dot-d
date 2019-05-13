@@ -248,7 +248,6 @@
 (defun insert-comment-with-description (comment-syntax comment)
   "Inserts a comment with '―' (Unicode character: U+2015) on each side."
   (let* ((comment-length (length comment))
-         (comment-syntax ";;")
          (current-column-pos (current-column))
          (space-on-each-side (/ (- fill-column
                                    current-column-pos
@@ -268,9 +267,10 @@
         (when (> comment-length 0) (insert " "))
         (insert comment)
         (when (> comment-length 0) (insert " "))
-        (dotimes (_ (if (= (% comment-length 2) 0)  space-on-each-side (- space-on-each-side 1)))
+        (dotimes (_ (if (= (% comment-length 2) 0)
+                      space-on-each-side
+                      (- space-on-each-side 1)))
           (insert "―"))))))
-
 
 (use-package clojure-mode
   :doc "A major mode for editing Clojure code"
@@ -311,9 +311,9 @@
   (add-hook 'cider-repl-mode-hook 'prettify-sets)
 
   (defun clj-insert-comment-with-description ()
-  "Inserts a pretty Clojure comment."
-  (interactive)
-  (insert-comment-with-description ";;" (read-from-minibuffer "Comment: ")))
+    "Inserts a pretty Clojure comment."
+    (interactive)
+    (insert-comment-with-description ";;" (read-from-minibuffer "Comment: ")))
 
   :bind ("C-c ;" . clj-insert-comment-with-description))
 
