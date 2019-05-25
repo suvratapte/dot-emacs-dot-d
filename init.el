@@ -355,34 +355,41 @@
 
 (use-package clj-refactor
   :ensure t
-  :config
+  :preface
+  (defun clean-all-modified-ns ()
+    "Cleans all the modified namespaces. The idea is to use this
+    before commiting, so that all the namespaces that you modify are
+    cleaned! :)"
+    (interactive)
+    (let ((extension ".clj")
+          ;; `shell-command-to-string` always contains a "\n" at its end. `butlast` is
+          ;; used to get rid of the last empty string returned via `split-string`.
+          (modified-files
+           (butlast
+            (split-string
+             (shell-command-to-string
+              "git diff --name-only && git diff --name-only --staged")
+             "\n"))))
+      (if (= (length modified-files) 0)
+          (message "No files have changed.")
+        (progn
+          (dolist (file modified-files)
+            (when (string-equal (substring file (- (length file) (length extension)))
+                                extension)
+              (when (not (string-equal (first (last (split-string file "/")))
+                                       "project.clj"))
+                (with-current-buffer (find-file-noselect (concat (cljr--project-dir) file))
+                  (cljr--clean-ns)
+                  (save-buffer)))))
+          (message "Namespaces cleaned! :)")))))
+
   (defun my-clojure-mode-hook ()
     (clj-refactor-mode 1)
-    (yas-minor-mode 1) ; for adding require/use/import statements
+    (yas-minor-mode 1) ;; for adding require/use/import statements
     ;; This choice of keybinding leaves cider-macroexpand-1 unbound
     (cljr-add-keybindings-with-prefix "C-c C-m"))
+  :config
   (add-hook 'clojure-mode-hook #'my-clojure-mode-hook))
-
-;; WIP: A function which will run `cljr-clean-ns' on all modified Clojure files.
-;; ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
-;; (defun clean-all-modified-ns ()
-;;   (interactive)
-;;   (let ((extension ".clj")
-;;         ;; `shell-command-to-string` always contains a "\n" at its end. `butlast` is
-;;         ;; used to get rid of the last empty string returned via `split-string`.
-;;         (modified-files (butlast
-;;                          (split-string (shell-command-to-string "git diff --name-only")
-;;                                        "\n"))))
-;;     (if (= (length modified-files) 0)
-;;         (message "No files have changed.")
-;;       (progn
-;;         (dolist (file modified-files)
-;;           (when (string-equal (substring file (- (length file) (length extension)))
-;;                               extension)
-;;             (when (not (string-equal (first (last (split-string file "/")))
-;;                                      "project.clj"))
-;;               (cljr--clean-ns file))))
-;;         (message "Namespaces cleaned! :)")))))
 
 (use-package eldoc
   :doc "Easily accessible documentation for Elisp"
