@@ -1,176 +1,190 @@
-;; Go straight to scratch buffer on startup
-(setq inhibit-startup-message t)
-
-;; Put `customize' code in
-(setq custom-file "~/.emacs.d/custom-file.el")
-
-;; Define package repositories
+
+; ――――――――――――――――――――――――――――――――――― Set up 'package' ―――――――――――――――――――――――――――――――――――
 (require 'package)
 
-;; Add melpa to package archives
+;; Add melpa to package archives.
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
-;; Load and activate emacs packages. Do this first so that the
-;; packages are loaded before you start trying to modify them.
-;; This also sets the load path.
+;; Load and activate emacs packages. Do this first so that the packages are loaded before
+;; you start trying to modify them.  This also sets the load path.
 (package-initialize)
-
-;; Don't use the compiled code if its the older package
-(setq load-prefer-newer t)
 
 ;; Install 'use-package' if it is not installed.
 (when (not (package-installed-p 'use-package))
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; Place downloaded elisp files in ~/.emacs.d/vendor. You'll then be able
-;; to load them.
-;;
-;; For example, if you download yaml-mode.el to ~/.emacs.d/vendor,
-;; then you can add the following code to this file:
-;;
-;; (require 'yaml-mode)
-;; (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-;;
-;; Adding this code will make Emacs enter yaml mode whenever you open
-;; a .yml file
-(add-to-list 'load-path "~/.emacs.d/vendor")
+
+; ――――――――――――――――――――――――――――――――― Use better defaults ――――――――――――――――――――――――――――――――
+(setq-default
+ ;; Don't use the compiled code if its the older package.
+ load-prefer-newer t
 
-;; Turn off unecessary UI elements
-(menu-bar-mode -1)
+ ;; Do not show the startup message.
+ inhibit-startup-message t
 
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
+ ;; Do not put 'customize' config in init.el; give it another file.
+ custom-file "~/.emacs.d/custom-file.el"
 
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
+ ;; 72 is too less for the fontsize that I use.
+ fill-column 90
 
-;; Set fotn size
-(set-face-attribute 'default nil :height 140)
+ ;; Display column number in mode line.
+ colucolmn-number-mode t
 
-;; Use the 'Source Code Pro' font if available
-(when (not (eq system-type 'windows-nt))
-  (when (member "Source Code Pro" (font-family-list))
-    (set-frame-font "Source Code Pro")))
+ ;; Use my name in the frame title. :)
+ frame-title-format "Suvrat's Emacs (%f)"
 
-;; These settings relate to how emacs interacts with your operating system
-(setq ;; makes killing/yanking interact with the clipboard
+ ;; Do not create lockfiles.
+ create-lockfiles nil
+
+ ;; Don't use hard tabs
+ indent-tabs-mode nil
+
+ ;; Emacs can automatically create backup files. This tells Emacs to put all backups in
+ ;; ~/.emacs.d/backups. More info:
+ ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Backup-Files.html
+ backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
+
+ ;; Do not autosave.
+ auto-save-default nil
+
+ ;; Automatically update buffers if file content on the disk has changed.
+ global-auto-revert-mode t
+
+ ;; Allow commands to be run on minibuffers.
+ enable-recursive-minibuffers t)
+
+;; Change all yes/no questions to y/n type
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Make the command key behave as 'meta'
+(when (eq system-type 'darwin)
+  (setq mac-command-modifier 'meta))
+
+;; `C-x o' is a 2 step key binding. `M-o' is much easier.
+(global-set-key (kbd "M-o") 'other-window)
+
+;; Delete whitespace just when a file is saved.
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; Enable narrowing commands.
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
+
+
+; ――――――――――――――――――――――――――― Disable unnecessary UI elements ――――――――――――――――――――――――――
+(progn
+  ;; Do not show menu bar.
+  (menu-bar-mode -1)
+
+  ;; Do not show tool bar.
+  (when (fboundp 'tool-bar-mode)
+    (tool-bar-mode -1))
+
+  ;; Do not show scroll bar.
+  (when (fboundp 'scroll-bar-mode)
+    (scroll-bar-mode -1))
+
+  ;; Highlight line on point.
+  (global-hl-line-mode t))
+
+
+; ――――――――――――――――――――――――― Better interaction with X clipboard ――――――――――――――――――――――――――
+(setq-default
+ ;; Makes killing/yanking interact with the clipboard.
  x-select-enable-clipboard t
 
- ;; I'm actually not sure what this does but it's recommended?
+ ;; To understand why this is done, read `X11 Copy & Paste to/from Emacs' section here:
+ ;; https://www.emacswiki.org/emacs/CopyAndPaste.
  x-select-enable-primary t
 
  ;; Save clipboard strings into kill ring before replacing them. When
  ;; one selects something in another program to paste it into Emacs, but
  ;; kills something in Emacs before actually pasting it, this selection
- ;; is gone unless this variable is non-nil
+ ;; is gone unless this variable is non-nil.
  save-interprogram-paste-before-kill t
 
  ;; Shows all options when running apropos. For more info,
- ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Apropos.html
+ ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Apropos.html.
  apropos-do-all t
 
  ;; Mouse yank commands yank at point instead of at click.
  mouse-yank-at-point t)
 
-;; Set column width and display column # in mode line
-(setq-default fill-column 90
-              column-number-mode t)
-
-;; Full path in the title bar
-(setq-default frame-title-format "Suvrat's Emacs (%f)")
-
-;; Change all yes/no questions to y/n type
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; No need for ~ files when editing
-(setq create-lockfiles nil)
-
-;; For autocompletion
-(global-set-key (kbd "M-/") 'hippie-expand)
-
-;; Lisp-friendly hippie expand
-(setq hippie-expand-try-functions-list
-      '(try-expand-dabbrev
-        try-expand-dabbrev-all-buffers
-        try-expand-dabbrev-from-kill
-        try-complete-lisp-symbol-partially
-        try-complete-lisp-symbol))
-
-;; Highlight current line
-(setq global-hl-line-mode 1)
-
-;; Don't use hard tabs
-(setq-default indent-tabs-mode nil)
-
-;; Emacs can automatically create backup files. This tells Emacs to
-;; put all backups in ~/.emacs.d/backups. More info:
-;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Backup-Files.html
-(setq backup-directory-alist `(("." . ,(concat user-emacs-directory
-                                               "backups"))))
-(setq auto-save-default nil)
-
+
+; ―――――――――――――――――――――――― Added functionality (Generic usecases) ――――――――――――――――――――――――
 (defun toggle-comment-on-line ()
   "comment or uncomment current line"
   (interactive)
   (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
 
 (global-set-key (kbd "C-;") 'toggle-comment-on-line)
-(global-set-key (kbd "C-c i") 'imenu)
 
-;; Use 2 spaces for tabs
-(defun die-tabs ()
+(defun comment-pretty ()
+  "Inserts a comment with '―' (Unicode character: U+2015) on each side."
   (interactive)
-  (set-variable 'tab-width 2)
-  (mark-whole-buffer)
-  (untabify (region-beginning) (region-end))
-  (keyboard-quit))
+  (let* ((comment (read-from-minibuffer "Comment: "))
+         (comment-length (length comment))
+         (current-column-pos (current-column))
+         (space-on-each-side (/ (- fill-column
+                                   current-column-pos
+                                   comment-length
+                                   (length comment-start)
+                                   ;; Single space on each side of comment
+                                   (if (> comment-length 0) 2 0)
+                                   ;; Single space after comment syntax sting
+                                   1)
+                                2)))
+    (if (< space-on-each-side 2)
+      (message "Comment string is too big to fit in one line")
+      (progn
+        (insert comment-start)
+        (insert " ")
+        (dotimes (_ space-on-each-side) (insert "―"))
+        (when (> comment-length 0) (insert " "))
+        (insert comment)
+        (when (> comment-length 0) (insert " "))
+        (dotimes (_ (if (= (% comment-length 2) 0)
+                        space-on-each-side
+                      (- space-on-each-side 1)))
+          (insert "―"))))))
 
-;; Fix weird os x kill error
-(defun ns-get-pasteboard ()
-  "Returns the value of the pasteboard, or nil for unsupported formats."
-  (condition-case nil
-      (ns-get-selection-internal 'CLIPBOARD)
-    (quit nil)))
+(global-set-key (kbd "C-c ;") 'comment-pretty)
 
-;; Make the command key behave as 'meta'
-(setq mac-command-modifier 'meta)
+;; Thanks to - Narendra Joshi (https://gitlab.com/narendraj9/dot-emacs)
+(defun upload-region (beg end)
+  "Upload the contents of the selected region in current buffer.
+   It uses transfer.sh Link to the uploaded file is copied to
+   clipboard.  Creates a temp file if the buffer isn't associted
+   witha file.  Argument BEG beginning point for region.
+   Argument END ending point for region."
+  (interactive "r")
+  (let* ((buf-file-path (buffer-file-name))
+         (file-path (or buf-file-path
+                        (create-file-for-buffer)))
+         (file-name (file-name-nondirectory file-path))
+         (upload-url (format "https://transfer.sh/%s"
+                             file-name))
+         (url-request-method "PUT")
+         (url-request-data (buffer-substring-no-properties beg end))
+         (url-callback (lambda (_)
+                         (search-forward "\n\n")
+                         (let ((url-link (buffer-substring (point)
+                                                           (point-max))))
+                           (kill-new url-link)
+                           (message "Link copied to clipboard: %s"
+                                    (s-trim url-link))
+                           (kill-buffer (current-buffer))))))
+    (url-retrieve upload-url url-callback)))
 
-(global-set-key (kbd "M-o") 'other-window)
-
-(defun focus (&optional arg var line)
-  "Brings the current window in the middle of the screen. Covering 2/3 of the frame width."
-  (interactive "P")
-  (delete-other-windows)
-  (let* ((window-width (window-body-width))
-         (focus-window-width (truncate (* window-width (/ 2.0 3.0))))
-         (side-padding-width (/ (- window-width focus-window-width) 2)))
-    (split-window-right)
-    (split-window-right)
-    (shrink-window-horizontally (truncate (* (window-body-width) (/ 1.0 3.0))))
-    (windmove-right)
-    (enlarge-window-horizontally (window-body-width))
-    (windmove-right)
-    (switch-to-buffer "*blank*")
-    (windmove-left)
-    (windmove-left)
-    (switch-to-buffer "*blank*")
-    (windmove-right)))
-
-;; This mode refreshes buffer contents if the corresponding file is
-;; changed on the disk
-(setq global-auto-revert-mode t)
-
-;; Allow minibuffer commands while in a minibuffer
-(setq enable-recursive-minibuffers t)
-
-;; Delete whitespace just when you save
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; Package configuration with 'use-package'
+
+; ――――――――――――――――――――― Additional packages and their configurations ―――――――――――――――――――――
 (require 'use-package)
 
+;; Add `:doc' support for use-package so that we can use it like what a doc-strings is for
+;; functions.
 (eval-and-compile
   (add-to-list 'use-package-keywords :doc t)
   (defun use-package-handler/:doc (name-symbol _keyword _docstring rest state)
@@ -186,7 +200,6 @@
 
     ;; just process the next keywords
     (use-package-process-keywords name-symbol rest state)))
-
 
 (use-package uniquify
   :doc "Naming convention for files with same names"
@@ -211,12 +224,23 @@
   :bind (:map
          global-map
          ("TAB" . company-complete-common-or-cycle)
+         ;; Use hippie expand as secondary auto complete. It is useful as it is
+         ;; 'buffer-content' aware (it uses all buffers for that).
+         ("M-/" . hippie-expand)
          :map company-active-map
          ("C-n" . company-select-next-or-abort)
          ("C-p" . company-select-previous-or-abort))
   :config
   (setq company-idle-delay 0.3)
-  (global-company-mode t))
+  (global-company-mode t)
+
+  ;; Configure hippie expand as well.
+  (setq hippie-expand-try-functions-list
+      '(try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol)))
 
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
@@ -244,33 +268,6 @@
   (setq highlight-symbol-idle-delay 0.5)
   :bind (("M-n" . highlight-symbol-next)
          ("M-p" . highlight-symbol-prev)))
-
-(defun insert-comment-with-description (comment-syntax comment)
-  "Inserts a comment with '―' (Unicode character: U+2015) on each side."
-  (let* ((comment-length (length comment))
-         (current-column-pos (current-column))
-         (space-on-each-side (/ (- fill-column
-                                   current-column-pos
-                                   comment-length
-                                   (length comment-syntax)
-                                    ;; Single space on each side of comment
-                                   (if (> comment-length 0) 2 0)
-                                   ;; Single space after comment syntax sting
-                                   1)
-                                2)))
-    (if (< space-on-each-side 2)
-        (message "Comment string is too big to fit in one line")
-      (progn
-        (insert comment-syntax)
-        (insert " ")
-        (dotimes (_ space-on-each-side) (insert "―"))
-        (when (> comment-length 0) (insert " "))
-        (insert comment)
-        (when (> comment-length 0) (insert " "))
-        (dotimes (_ (if (= (% comment-length 2) 0)
-                      space-on-each-side
-                      (- space-on-each-side 1)))
-          (insert "―"))))))
 
 (use-package clojure-mode
   :doc "A major mode for editing Clojure code"
@@ -308,14 +305,7 @@
                                       "∈")
                       nil))))))
   (add-hook 'clojure-mode-hook 'prettify-sets)
-  (add-hook 'cider-repl-mode-hook 'prettify-sets)
-
-  (defun clj-insert-comment-with-description ()
-    "Inserts a pretty Clojure comment."
-    (interactive)
-    (insert-comment-with-description ";;" (read-from-minibuffer "Comment: ")))
-
-  :bind ("C-c ;" . clj-insert-comment-with-description))
+  (add-hook 'cider-repl-mode-hook 'prettify-sets))
 
 (use-package clojure-mode-extra-font-locking
   :doc "Extra syntax highlighting for clojure"
@@ -345,7 +335,7 @@
   ;; Always pretty print
   (setq cider-repl-use-pretty-printing t)
   ;; Enable logging client-server messaging in *nrepl-messages* buffer
-  (setq nrepl-log-messages t)
+  (setq nrepl-log-messages nil)
   :bind (:map
          cider-mode-map
          ("C-c d" . cider-debug-defun-at-point)
@@ -362,8 +352,8 @@
     cleaned! :)"
     (interactive)
     (let ((extension ".clj")
-          ;; `shell-command-to-string` always contains a "\n" at its end. `butlast` is
-          ;; used to get rid of the last empty string returned via `split-string`.
+          ;; `shell-command-to-string` contains a "\n" at its end. `butlast` is used to
+          ;; get rid of the last empty string returned by `split-string`.
           (modified-files
            (butlast
             (split-string
@@ -472,6 +462,15 @@
    '(org-level-1 ((t (:foreground "RoyalBlue1" :weight bold))))
    '(org-tag ((t (:foreground "#9ce22e" :weight bold))))))
 
+(use-package "faces"
+  :config
+  (set-face-attribute 'default nil :height 140)
+
+  ;; Use the 'Source Code Pro' font if available
+  (when (not (eq system-type 'windows-nt))
+    (when (member "Source Code Pro" (font-family-list))
+      (set-frame-font "Source Code Pro"))))
+
 (use-package ido-vertical-mode
   :doc "Show ido vertically"
   :ensure t
@@ -492,13 +491,14 @@
   :ensure t
   :bind (("C-s" . isearch-forward-regexp)
          ("C-r" . isearch-backward-regexp)
-         ("C-M-s" . isearch-forward)
+         ("C-M-s" . swiper)
          ("C-M-r" . isearch-backward)))
 
 (use-package counsel
   :doc "Ivy enhanced Emacs commands"
   :ensure t
-  :bind (("M-x" . counsel-M-x)))
+  :bind (("M-x" . counsel-M-x)
+         ("C-c i" . counsel-imenu)))
 
 (use-package aggressive-indent
   :doc "Always keep everything indented"
@@ -692,6 +692,7 @@
 
 (use-package pdf-tools
   :doc "Better pdf viewing"
+  :disabled t
   :ensure t
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :bind (:map pdf-view-mode-map
@@ -699,47 +700,25 @@
               ("k" . image-previous-line)))
 
 
-;; Thanks to - Narendra Joshi (https://gitlab.com/narendraj9/dot-emacs)
-(defun upload-region (beg end)
-  "Upload the contents of the selected region in current buffer.
-   It uses transfer.sh Link to the uploaded file is copied to
-   clipboard.  Creates a temp file if the buffer isn't associted
-   witha file.  Argument BEG beginning point for region.
-   Argument END ending point for region."
-  (interactive "r")
-  (let* ((buf-file-path (buffer-file-name))
-         (file-path (or buf-file-path
-                        (create-file-for-buffer)))
-         (file-name (file-name-nondirectory file-path))
-         (upload-url (format "https://transfer.sh/%s"
-                             file-name))
-         (url-request-method "PUT")
-         (url-request-data (buffer-substring-no-properties beg end))
-         (url-callback (lambda (_)
-                         (search-forward "\n\n")
-                         (let ((url-link (buffer-substring (point)
-                                                           (point-max))))
-                           (kill-new url-link)
-                           (message "Link copied to clipboard: %s"
-                                    (s-trim url-link))
-                           (kill-buffer (current-buffer))))))
-    (url-retrieve upload-url url-callback)))
+(use-package focus
+  :doc "Syntax coloring only on the current item."
+  :disabled t
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'focus-mode))
 
 
-(if (eq system-type 'darwin)
-    (use-package exec-path-from-shell
-      :doc "MacOS does not start a shell at login.
+(when (eq system-type 'darwin)
+  (use-package exec-path-from-shell
+    :doc "MacOS does not start a shell at login.
             This makes sure that the env variable
             of shell and GUI Emacs look the same."
-      :ensure t
-      :config
-      (when (memq window-system '(mac ns))
-        (exec-path-from-shell-initialize)
-        (exec-path-from-shell-copy-envs
-         '("PATH" "ANDROID_HOME" "LEIN_USERNAME" "LEIN_PASSPHRASE"
-           "LEIN_JVM_OPTS" "NPM_TOKEN" "LANGUAGE" "LANG" "LC_ALL"
-           "MOBY_ENV" "JAVA_8_HOME" "JAVA_7_HOME" "JAVA_HOME" "PS1"
-           "NVM_DIR" "GPG_TTY")))))
-
-(put 'narrow-to-region 'disabled nil)
-(put 'narrow-to-page 'disabled nil)
+    :ensure t
+    :config
+    (when (memq window-system '(mac ns))
+      (exec-path-from-shell-initialize)
+      (exec-path-from-shell-copy-envs
+       '("PATH" "ANDROID_HOME" "LEIN_USERNAME" "LEIN_PASSPHRASE"
+         "LEIN_JVM_OPTS" "NPM_TOKEN" "LANGUAGE" "LANG" "LC_ALL"
+         "MOBY_ENV" "JAVA_8_HOME" "JAVA_7_HOME" "JAVA_HOME" "PS1"
+         "NVM_DIR" "GPG_TTY")))))
