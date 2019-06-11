@@ -201,6 +201,8 @@
     ;; just process the next keywords
     (use-package-process-keywords name-symbol rest state)))
 
+
+; ――――――――――――――――――――――――――――――――――― Generic packages ―――――――――――――――――――――――――――――――――――
 (use-package uniquify
   :doc "Naming convention for files with same names"
   :config
@@ -218,6 +220,163 @@
   :doc "Better buffer management"
   :bind ("C-x C-b" . ibuffer))
 
+(use-package ido-completing-read+
+  :doc "Allow ido usage in as many contexts as possible"
+  :ensure t
+  :config
+  ;; This enables ido in all contexts where it could be useful, not just
+  ;; for selecting buffer and file names
+  (ido-mode t)
+  (ido-everywhere t)
+  ;; This allows partial matches, e.g. "uzh" will match "Ustad Zakir Hussain"
+  (setq ido-enable-flex-matching t)
+  (setq ido-use-filename-at-point nil)
+  ;; Includes buffer names of recently open files, even if they're not open now
+  (setq ido-use-virtual-buffers t))
+
+(use-package smex
+  :doc "Enhance M-x to allow easier execution of commands"
+  :ensure t
+  :config
+  (setq smex-save-file (concat user-emacs-directory ".smex-items"))
+  (smex-initialize)
+  :bind ("M-x" . smex))
+
+(use-package projectile
+  :doc "Project navigation"
+  :ensure t
+  :config
+  ;; Use it everywhere
+  (projectile-global-mode t)
+  :bind ("C-x f" . projectile-find-file))
+
+(use-package magit
+  :doc "Git integration for Emacs"
+  :ensure t
+  :bind ("C-x g" . magit-status))
+
+(use-package ace-jump-mode
+  :doc "Jump around the visible buffer using 'Head Chars'"
+  :ensure t
+  :bind ("C-M-;" . ace-jump-mode))
+
+(use-package which-key
+  :doc "Prompt the next possible key bindings after a short wait"
+  :ensure t
+  :config
+  (which-key-mode t))
+
+(use-package ido-vertical-mode
+  :doc "Show ido vertically"
+  :ensure t
+  :config
+  (ido-vertical-mode t))
+
+(use-package ivy
+  :doc "A generic completion mechanism"
+  :ensure t
+  :config
+  (ivy-mode t)
+  (setq ivy-use-virtual-buffers t)
+  :bind (("C-x b" . ivy-switch-buffer)
+         ("C-x B" . ivy-switch-buffer-other-window)))
+
+(use-package swiper
+  :doc "A better search"
+  :ensure t
+  :bind (("C-s" . isearch-forward-regexp)
+         ("C-r" . isearch-backward-regexp)
+         ("C-M-s" . swiper)
+         ("C-M-r" . isearch-backward)))
+
+(use-package counsel
+  :doc "Ivy enhanced Emacs commands"
+  :ensure t
+  :bind (("M-x" . counsel-M-x)
+         ("C-c i" . counsel-imenu)))
+
+(use-package aggressive-indent
+  :doc "Always keep everything indented"
+  :ensure t
+  :preface
+  ;; Have a way to save without indentation.
+  (defun save-without-aggresive-indentation ()
+    (interactive)
+    (let ((hooks before-save-hook))
+      (setq before-save-hook (remove 'aggressive-indent-indent-defun before-save-hook))
+      (save-buffer)
+      (setq before-save-hook hooks)))
+
+  :config
+  (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
+
+  :bind (("C-c s" . save-without-aggresive-indentation)))
+
+(use-package git-gutter
+  :doc "Shows modified lines"
+  :ensure t
+  :config
+  (global-git-gutter-mode t)
+  (set-face-background 'git-gutter:modified "yellow")
+  (set-face-foreground 'git-gutter:added "green")
+  (set-face-foreground 'git-gutter:deleted "red")
+  :bind (("C-x C-g" . git-gutter)))
+
+(use-package git-timemachine
+  :doc "Go through git history in a file"
+  :ensure t)
+
+(use-package region-bindings-mode
+  :doc "Define bindings only when a region is selected."
+  :ensure t
+  :config
+  (region-bindings-mode-enable))
+
+(use-package multiple-cursors
+  :doc "A minor mode for editing with multiple cursors"
+  :ensure t
+  :config
+  (setq mc/always-run-for-all t)
+  :bind
+  ;; Use multiple cursor bindings only when a region is active
+  (:map region-bindings-mode-map
+        ("C->" . mc/mark-next-like-this)
+        ("C-<" . mc/mark-previous-like-this)
+        ("C-c a" . mc/mark-all-like-this)
+        ("C-c h" . mc-hide-unmatched-lines-mode)
+        ("C-c l" . mc/edit-lines)))
+
+(use-package esup
+  :doc "Emacs Start Up Profiler (esup) benchmarks Emacs
+        startup time without leaving Emacs."
+  :ensure t)
+
+(use-package pdf-tools
+  :doc "Better pdf viewing"
+  :disabled t
+  :ensure t
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :bind (:map pdf-view-mode-map
+              ("j" . image-next-line)
+              ("k" . image-previous-line)))
+
+(when (eq system-type 'darwin)
+  (use-package exec-path-from-shell
+    :doc "MacOS does not start a shell at login. This makes sure
+          that the env variable of shell and GUI Emacs look the
+          same."
+    :ensure t
+    :config
+    (when (memq window-system '(mac ns))
+      (exec-path-from-shell-initialize)
+      (exec-path-from-shell-copy-envs
+       '("PATH" "ANDROID_HOME" "LEIN_USERNAME" "LEIN_PASSPHRASE"
+         "LEIN_JVM_OPTS" "NPM_TOKEN" "LANGUAGE" "LANG" "LC_ALL"
+         "MOBY_ENV" "JAVA_8_HOME" "JAVA_7_HOME" "JAVA_HOME" "PS1"
+         "NVM_DIR" "GPG_TTY")))))
+
+
+; ――――――――――――――――――――――――――――――――――――― Code editing ―――――――――――――――――――――――――――――――――――――
 (use-package company
   :doc "COMplete ANYthing"
   :ensure t
@@ -260,6 +419,12 @@
   :bind (("M-[" . paredit-wrap-square)
          ("M-{" . paredit-wrap-curly)))
 
+(use-package rainbow-delimiters
+  :doc "Colorful paranthesis matching"
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
 (use-package highlight-symbol
   :doc "Highlight and jump to symbols"
   :ensure t
@@ -269,6 +434,8 @@
   :bind (("M-n" . highlight-symbol-next)
          ("M-p" . highlight-symbol-prev)))
 
+
+; ―――――――――――――――――――――――――――――――― Programming languages ―――――――――――――――――――――――――――――――
 (use-package clojure-mode
   :doc "A major mode for editing Clojure code"
   :ensure t
@@ -386,58 +553,8 @@
   :config
   (global-eldoc-mode t))
 
-(use-package ido-completing-read+
-  :doc "Allow ido usage in as many contexts as possible"
-  :ensure t
-  :config
-  ;; This enables ido in all contexts where it could be useful, not just
-  ;; for selecting buffer and file names
-  (ido-mode t)
-  (ido-everywhere t)
-  ;; This allows partial matches, e.g. "uzh" will match "Ustad Zakir Hussain"
-  (setq ido-enable-flex-matching t)
-  (setq ido-use-filename-at-point nil)
-  ;; Includes buffer names of recently open files, even if they're not open now
-  (setq ido-use-virtual-buffers t))
-
-(use-package smex
-  :doc "Enhance M-x to allow easier execution of commands"
-  :ensure t
-  :config
-  (setq smex-save-file (concat user-emacs-directory ".smex-items"))
-  (smex-initialize)
-  :bind ("M-x" . smex))
-
-(use-package projectile
-  :doc "Project navigation"
-  :ensure t
-  :config
-  ;; Use it everywhere
-  (projectile-global-mode t)
-  :bind ("C-x f" . projectile-find-file))
-
-(use-package rainbow-delimiters
-  :doc "Colorful paranthesis matching"
-  :ensure t
-  :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-
-(use-package magit
-  :doc "Git integration for Emacs"
-  :ensure t
-  :bind ("C-x g" . magit-status))
-
-(use-package ace-jump-mode
-  :doc "Jump around the visible buffer using 'Head Chars'"
-  :ensure t
-  :bind ("C-M-;" . ace-jump-mode))
-
-(use-package which-key
-  :doc "Prompt the next possible key bindings after a short wait"
-  :ensure t
-  :config
-  (which-key-mode t))
-
+
+; ―――――――――――――――――――――――――――――――――――― Look and feel ―――――――――――――――――――――――――――――――――――
 (use-package monokai-alt-theme
   :doc "Just another theme"
   :ensure t
@@ -471,91 +588,8 @@
     (when (member "Source Code Pro" (font-family-list))
       (set-frame-font "Source Code Pro"))))
 
-(use-package ido-vertical-mode
-  :doc "Show ido vertically"
-  :ensure t
-  :config
-  (ido-vertical-mode t))
-
-(use-package ivy
-  :doc "A generic completion mechanism"
-  :ensure t
-  :config
-  (ivy-mode t)
-  (setq ivy-use-virtual-buffers t)
-  :bind (("C-x b" . ivy-switch-buffer)
-         ("C-x B" . ivy-switch-buffer-other-window)))
-
-(use-package swiper
-  :doc "A better search"
-  :ensure t
-  :bind (("C-s" . isearch-forward-regexp)
-         ("C-r" . isearch-backward-regexp)
-         ("C-M-s" . swiper)
-         ("C-M-r" . isearch-backward)))
-
-(use-package counsel
-  :doc "Ivy enhanced Emacs commands"
-  :ensure t
-  :bind (("M-x" . counsel-M-x)
-         ("C-c i" . counsel-imenu)))
-
-(use-package aggressive-indent
-  :doc "Always keep everything indented"
-  :ensure t
-  :preface
-  ;; Have a way to save without indentation.
-  (defun save-without-aggresive-indentation ()
-    (interactive)
-    (let ((hooks before-save-hook))
-      (setq before-save-hook (remove 'aggressive-indent-indent-defun before-save-hook))
-      (save-buffer)
-      (setq before-save-hook hooks)))
-
-  :config
-  (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
-
-  :bind (("C-c s" . save-without-aggresive-indentation)))
-
-(use-package git-gutter
-  :doc "Shows modified lines"
-  :ensure t
-  :config
-  (global-git-gutter-mode t)
-  (set-face-background 'git-gutter:modified "yellow")
-  (set-face-foreground 'git-gutter:added "green")
-  (set-face-foreground 'git-gutter:deleted "red")
-  :bind (("C-x C-g" . git-gutter)))
-
-(use-package git-timemachine
-  :doc "Go through git history in a file"
-  :ensure t)
-
-(use-package region-bindings-mode
-  :doc "Define bindings only when a region is selected."
-  :ensure t
-  :config
-  (region-bindings-mode-enable))
-
-(use-package multiple-cursors
-  :doc "A minor mode for editing with multiple cursors"
-  :ensure t
-  :config
-  (setq mc/always-run-for-all t)
-  :bind
-  ;; Use multiple cursor bindings only when a region is active
-  (:map region-bindings-mode-map
-        ("C->" . mc/mark-next-like-this)
-        ("C-<" . mc/mark-previous-like-this)
-        ("C-c a" . mc/mark-all-like-this)
-        ("C-c h" . mc-hide-unmatched-lines-mode)
-        ("C-c l" . mc/edit-lines)))
-
-(use-package esup
-  :doc "Emacs Start Up Profiler (esup) benchmarks Emacs
-        startup time without leaving Emacs."
-  :ensure t)
-
+
+; ―――――――――――――――――――――――――――――――――――――――― *ORG* ―――――――――――――――――――――――――――――――――――――――
 (use-package org
   :config
   ;; Enable spell check in org
@@ -688,37 +722,3 @@
         ("C-c g" . org-clock-goto)
         :map org-mode-map
         ("C-M-g" . org-move-item-or-tree)))
-
-
-(use-package pdf-tools
-  :doc "Better pdf viewing"
-  :disabled t
-  :ensure t
-  :mode ("\\.pdf\\'" . pdf-view-mode)
-  :bind (:map pdf-view-mode-map
-              ("j" . image-next-line)
-              ("k" . image-previous-line)))
-
-
-(use-package focus
-  :doc "Syntax coloring only on the current item."
-  :disabled t
-  :ensure t
-  :config
-  (add-hook 'prog-mode-hook 'focus-mode))
-
-
-(when (eq system-type 'darwin)
-  (use-package exec-path-from-shell
-    :doc "MacOS does not start a shell at login.
-            This makes sure that the env variable
-            of shell and GUI Emacs look the same."
-    :ensure t
-    :config
-    (when (memq window-system '(mac ns))
-      (exec-path-from-shell-initialize)
-      (exec-path-from-shell-copy-envs
-       '("PATH" "ANDROID_HOME" "LEIN_USERNAME" "LEIN_PASSPHRASE"
-         "LEIN_JVM_OPTS" "NPM_TOKEN" "LANGUAGE" "LANG" "LC_ALL"
-         "MOBY_ENV" "JAVA_8_HOME" "JAVA_7_HOME" "JAVA_HOME" "PS1"
-         "NVM_DIR" "GPG_TTY")))))
