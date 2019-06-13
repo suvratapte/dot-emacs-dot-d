@@ -30,9 +30,6 @@
  ;; 72 is too less for the fontsize that I use.
  fill-column 90
 
- ;; Display column number in mode line.
- colucolmn-number-mode t
-
  ;; Use my name in the frame title. :)
  frame-title-format "Suvrat's Emacs (%f)"
 
@@ -49,9 +46,6 @@
 
  ;; Do not autosave.
  auto-save-default nil
-
- ;; Automatically update buffers if file content on the disk has changed.
- global-auto-revert-mode t
 
  ;; Allow commands to be run on minibuffers.
  enable-recursive-minibuffers t)
@@ -72,6 +66,12 @@
 ;; Enable narrowing commands.
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
+
+;; Display column number in mode line.
+(column-number-mode t)
+
+;; Automatically update buffers if file content on the disk has changed.
+(global-auto-revert-mode t)
 
 
 ; ――――――――――――――――――――――――――― Disable unnecessary UI elements ――――――――――――――――――――――――――
@@ -277,6 +277,7 @@
   :ensure t
   :config
   (ivy-mode t)
+  (setq ivy-wrap t)
   (setq ivy-use-virtual-buffers t)
   :bind (("C-x b" . ivy-switch-buffer)
          ("C-x B" . ivy-switch-buffer-other-window)))
@@ -284,16 +285,16 @@
 (use-package swiper
   :doc "A better search"
   :ensure t
-  :bind (("C-s" . isearch-forward-regexp)
-         ("C-r" . isearch-backward-regexp)
-         ("C-M-s" . swiper)
-         ("C-M-r" . isearch-backward)))
+  :bind (("C-s" . swiper)
+         ("C-M-s" . isearch-forward-regexp)
+         ("C-M-r" . isearch-backward-regexp)))
 
 (use-package counsel
   :doc "Ivy enhanced Emacs commands"
   :ensure t
   :bind (("M-x" . counsel-M-x)
-         ("C-c i" . counsel-imenu)))
+         ("C-c i" . counsel-imenu)
+         ("C-c s" . counsel-ag)))
 
 (use-package aggressive-indent
   :doc "Always keep everything indented"
@@ -310,7 +311,7 @@
   :config
   (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
 
-  :bind (("C-c s" . save-without-aggresive-indentation)))
+  :bind (("C-x s" . save-without-aggresive-indentation)))
 
 (use-package git-gutter
   :doc "Shows modified lines"
