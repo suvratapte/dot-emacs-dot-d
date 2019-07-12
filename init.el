@@ -231,7 +231,7 @@
   ;; This allows partial matches, e.g. "uzh" will match "Ustad Zakir Hussain"
   (setq ido-enable-flex-matching t)
   (setq ido-use-filename-at-point nil)
-  ;; Includes buffer names of recently open files, even if they're not open now
+  ;; Includes buffer names of recently opened files, even if they're not open now.
   (setq ido-use-virtual-buffers t))
 
 (use-package smex
@@ -559,6 +559,7 @@
 (use-package monokai-alt-theme
   :doc "Just another theme"
   :ensure t
+  :disabled t
   :config
   (load-theme 'monokai-alt t)
   ;; The cursor color in this theme is very confusing.
@@ -571,14 +572,51 @@
    'user ;; `user' refers to user settings applied via Customize.
    '(font-lock-comment-face ((t (:foreground "tan3"))))
    '(font-lock-doc-face ((t (:foreground "tan3"))))
-   '(mode-line ((t (:background "#9ce22e" :foreground "black"
-                                :box (:line-width 3 :color "#9ce22e") :weight normal))))
+   '(mode-line ((t (:background "#9ce22e"
+                    :foreground "black"
+                    :box (:line-width 3 :color "#9ce22e")
+                    :weight normal))))
    '(mode-line-buffer-id ((t (:foreground "black" :weight bold))))
-   '(mode-line-inactive ((t (:background "#9ce22e" :foreground "grey50"
-                                         :box (:line-width 3 :color "#9ce22e") :weight normal))))
+   '(mode-line-inactive ((t (:background "#9ce22e"
+                             :foreground "grey50"
+                             :box (:line-width 3 :color "#9ce22e")
+                             :weight normal))))
    '(org-done ((t (:foreground "chartreuse1" :weight bold))))
    '(org-level-1 ((t (:foreground "RoyalBlue1" :weight bold))))
-   '(org-tag ((t (:foreground "#9ce22e" :weight bold))))))
+   '(org-tag ((t (:foreground "#9ce22e" :weight bold)))))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(font-lock-comment-face ((((class color) (min-colors 89))
+                              (:foreground "#b2b2b2" :slant italic))))
+   '(font-lock-doc-face ((((class color) (min-colors 89))
+                          (:foreground "#cc0000"))))
+   '(mode-line ((((class color) (min-colors 89))
+                 (:box nil :background "#5fafd7" :foreground "#ffffff"))))
+   '(mode-line-buffer-id ((((class color) (min-colors 89))
+                           (:box nil :foreground "#3a3a3a" :background nil :bold t))))
+   '(mode-line-inactive ((((class color) (min-colors 89))
+                          (:box nil :background "#dadada" :foreground "#9e9e9e"))))
+   '(org-done ((((class color) (min-colors 89))
+                (:bold t :weight bold :foreground "#008700" :background "#d7ff87"
+                 :box (:line-width 1 :style none)))))
+   '(org-level-1 ((((class color) (min-colors 89)) (:bold t :foreground "#5fafd7"))))
+   '(org-tag ((((class color) (min-colors 89))
+               (:background "#9e9e9e" :foreground "#ffffff" :bold t :weight bold))))))
+
+(use-package ewal-spacemacs-themes
+  :ensure t
+  :config
+  (setq spacemacs-theme-comment-bg nil
+        spacemacs-theme-comment-italic t)
+  (load-theme 'spacemacs-dark t))
+
+(use-package powerline
+  :ensure t
+  :config
+  (powerline-center-theme))
 
 (use-package "faces"
   :config
@@ -723,3 +761,10 @@
         ("C-c g" . org-clock-goto)
         :map org-mode-map
         ("C-M-g" . org-move-item-or-tree)))
+
+
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook 'org-bullets-mode)
+  (setq org-bullets-bullet-list '("➔" "♕" "➜" "◉" "○" "✸" "✿")))
