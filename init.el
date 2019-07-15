@@ -260,6 +260,11 @@
   :ensure t
   :bind ("C-M-;" . ace-jump-mode))
 
+(use-package dumb-jump
+  :doc "Dumb ag version of M-."
+  :ensure t
+  :bind ("C-M-." . dumb-jump-go))
+
 (use-package which-key
   :doc "Prompt the next possible key bindings after a short wait"
   :ensure t
@@ -622,10 +627,40 @@
   :config
   (set-face-attribute 'default nil :height 140)
 
-  ;; Use the 'Source Code Pro' font if available
+  ;; Use the 'Fira Code' if available
   (when (not (eq system-type 'windows-nt))
-    (when (member "Source Code Pro" (font-family-list))
-      (set-frame-font "Source Code Pro"))))
+    (when (member "Fira Code" (font-family-list))
+
+      ;; Fira code legatures
+      (let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
+                     (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
+                     (36 . ".\\(?:>\\)")
+                     (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
+                     (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
+                     ;;(42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
+                     (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
+                     (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
+                     (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
+                     (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
+                     (48 . ".\\(?:x[a-zA-Z]\\)")
+                     (58 . ".\\(?:::\\|[:=]\\)")
+                     (59 . ".\\(?:;;\\|;\\)")
+                     (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
+                     (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
+                     (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
+                     (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
+                     (91 . ".\\(?:]\\)")
+                     (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
+                     (94 . ".\\(?:=\\)")
+                     (119 . ".\\(?:ww\\)")
+                     (123 . ".\\(?:-\\)")
+                     (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
+                     (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)"))))
+        (dolist (char-regexp alist)
+          (set-char-table-range composition-function-table (car char-regexp)
+                                `([,(cdr char-regexp) 0 font-shape-gstring]))))
+
+      (set-frame-font "Fira Code Retina"))))
 
 
 ; ―――――――――――――――――――――――――――――――――――――――― *ORG* ―――――――――――――――――――――――――――――――――――――――
@@ -672,11 +707,11 @@
 
   (setq org-todo-keyword-faces
         '(("TODO" :foreground "red" :weight bold)
-          ("WORKING" :foreground "orange" :weight bold)
+          ("WORKING" :foreground "#a45bad" :weight bold)
           ("PAUSED" :foreground "SlateBlue1" :weight bold)
           ("BLOCKED" :foreground "pink1" :weight bold)
           ("NEXT" :foreground "cyan1" :weight bold)
-          ("DONE" :foreground "chartreuse1" :weight bold)
+          ("DONE" :foreground "#2d9574" :weight bold)
           ("CANCELLED" :foreground "yellow" :weight bold)))
 
   (setq org-agenda-custom-commands
@@ -767,4 +802,4 @@
   :ensure t
   :config
   (add-hook 'org-mode-hook 'org-bullets-mode)
-  (setq org-bullets-bullet-list '("➔" "♕" "➜" "◉" "○" "✸" "✿")))
+  (setq org-bullets-bullet-list '("➔" "♕" "♖" "♗" "♘" "♙")))
