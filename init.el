@@ -366,6 +366,11 @@
               ("j" . image-next-line)
               ("k" . image-previous-line)))
 
+(use-package define-word
+  :doc "Dictionary in Emacs."
+  :ensure t
+  :bind ("C-c C-d" . define-word-at-point))
+
 (when (eq system-type 'darwin)
   (use-package exec-path-from-shell
     :doc "MacOS does not start a shell at login. This makes sure
@@ -637,10 +642,12 @@
                      (36 . ".\\(?:>\\)")
                      (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
                      (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
-                     ;;(42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
+                     ;; (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
                      (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
-                     (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
-                     (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
+                     ;; Causes "error in process filter: Attempt to shape unibyte text".
+                     ;; (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
+                     ;; Fira code page said that this causes an error in Mojave.
+                     ;; (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
                      (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
                      (48 . ".\\(?:x[a-zA-Z]\\)")
                      (58 . ".\\(?:::\\|[:=]\\)")
@@ -802,4 +809,4 @@
   :ensure t
   :config
   (add-hook 'org-mode-hook 'org-bullets-mode)
-  (setq org-bullets-bullet-list '("➔" "♕" "♖" "♗" "♘" "♙")))
+  (setq org-bullets-bullet-list '("♕" "♖" "♗" "♘" "♙")))
