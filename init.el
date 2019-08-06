@@ -423,7 +423,6 @@
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
   :ensure t
-  :diminish paredit-mode
   :init
   (add-hook 'clojure-mode-hook #'enable-paredit-mode)
   (add-hook 'cider-repl-mode-hook #'enable-paredit-mode)
@@ -436,7 +435,8 @@
   :config
   (show-paren-mode t)
   :bind (("M-[" . paredit-wrap-square)
-         ("M-{" . paredit-wrap-curly)))
+         ("M-{" . paredit-wrap-curly))
+  :diminish nil)
 
 (use-package rainbow-delimiters
   :doc "Colorful paranthesis matching"
