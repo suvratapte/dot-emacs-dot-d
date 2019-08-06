@@ -30,8 +30,8 @@
  ;; 72 is too less for the fontsize that I use.
  fill-column 90
 
- ;; Use my name in the frame title. :)
- frame-title-format "Suvrat's Emacs (%f)"
+ ;; Use your name in the frame title. :)
+ frame-title-format (format "%s's Emacs (%%f)" (capitalize user-login-name))
 
  ;; Do not create lockfiles.
  create-lockfiles nil
