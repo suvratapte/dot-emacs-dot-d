@@ -1,5 +1,5 @@
 
-; ――――――――――――――――――――――――――――――――――― Set up 'package' ―――――――――――――――――――――――――――――――――――
+;; ――――――――――――――――――――――――――――――――――― Set up 'package' ――――――――――――――――――――――――――――――――――
 (require 'package)
 
 ;; Add melpa to package archives.
@@ -16,7 +16,7 @@
   (package-install 'use-package))
 
 
-; ――――――――――――――――――――――――――――――――― Use better defaults ――――――――――――――――――――――――――――――――
+;; ――――――――――――――――――――――――――――――――― Use better defaults ―――――――――――――――――――――――――――――――
 (setq-default
  ;; Don't use the compiled code if its the older package.
  load-prefer-newer t
@@ -74,7 +74,7 @@
 (global-auto-revert-mode t)
 
 
-; ――――――――――――――――――――――――――― Disable unnecessary UI elements ――――――――――――――――――――――――――
+;; ――――――――――――――――――――――――――― Disable unnecessary UI elements ―――――――――――――――――――――――――
 (progn
   ;; Do not show menu bar.
   (menu-bar-mode -1)
@@ -91,7 +91,7 @@
   (global-hl-line-mode t))
 
 
-; ――――――――――――――――――――――――― Better interaction with X clipboard ――――――――――――――――――――――――――
+;; ――――――――――――――――――――――――― Better interaction with X clipboard ―――――――――――――――――――――――――
 (setq-default
  ;; Makes killing/yanking interact with the clipboard.
  x-select-enable-clipboard t
@@ -114,7 +114,7 @@
  mouse-yank-at-point t)
 
 
-; ―――――――――――――――――――――――― Added functionality (Generic usecases) ――――――――――――――――――――――――
+;; ―――――――――――――――――――――――― Added functionality (Generic usecases) ―――――――――――――――――――――――
 (defun toggle-comment-on-line ()
   "comment or uncomment current line"
   (interactive)
@@ -138,9 +138,11 @@
                                    1)
                                 2)))
     (if (< space-on-each-side 2)
-      (message "Comment string is too big to fit in one line")
+        (message "Comment string is too big to fit in one line")
       (progn
         (insert comment-start)
+        (when (equal comment-start ";")
+          (insert comment-start))
         (insert " ")
         (dotimes (_ space-on-each-side) (insert "―"))
         (when (> comment-length 0) (insert " "))
@@ -180,7 +182,7 @@
     (url-retrieve upload-url url-callback)))
 
 
-; ――――――――――――――――――――― Additional packages and their configurations ―――――――――――――――――――――
+;; ――――――――――――――――――――― Additional packages and their configurations ――――――――――――――――――――
 (require 'use-package)
 
 ;; Add `:doc' support for use-package so that we can use it like what a doc-strings is for
@@ -202,7 +204,7 @@
     (use-package-process-keywords name-symbol rest state)))
 
 
-; ――――――――――――――――――――――――――――――――――― Generic packages ―――――――――――――――――――――――――――――――――――
+;; ――――――――――――――――――――――――――――――――――― Generic packages ――――――――――――――――――――――――――――――――――
 (use-package uniquify
   :doc "Naming convention for files with same names"
   :config
@@ -304,19 +306,17 @@
 (use-package aggressive-indent
   :doc "Always keep everything indented"
   :ensure t
-  :preface
-  ;; Have a way to save without indentation.
-  (defun save-without-aggresive-indentation ()
-    (interactive)
-    (let ((hooks before-save-hook))
-      (setq before-save-hook (remove 'aggressive-indent-indent-defun before-save-hook))
-      (save-buffer)
-      (setq before-save-hook hooks)))
-
   :config
   (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
-
-  :bind (("C-x s" . save-without-aggresive-indentation)))
+  ;; ;; Have a way to save without indentation.
+  ;; (defun save-without-aggresive-indentation ()
+  ;;   (interactive)
+  ;;   (let ((hooks before-save-hook))
+  ;;     (setq before-save-hook (remove 'aggressive-indent-indent-defun before-save-hook))
+  ;;     (save-buffer)
+  ;;     (setq before-save-hook hooks)))
+  ;; :bind (("C-x s" . save-without-aggresive-indentation))
+  )
 
 (use-package git-gutter
   :doc "Shows modified lines"
@@ -369,7 +369,7 @@
 (use-package define-word
   :doc "Dictionary in Emacs."
   :ensure t
-  :bind ("C-c C-d" . define-word-at-point))
+  :bind ("C-c w" . define-word-at-point))
 
 (when (eq system-type 'darwin)
   (use-package exec-path-from-shell
@@ -387,7 +387,7 @@
          "NVM_DIR" "GPG_TTY")))))
 
 
-; ――――――――――――――――――――――――――――――――――――― Code editing ―――――――――――――――――――――――――――――――――――――
+;; ――――――――――――――――――――――――――――――――――――― Code editing ――――――――――――――――――――――――――――――――――――
 (use-package company
   :doc "COMplete ANYthing"
   :ensure t
@@ -446,7 +446,7 @@
          ("M-p" . highlight-symbol-prev)))
 
 
-; ―――――――――――――――――――――――――――――――― Programming languages ―――――――――――――――――――――――――――――――
+;; ―――――――――――――――――――――――――――――――― Programming languages ――――――――――――――――――――――――――――――
 (use-package clojure-mode
   :doc "A major mode for editing Clojure code"
   :ensure t
@@ -565,7 +565,7 @@
   (global-eldoc-mode t))
 
 
-; ―――――――――――――――――――――――――――――――――――― Look and feel ―――――――――――――――――――――――――――――――――――
+;; ―――――――――――――――――――――――――――――――――――― Look and feel ――――――――――――――――――――――――――――――――――
 (use-package monokai-alt-theme
   :doc "Just another theme"
   :ensure t
@@ -645,7 +645,7 @@
                      ;; (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
                      (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
                      ;; Causes "error in process filter: Attempt to shape unibyte text".
-                     ;; (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
+                     (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
                      ;; Fira code page said that this causes an error in Mojave.
                      ;; (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
                      (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
@@ -653,7 +653,7 @@
                      (58 . ".\\(?:::\\|[:=]\\)")
                      (59 . ".\\(?:;;\\|;\\)")
                      (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
-                     (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
+                     ;; (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
                      (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
                      (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
                      (91 . ".\\(?:]\\)")
@@ -670,143 +670,5 @@
       (set-frame-font "Fira Code Retina"))))
 
 
-; ―――――――――――――――――――――――――――――――――――――――― *ORG* ―――――――――――――――――――――――――――――――――――――――
-(use-package org
-  :config
-  ;; Enable spell check in org
-  (add-hook 'org-mode-hook 'turn-on-flyspell)
-
-  (setq org-list-demote-modify-bullet
-        '(("+" . "-") ("-" . "+")))
-
-  ;; Hide leading stars
-  (setq org-hide-leading-stars t)
-
-  ;; Enable source code highlighting in org-mode.
-  (setq org-src-fontify-natively t)
-
-  ;; '!' after the hotkey tells org-mode to add a LOGBOOK entry for every
-  ;; status change.
-  (setq org-todo-keywords
-        '((sequence "TODO(t!)" "WORKING(w!)" "PAUSED(p!)" "BLOCKED(b!)" "NEXT(n!)"
-                    "|" "DONE(d@!)" "CANCELLED(c!)")))
-
-  ;; Use logbook
-  (setq org-log-into-drawer t)
-
-  ;; Use clocking
-  (setq org-clock-into-drawer "CLOCKING")
-
-  ;; Add 'closed' log when marked done
-  (setq org-log-done t)
-
-  ;; Org modules
-  (setq org-modules '(org-bbdb
-                      org-bibtex
-                      org-docview
-                      org-gnus
-                      org-habit
-                      org-info
-                      org-irc
-                      org-mhe
-                      org-rmail
-                      org-w3m))
-
-  (setq org-todo-keyword-faces
-        '(("TODO" :foreground "red" :weight bold)
-          ("WORKING" :foreground "#a45bad" :weight bold)
-          ("PAUSED" :foreground "SlateBlue1" :weight bold)
-          ("BLOCKED" :foreground "pink1" :weight bold)
-          ("NEXT" :foreground "cyan1" :weight bold)
-          ("DONE" :foreground "#2d9574" :weight bold)
-          ("CANCELLED" :foreground "yellow" :weight bold)))
-
-  (setq org-agenda-custom-commands
-        '(("i" "My Agenda"
-           ((agenda ""
-                    ((org-agenda-overriding-header "Agenda")
-                     (org-agenda-span 2)))
-            (todo "WORKING"
-                  ((org-agenda-overriding-header "Currently working")))
-            (todo "NEXT"
-                  ((org-agenda-overriding-header "Next tasks")))
-            (alltodo ""
-                     ((org-agenda-overriding-header "Unscheduled")
-                      (org-agenda-skip-function
-                       '(org-agenda-skip-entry-if 'scheduled)))))
-           nil nil)))
-
-
-  (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c a") 'org-agenda)
-
-  ;; Capture directories
-  (setq org-personal-directory "~/workspace/repository-of-things/personal"
-        org-work-directory "~/workspace/repository-of-things/work")
-
-  ;; Capture files
-  (setq org-reading-list-file (concat org-personal-directory "/reading-list.org")
-        org-oncall-file (concat org-work-directory "/oncall.org")
-        org-meeting-notes-file (concat org-work-directory "/meeting-notes.org")
-        org-hscore-file (concat org-work-directory "/hscore.org")
-        org-personal-todo-file (concat org-personal-directory "/todo.org")
-        org-habits-file (concat org-personal-directory "/habits.org")
-        org-til-file (concat org-personal-directory "/til.org"))
-
-  (setq org-capture-templates
-        '(("r" "Reading list item" entry (file org-reading-list-file)
-           "* TODO %^{Description}\n  %?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
-          ("o" "Oncall ticket" entry (file org-oncall-file)
-           "* TODO %^{Type|ONCALL|CSR}-%^{Ticket number} - %^{Description}
-  :LOGBOOK:\n  - Added - %U\n  :END:
-  - Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
-          ("h" "HSCore task" entry (file org-hscore-file)
-           "* TODO %^{Type|HSC}-%^{Ticket number} - %^{Description}
-  :LOGBOOK:\n  - Added - %U\n  :END:
-  - Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
-          ("m" "Meeting notes" entry (file org-meeting-notes-file)
-           "* %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
-  - Date: %U\n  - Notes:\n    + %?\n  - Action items [/]\n    + [ ] ")
-          ("p" "Personal todo item" entry (file org-personal-todo-file)
-           "* TODO %^{Description}%?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
-          ("t" "Today I learnt" entry (file org-til-file)
-           "* %^{Description}\n  - Source: %?\n  -")))
-
-  (setq org-agenda-files (list org-oncall-file
-                               org-reading-list-file
-                               org-meeting-notes-file
-                               org-hscore-file
-                               org-personal-todo-file
-                               org-habits-file))
-
-  (defun org-move-item-or-tree ()
-    (interactive)
-    (message "Use f, b, n, p to move items with subtrees. %s %s"
-             "F, B, N, P to move items without subtrees."
-             "C-{f,b,n,p} for point movement.")
-    (let ((map (make-sparse-keymap)))
-      (define-key map (kbd "f") 'org-shiftmetaright)
-      (define-key map (kbd "b") 'org-shiftmetaleft)
-      (define-key map (kbd "n") 'org-shiftmetadown)
-      (define-key map (kbd "p") 'org-shiftmetaup)
-      (define-key map (kbd "F") 'org-metaright)
-      (define-key map (kbd "B") 'org-metaleft)
-      (define-key map (kbd "N") 'org-metadown)
-      (define-key map (kbd "P") 'org-metaup)
-      (define-key map (kbd "C-f") 'forward-char)
-      (define-key map (kbd "C-b") 'backward-char)
-      (define-key map (kbd "C-n") 'next-line)
-      (define-key map (kbd "C-p") 'previous-line)
-      (set-transient-map map t)))
-
-  :bind (:map global-map
-        ("C-c g" . org-clock-goto)
-        :map org-mode-map
-        ("C-M-g" . org-move-item-or-tree)))
-
-
-(use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook 'org-bullets-mode)
-  (setq org-bullets-bullet-list '("♕" "♖" "♗" "♘" "♙")))
+;; ―――――――――――――――――――――――――――――――――――――――― *ORG* ――――――――――――――――――――――――――――――――――――――
+(load-file "~/.emacs.d/org-setup.el")
