@@ -271,7 +271,8 @@
   :doc "Prompt the next possible key bindings after a short wait"
   :ensure t
   :config
-  (which-key-mode t))
+  (which-key-mode t)
+  :diminish nil)
 
 (use-package ido-vertical-mode
   :doc "Show ido vertically"
@@ -287,7 +288,8 @@
   (setq ivy-wrap t)
   (setq ivy-use-virtual-buffers t)
   :bind (("C-x b" . ivy-switch-buffer)
-         ("C-x B" . ivy-switch-buffer-other-window)))
+         ("C-x B" . ivy-switch-buffer-other-window))
+  :diminish nil)
 
 (use-package swiper
   :doc "A better search"
@@ -386,6 +388,10 @@
          "MOBY_ENV" "JAVA_8_HOME" "JAVA_7_HOME" "JAVA_HOME" "PS1"
          "NVM_DIR" "GPG_TTY")))))
 
+(use-package diminish
+  :doc "Hide minor modes from mode line"
+  :ensure t)
+
 
 ;; ――――――――――――――――――――――――――――――――――――― Code editing ――――――――――――――――――――――――――――――――――――
 (use-package company
@@ -406,11 +412,13 @@
 
   ;; Configure hippie expand as well.
   (setq hippie-expand-try-functions-list
-      '(try-expand-dabbrev
-        try-expand-dabbrev-all-buffers
-        try-expand-dabbrev-from-kill
-        try-complete-lisp-symbol-partially
-        try-complete-lisp-symbol)))
+        '(try-expand-dabbrev
+          try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-from-kill
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol))
+
+  :diminish nil)
 
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
@@ -444,6 +452,10 @@
   (setq highlight-symbol-idle-delay 0.5)
   :bind (("M-n" . highlight-symbol-next)
          ("M-p" . highlight-symbol-prev)))
+
+(use-package yasnippet
+  :ensure t
+  :diminish nil)
 
 
 ;; ―――――――――――――――――――――――――――――――― Programming languages ――――――――――――――――――――――――――――――
@@ -557,12 +569,15 @@
     ;; This choice of keybinding leaves cider-macroexpand-1 unbound
     (cljr-add-keybindings-with-prefix "C-c C-m"))
   :config
-  (add-hook 'clojure-mode-hook #'my-clojure-mode-hook))
+  (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
+
+  :diminish nil)
 
 (use-package eldoc
   :doc "Easily accessible documentation for Elisp"
   :config
-  (global-eldoc-mode t))
+  (global-eldoc-mode t)
+  :diminish nil)
 
 
 ;; ―――――――――――――――――――――――――――――――――――― Look and feel ――――――――――――――――――――――――――――――――――
@@ -624,6 +639,7 @@
   (load-theme 'spacemacs-dark t))
 
 (use-package powerline
+  :doc "Better mode line"
   :ensure t
   :config
   (powerline-center-theme))
