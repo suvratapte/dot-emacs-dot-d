@@ -5,32 +5,30 @@
   ;; Enable spell check in org
   (add-hook 'org-mode-hook 'turn-on-flyspell)
 
-  (setq org-list-demote-modify-bullet
-        '(("+" . "-") ("-" . "+")))
+  (setq org-list-demote-modify-bullet '(("+" . "-") ("-" . "+"))
+        ;; Hide leading stars
+        org-hide-leading-stars t
 
-  ;; Hide leading stars
-  (setq org-hide-leading-stars t)
+        ;; Enable source code highlighting in org-mode.
+        org-src-fontify-natively t
 
-  ;; Enable source code highlighting in org-mode.
-  (setq org-src-fontify-natively t)
+        ;; '!' after the hotkey tells org-mode to add a LOGBOOK entry for every
+        ;; status change.
+        org-todo-keywords '((sequence "TODO(t!)" "WORKING(w!)"
+                                      "PAUSED(p!)" "BLOCKED(b!)"
+                                      "NEXT(n!)" "|"
+                                      "DONE(d@!)" "CANCELLED(c!)"))
 
-  ;; '!' after the hotkey tells org-mode to add a LOGBOOK entry for every
-  ;; status change.
-  (setq org-todo-keywords
-        '((sequence "TODO(t!)" "WORKING(w!)" "PAUSED(p!)" "BLOCKED(b!)" "NEXT(n!)"
-                    "|" "DONE(d@!)" "CANCELLED(c!)")))
+        ;; Use logbook
+        org-log-into-drawer t
 
-  ;; Use logbook
-  (setq org-log-into-drawer t)
+        ;; Use clocking
+        org-clock-into-drawer "CLOCKING"
 
-  ;; Use clocking
-  (setq org-clock-into-drawer "CLOCKING")
+        ;; Add 'closed' log when marked done
+        org-log-done t
 
-  ;; Add 'closed' log when marked done
-  (setq org-log-done t)
-
-  ;; Org modules
-  (setq org-modules '(org-bbdb
+        org-modules '(org-bbdb
                       org-bibtex
                       org-docview
                       org-gnus
@@ -39,18 +37,18 @@
                       org-irc
                       org-mhe
                       org-rmail
-                      org-w3m))
+                      org-w3m)
 
-  (setq org-todo-keyword-faces
+        org-todo-keyword-faces
         '(("TODO" :foreground "red" :weight bold)
           ("WORKING" :foreground "#a45bad" :weight bold)
           ("PAUSED" :foreground "SlateBlue1" :weight bold)
           ("BLOCKED" :foreground "pink1" :weight bold)
           ("NEXT" :foreground "cyan1" :weight bold)
           ("DONE" :foreground "#2d9574" :weight bold)
-          ("CANCELLED" :foreground "yellow" :weight bold)))
+          ("CANCELLED" :foreground "yellow" :weight bold))
 
-  (setq org-agenda-custom-commands
+        org-agenda-custom-commands
         '(("i" "My Agenda"
            ((agenda ""
                     ((org-agenda-overriding-header "Agenda")
@@ -63,26 +61,22 @@
                      ((org-agenda-overriding-header "Unscheduled")
                       (org-agenda-skip-function
                        '(org-agenda-skip-entry-if 'scheduled)))))
-           nil nil)))
+           nil nil))
 
+        ;; Capture directories
+        org-personal-directory "~/workspace/repository-of-things/personal"
+        org-work-directory "~/workspace/repository-of-things/work"
 
-  (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c a") 'org-agenda)
-
-  ;; Capture directories
-  (setq org-personal-directory "~/workspace/repository-of-things/personal"
-        org-work-directory "~/workspace/repository-of-things/work")
-
-  ;; Capture files
-  (setq org-reading-list-file (concat org-personal-directory "/reading-list.org")
+        ;; Capture files
+        org-reading-list-file (concat org-personal-directory "/reading-list.org")
         org-oncall-file (concat org-work-directory "/oncall.org")
         org-meeting-notes-file (concat org-work-directory "/meeting-notes.org")
         org-hscore-file (concat org-work-directory "/hscore.org")
         org-personal-todo-file (concat org-personal-directory "/todo.org")
         org-habits-file (concat org-personal-directory "/habits.org")
-        org-til-file (concat org-personal-directory "/til.org"))
+        org-til-file (concat org-personal-directory "/til.org")
 
-  (setq org-capture-templates
+        org-capture-templates
         '(("r" "Reading list item" entry (file org-reading-list-file)
            "* TODO %^{Description}\n  %?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
           ("o" "Oncall ticket" entry (file org-oncall-file)
@@ -99,14 +93,17 @@
           ("p" "Personal todo item" entry (file org-personal-todo-file)
            "* TODO %^{Description}%?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
           ("t" "Today I learnt" entry (file org-til-file)
-           "* %^{Description}\n  - Source: %?\n  -")))
+           "* %^{Description}\n  - Source: %?\n  -"))
 
-  (setq org-agenda-files (list org-oncall-file
+        org-agenda-files (list org-oncall-file
                                org-reading-list-file
                                org-meeting-notes-file
                                org-hscore-file
                                org-personal-todo-file
-                               org-habits-file))
+                               org-habits-file)
+
+        ;; Do not show clock in the modeline. It hides other important things.
+        org-mode-line-string nil)
 
   (defun org-move-item-or-tree ()
     (interactive)
@@ -128,10 +125,14 @@
       (define-key map (kbd "C-p") 'previous-line)
       (set-transient-map map t)))
 
-  :bind (:map global-map
-              ("C-c g" . org-clock-goto)
-              :map org-mode-map
-              ("C-M-g" . org-move-item-or-tree)))
+  :bind (:map
+         global-map
+         ("C-c c" . org-capture)
+         ("C-c a" . org-agenda)
+         ("C-c g" . org-clock-goto)
+         :map
+         org-mode-map
+         ("C-M-g" . org-move-item-or-tree)))
 
 
 (use-package org-bullets

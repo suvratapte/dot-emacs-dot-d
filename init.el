@@ -239,6 +239,8 @@
 (use-package smex
   :doc "Enhance M-x to allow easier execution of commands"
   :ensure t
+  ;; Using counsel-M-x for now. Remove this permanently if counsel-M-x works better.
+  :disabled t
   :config
   (setq smex-save-file (concat user-emacs-directory ".smex-items"))
   (smex-initialize)
@@ -250,7 +252,8 @@
   :config
   ;; Use it everywhere
   (projectile-global-mode t)
-  :bind ("C-x f" . projectile-find-file))
+  :bind ("C-x f" . projectile-find-file)
+  :diminish nil)
 
 (use-package magit
   :doc "Git integration for Emacs"
@@ -287,6 +290,9 @@
   (ivy-mode t)
   (setq ivy-wrap t)
   (setq ivy-use-virtual-buffers t)
+  ;; Counsel starts all prompts with the default regex `^'.
+  ;; This is not needed.
+  (setq ivy-initial-inputs-alist nil)
   :bind (("C-x b" . ivy-switch-buffer)
          ("C-x B" . ivy-switch-buffer-other-window))
   :diminish nil)
@@ -306,7 +312,7 @@
          ("C-c s" . counsel-ag)))
 
 (use-package aggressive-indent
-  :doc "Always keep everything indented"
+  :doc "Intended Indentation"
   :ensure t
   :config
   (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
@@ -325,10 +331,12 @@
   :ensure t
   :config
   (global-git-gutter-mode t)
-  (set-face-background 'git-gutter:modified "yellow")
+  (setq git-gutter:modified-sign "~")
+  (set-face-foreground 'git-gutter:modified "yellow")
   (set-face-foreground 'git-gutter:added "green")
   (set-face-foreground 'git-gutter:deleted "red")
-  :bind (("C-x C-g" . git-gutter)))
+  :bind (("C-x C-g" . git-gutter))
+  :diminish nil)
 
 (use-package git-timemachine
   :doc "Go through git history in a file"
@@ -531,7 +539,8 @@
          ("C-c d" . cider-debug-defun-at-point)
          :map
          cider-repl-mode-map
-         ("C-c M-o" . cider-repl-clear-buffer)))
+         ("C-c M-o" . cider-repl-clear-buffer))
+  :diminish nil)
 
 (use-package clj-refactor
   :ensure t
