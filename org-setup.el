@@ -81,12 +81,16 @@
            "* TODO %^{Description}\n  %?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
           ("o" "Oncall ticket" entry (file org-oncall-file)
            "* TODO %^{Type|ONCALL|CSR}-%^{Ticket number} - %^{Description}
-  :LOGBOOK:\n  - Added - %U\n  :END:
-  - Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
+  :PROPERTIES:
+  :LINK:     https://helpshift.atlassian.net/browse/%\\1-%\\2
+  :END:
+  :LOGBOOK:\n  - Added - %U\n  :END:" :prepend t)
           ("h" "HSCore task" entry (file org-hscore-file)
            "* TODO %^{Type|HSC}-%^{Ticket number} - %^{Description}
-  :LOGBOOK:\n  - Added - %U\n  :END:
-  - Link: https://helpshift.atlassian.net/browse/%\\1-%\\2" :prepend t)
+  :PROPERTIES:
+  :LINK:     https://helpshift.atlassian.net/browse/%\\1-%\\2
+  :END:
+  :LOGBOOK:\n  - Added - %U\n  :END:" :prepend t)
           ("m" "Meeting notes" entry (file org-meeting-notes-file)
            "* %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
   - Date: %U\n  - Notes:\n    + %?\n  - Action items [/]\n    + [ ] ")

@@ -31,7 +31,7 @@
  fill-column 90
 
  ;; Use your name in the frame title. :)
- frame-title-format (format "%s's Emacs (%%f)" (capitalize user-login-name))
+ frame-title-format (format "%s's Emacs" (capitalize user-login-name))
 
  ;; Do not create lockfiles.
  create-lockfiles nil
@@ -331,8 +331,8 @@
   :ensure t
   :config
   (global-git-gutter-mode t)
-  (setq git-gutter:modified-sign "~")
-  (set-face-foreground 'git-gutter:modified "yellow")
+  (setq git-gutter:modified-sign "|")
+  (set-face-foreground 'git-gutter:modified "grey")
   (set-face-foreground 'git-gutter:added "green")
   (set-face-foreground 'git-gutter:deleted "red")
   :bind (("C-x C-g" . git-gutter))
