@@ -697,3 +697,6 @@
 
 ;; ―――――――――――――――――――――――――――――――――――――――― *ORG* ――――――――――――――――――――――――――――――――――――――
 (load-file "~/.emacs.d/org-setup.el")
+
+;; ――――――――――――――――― Start Emacsserver so that emacsclient can be used ―――――――――――――――――
+(server-start)
