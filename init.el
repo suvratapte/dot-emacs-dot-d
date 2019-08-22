@@ -181,6 +181,9 @@
                            (kill-buffer (current-buffer))))))
     (url-retrieve upload-url url-callback)))
 
+;; Start Emacsserver so that emacsclient can be used
+(server-start)
+
 
 ;; ――――――――――――――――――――― Additional packages and their configurations ――――――――――――――――――――
 (require 'use-package)
@@ -698,6 +701,3 @@
 
 ;; ―――――――――――――――――――――――――――――――――――――――― *ORG* ――――――――――――――――――――――――――――――――――――――
 (load-file "~/.emacs.d/org-setup.el")
-
-;; ――――――――――――――――― Start Emacsserver so that emacsclient can be used ―――――――――――――――――
-(server-start)
