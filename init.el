@@ -303,7 +303,7 @@
 (use-package swiper
   :doc "A better search"
   :ensure t
-  :bind (("C-s" . swiper)
+  :bind (("C-s" . swiper-isearch)
          ("C-M-s" . isearch-forward-regexp)
          ("C-M-r" . isearch-backward-regexp)))
 
@@ -461,6 +461,7 @@
   :config
   (add-hook 'prog-mode-hook 'highlight-symbol-mode)
   (set-face-background 'highlight-symbol-face "#a45bad")
+  (set-face-foreground 'highlight-symbol-face "snow")
   (setq highlight-symbol-idle-delay 0.5)
   :bind (("M-n" . highlight-symbol-next)
          ("M-p" . highlight-symbol-prev)))
