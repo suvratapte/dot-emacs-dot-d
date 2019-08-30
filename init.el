@@ -459,10 +459,9 @@
   :doc "Highlight and jump to symbols"
   :ensure t
   :config
-  (add-hook 'prog-mode-hook 'highlight-symbol-mode)
-  (set-face-background 'highlight-symbol-face "#a45bad")
-  (set-face-foreground 'highlight-symbol-face "snow")
+  (set-face-background 'highlight-symbol-face (face-background 'highlight))
   (setq highlight-symbol-idle-delay 0.5)
+  (add-hook 'prog-mode-hook 'highlight-symbol-mode)
   :bind (("M-n" . highlight-symbol-next)
          ("M-p" . highlight-symbol-prev)))
 
