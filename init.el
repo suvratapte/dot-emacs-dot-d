@@ -467,7 +467,11 @@
 
 (use-package yasnippet
   :ensure t
-  :diminish nil)
+  :diminish nil
+  :config
+  (yas-global-mode t)
+  (add-to-list 'hippie-expand-try-functions-list
+               'yas-hippie-try-expand))
 
 
 ;; ―――――――――――――――――――――――――――――――― Programming languages ――――――――――――――――――――――――――――――
@@ -538,6 +542,14 @@
   (setq cider-repl-use-pretty-printing t)
   ;; Enable logging client-server messaging in *nrepl-messages* buffer
   (setq nrepl-log-messages nil)
+
+  ;; REPL should expect input on the next line + λ ! :)
+  (defun cider-repl-prompt-custom (namespace)
+    "Return a prompt string that mentions NAMESPACE."
+    (format "λ %s λ \n" namespace))
+
+  (setq cider-repl-prompt-function 'cider-repl-prompt-custom)
+
   :bind (:map
          cider-mode-map
          ("C-c d" . cider-debug-defun-at-point)
@@ -545,6 +557,25 @@
          cider-repl-mode-map
          ("C-c M-o" . cider-repl-clear-buffer))
   :diminish nil)
+
+(use-package flycheck
+  :ensure t
+  :config
+  (global-flycheck-mode))
+
+(use-package flycheck-joker
+  :after clojure-mode
+  :ensure t)
+
+(use-package flycheck-clj-kondo
+  :ensure t
+  :after clojure-mode
+  :config
+  (dolist (checkers '((clj-kondo-clj . clojure-joker)
+                      (clj-kondo-cljs . clojurescript-joker)
+                      (clj-kondo-cljc . clojure-joker)
+                      (clj-kondo-edn . edn-joker)))
+    (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers)))))
 
 (use-package clj-refactor
   :ensure t
@@ -698,6 +729,17 @@
 
       (set-frame-font "Fira Code Retina"))))
 
+
+(use-package emojify
+  :doc "Display Emoji in Emacs."
+  :ensure t
+  :init
+  (add-hook 'after-init-hook #'global-emojify-mode))
+
 
 ;; ―――――――――――――――――――――――――――――――――――――――― *ORG* ――――――――――――――――――――――――――――――――――――――
 (load-file "~/.emacs.d/org-setup.el")
+
+(provide 'init)
+
+;;; init.el ends here
