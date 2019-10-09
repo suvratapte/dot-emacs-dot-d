@@ -1,3 +1,20 @@
+;;; init.el --- My custom Emacs configuration.
+;;; Commentary:
+;;; Author: Suvrat Apte
+;;; Created on: 02 November 2015
+;;; Copyright (c) 2019 Suvrat Apte <suvratapte@gmail.com>
+
+;; This file is not part of GNU Emacs.
+
+;;; License:
+
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the Do What The Fuck You Want to
+;; Public License, Version 2, which is included with this distribution.
+;; See the file LICENSE.txt
+
+;;; Code:
+
 
 ;; ――――――――――――――――――――――――――――――――――― Set up 'package' ――――――――――――――――――――――――――――――――――
 (require 'package)
@@ -116,14 +133,14 @@
 
 ;; ―――――――――――――――――――――――― Added functionality (Generic usecases) ―――――――――――――――――――――――
 (defun toggle-comment-on-line ()
-  "comment or uncomment current line"
+  "Comment or uncomment current line."
   (interactive)
   (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
 
 (global-set-key (kbd "C-;") 'toggle-comment-on-line)
 
 (defun comment-pretty ()
-  "Inserts a comment with '―' (Unicode character: U+2015) on each side."
+  "Insert a comment with '―' (Unicode character: U+2015) on each side."
   (interactive)
   (let* ((comment (read-from-minibuffer "Comment: "))
          (comment-length (length comment))
@@ -158,14 +175,13 @@
 ;; Thanks to - Narendra Joshi (https://gitlab.com/narendraj9/dot-emacs)
 (defun upload-region (beg end)
   "Upload the contents of the selected region in current buffer.
+
    It uses transfer.sh Link to the uploaded file is copied to
    clipboard.  Creates a temp file if the buffer isn't associted
    witha file.  Argument BEG beginning point for region.
    Argument END ending point for region."
   (interactive "r")
-  (let* ((buf-file-path (buffer-file-name))
-         (file-path (or buf-file-path
-                        (create-file-for-buffer)))
+  (let* ((file-path (buffer-file-name))
          (file-name (file-name-nondirectory file-path))
          (upload-url (format "https://transfer.sh/%s"
                              file-name))
@@ -254,7 +270,7 @@
   :ensure t
   :config
   ;; Use it everywhere
-  (projectile-global-mode t)
+  (projectile-mode t)
   :bind ("C-x f" . projectile-find-file)
   :diminish nil)
 
@@ -522,7 +538,7 @@
   ;; Cider has reached 0.20.x but clj-refactor only supports upto 0.18.0. Manually
   ;; download cider-0.18.0 by checking out the tag on github and place it in
   ;; `~/.emacs.d/elpa/` so that the `load-path` tag below, works.
-  :load-path "~/.emacs.d/elpa/cider-0.18.0"
+  ;; :load-path "~/.emacs.d/elpa/cider-0.18.0"
   :init
   ;; Enable minibuffer documentation
   (add-hook 'cider-mode-hook 'eldoc-mode)
@@ -546,7 +562,7 @@
   ;; REPL should expect input on the next line + λ ! :)
   (defun cider-repl-prompt-custom (namespace)
     "Return a prompt string that mentions NAMESPACE."
-    (format "λ %s λ \n" namespace))
+    (format "λ %s λ\n" namespace))
 
   (setq cider-repl-prompt-function 'cider-repl-prompt-custom)
 
@@ -678,8 +694,8 @@
 (use-package ewal-spacemacs-themes
   :ensure t
   :config
-  (setq spacemacs-theme-comment-bg nil
-        spacemacs-theme-comment-italic t)
+  (setq-default spacemacs-theme-comment-bg nil
+                spacemacs-theme-comment-italic t)
   (load-theme 'spacemacs-dark t))
 
 (use-package powerline
@@ -728,7 +744,6 @@
                                 `([,(cdr char-regexp) 0 font-shape-gstring]))))
 
       (set-frame-font "Fira Code Retina"))))
-
 
 (use-package emojify
   :doc "Display Emoji in Emacs."
