@@ -16,7 +16,7 @@
    ;; '!' after the hotkey tells org-mode to add a LOGBOOK entry for every
    ;; status change.
    org-todo-keywords '((sequence
-                        "PROJECT(P!)" "TODO(t!)" "WORKING(w!)" "WAITING(W!)" "NEXT(n!)"
+                        "TODO(t!)" "WORKING(w!)" "WAITING(W!)" "NEXT(n!)"
                         "|" "DONE(d@!)"))
 
    ;; Use logbook
@@ -39,13 +39,15 @@
                  org-rmail
                  org-w3m)
 
+   ;; C-{a,e} should behave differently on headings
+   org-special-ctrl-a/e t
+
    org-todo-keyword-faces
    '(("TODO" :foreground "red" :weight bold)
      ("WORKING" :foreground "#a45bad" :weight bold)
-     ("WAITING" :foreground "pink1" :weight bold)
+     ("WAITING" :foreground "#9f8766" :weight bold)
      ("NEXT" :foreground "cyan1" :weight bold)
-     ("DONE" :foreground "#2d9574" :weight bold)
-     ("PROJECT" :foreground "#9f8766" :weight bold))
+     ("DONE" :foreground "#2d9574" :weight bold))
 
    org-agenda-custom-commands
    '(("i" "My Agenda"
@@ -99,7 +101,8 @@
       "* %^{Description}\n  - Source: %?\n  -"))
 
    org-agenda-files (list org-oncall-file
-                          org-reading-list-file
+                          ;; Excluding the reading list file since it has many TODOs.
+                          ;; org-reading-list-file
                           org-meeting-notes-file
                           org-hscore-file
                           org-personal-todo-file

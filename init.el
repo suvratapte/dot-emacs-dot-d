@@ -483,11 +483,12 @@
 
 (use-package yasnippet
   :ensure t
-  :diminish nil
+  :disabled t ;; I'm not using this at the moment.
   :config
   (yas-global-mode t)
   (add-to-list 'hippie-expand-try-functions-list
-               'yas-hippie-try-expand))
+               'yas-hippie-try-expand)
+  :diminish nil)
 
 
 ;; ―――――――――――――――――――――――――――――――― Programming languages ――――――――――――――――――――――――――――――
@@ -577,7 +578,8 @@
 (use-package flycheck
   :ensure t
   :config
-  (global-flycheck-mode))
+  (global-flycheck-mode)
+  :diminish nil)
 
 (use-package flycheck-joker
   :after clojure-mode
@@ -726,8 +728,9 @@
                      ;; (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
                      (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
                      (48 . ".\\(?:x[a-zA-Z]\\)")
-                     (58 . ".\\(?:::\\|[:=]\\)")
-                     (59 . ".\\(?:;;\\|;\\)")
+                     ;; Grouping ';' and ':' in groups of 3 causes occur to break. Disable it.
+                     ;; (58 . ".\\(?:::\\|[:=]\\)")
+                     ;; (59 . ".\\(?:;;\\|;\\)")
                      (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
                      ;; (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
                      (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
