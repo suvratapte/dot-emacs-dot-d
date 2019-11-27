@@ -1,4 +1,4 @@
-;;; init.el --- My custom Emacs configuration.
+;;; init.el --- My Emacs configuration.
 ;;; Commentary:
 ;;; Author: Suvrat Apte
 ;;; Created on: 02 November 2015
@@ -171,6 +171,24 @@
           (insert "―"))))))
 
 (global-set-key (kbd "C-c ;") 'comment-pretty)
+
+;; Flyspell should be able to learn a word without the
+;; `flyspell-correct-word-before-point` pop up.
+
+;; Refer:
+;; https://stackoverflow.com/questions/22107182/in-emacs-flyspell-mode-how-to-add-new-word-to-dictionary
+(defun flyspell-learn-word-at-point ()
+  "Add word at point to list of correct words."
+  (interactive)
+  (let ((current-location (point))
+        (word (flyspell-get-word)))
+    (when (consp word)
+      (flyspell-do-correct 'save nil
+                           (car word) current-location
+                           (cadr word) (caddr word)
+                           current-location))))
+
+(global-set-key (kbd "C-c l") 'flyspell-learn-word-at-point)
 
 ;; Thanks to - Narendra Joshi (https://gitlab.com/narendraj9/dot-emacs)
 (defun upload-region (beg end)

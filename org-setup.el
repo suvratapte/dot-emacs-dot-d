@@ -1,3 +1,20 @@
+;;; org-setup.el --- My Org mode configuration.
+;;; Commentary:
+;;; Author: Suvrat Apte
+;;; Created on: 02 November 2015
+;;; Copyright (c) 2019 Suvrat Apte <suvratapte@gmail.com>
+
+;; This file is not part of GNU Emacs.
+
+;;; License:
+
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the Do What The Fuck You Want to
+;; Public License, Version 2, which is included with this distribution.
+;; See the file LICENSE.txt
+
+;;; Code:
+
 
 ;; ―――――――――――――――――――――――――――――――――――――――― *ORG* ――――――――――――――――――――――――――――――――――――――
 (use-package org
@@ -146,3 +163,8 @@
   :config
   (add-hook 'org-mode-hook 'org-bullets-mode)
   (setq org-bullets-bullet-list '("♕" "♖" "♗" "♘" "♙")))
+
+
+(provide 'org-setup)
+
+;;; org-setup.el ends here
