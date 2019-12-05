@@ -418,20 +418,20 @@
   :ensure t
   :bind ("C-c w" . define-word-at-point))
 
-(when (eq system-type 'darwin)
-  (use-package exec-path-from-shell
-    :doc "MacOS does not start a shell at login. This makes sure
+(use-package exec-path-from-shell
+  :doc "MacOS does not start a shell at login. This makes sure
           that the env variable of shell and GUI Emacs look the
           same."
-    :ensure t
-    :config
-    (when (memq window-system '(mac ns))
-      (exec-path-from-shell-initialize)
-      (exec-path-from-shell-copy-envs
-       '("PATH" "ANDROID_HOME" "LEIN_USERNAME" "LEIN_PASSPHRASE"
-         "LEIN_JVM_OPTS" "NPM_TOKEN" "LANGUAGE" "LANG" "LC_ALL"
-         "MOBY_ENV" "JAVA_8_HOME" "JAVA_7_HOME" "JAVA_HOME" "PS1"
-         "NVM_DIR" "GPG_TTY")))))
+  :ensure t
+  :if (eq system-type 'darwin)
+  :config
+  (when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-envs
+     '("PATH" "ANDROID_HOME" "LEIN_USERNAME" "LEIN_PASSPHRASE"
+       "LEIN_JVM_OPTS" "NPM_TOKEN" "LANGUAGE" "LANG" "LC_ALL"
+       "MOBY_ENV" "JAVA_8_HOME" "JAVA_7_HOME" "JAVA_HOME" "PS1"
+       "NVM_DIR" "GPG_TTY"))))
 
 (use-package diminish
   :doc "Hide minor modes from mode line"
