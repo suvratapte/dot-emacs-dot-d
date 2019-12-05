@@ -161,7 +161,7 @@
         (when (equal comment-start ";")
           (insert comment-start))
         (insert " ")
-        (dotimes (_ space-on-each-side) (insert "―"))
+        (dotimes (_ space-on-each-side) (insert "─"))
         (when (> comment-length 0) (insert " "))
         (insert comment)
         (when (> comment-length 0) (insert " "))
