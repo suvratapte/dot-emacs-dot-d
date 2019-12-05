@@ -497,7 +497,8 @@
   (setq highlight-symbol-idle-delay 0.5)
   (add-hook 'prog-mode-hook 'highlight-symbol-mode)
   :bind (("M-n" . highlight-symbol-next)
-         ("M-p" . highlight-symbol-prev)))
+         ("M-p" . highlight-symbol-prev))
+  :diminish nil)
 
 (use-package yasnippet
   :ensure t
