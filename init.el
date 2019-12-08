@@ -444,15 +444,15 @@
   :ensure t
   :bind (:map
          global-map
-         ("TAB" . company-complete-common-or-cycle)
+         ;; ("TAB" . company-complete-common-or-cycle)
          ;; Use hippie expand as secondary auto complete. It is useful as it is
          ;; 'buffer-content' aware (it uses all buffers for that).
          ("M-/" . hippie-expand)
          :map company-active-map
-         ("C-n" . company-select-next-or-abort)
-         ("C-p" . company-select-previous-or-abort))
+         ("C-n" . company-select-next)
+         ("C-p" . company-select-previous))
   :config
-  (setq company-idle-delay 0.3)
+  (setq company-idle-delay 0.1)
   (global-company-mode t)
 
   ;; Configure hippie expand as well.
