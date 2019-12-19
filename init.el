@@ -16,7 +16,7 @@
 ;;; Code:
 
 
-;; ――――――――――――――――――――――――――――――――――― Set up 'package' ――――――――――――――――――――――――――――――――――
+;; ─────────────────────────────────── Set up 'package' ───────────────────────────────────
 (require 'package)
 
 ;; Add melpa to package archives.
@@ -33,7 +33,7 @@
   (package-install 'use-package))
 
 
-;; ――――――――――――――――――――――――――――――――― Use better defaults ―――――――――――――――――――――――――――――――
+;; ───────────────────────────────── Use better defaults ────────────────────────────────
 (setq-default
  ;; Don't use the compiled code if its the older package.
  load-prefer-newer t
@@ -91,7 +91,7 @@
 (global-auto-revert-mode t)
 
 
-;; ――――――――――――――――――――――――――― Disable unnecessary UI elements ―――――――――――――――――――――――――
+;; ─────────────────────────── Disable unnecessary UI elements ──────────────────────────
 (progn
   ;; Do not show menu bar.
   (menu-bar-mode -1)
@@ -108,7 +108,7 @@
   (global-hl-line-mode t))
 
 
-;; ――――――――――――――――――――――――― Better interaction with X clipboard ―――――――――――――――――――――――――
+;; ───────────────────────── Better interaction with X clipboard ────────────────────────
 (setq-default
  ;; Makes killing/yanking interact with the clipboard.
  x-select-enable-clipboard t
@@ -131,7 +131,7 @@
  mouse-yank-at-point t)
 
 
-;; ―――――――――――――――――――――――― Added functionality (Generic usecases) ―――――――――――――――――――――――
+;; ──────────────────────── Added functionality (Generic usecases) ────────────────────────
 (defun toggle-comment-on-line ()
   "Comment or uncomment current line."
   (interactive)
@@ -140,9 +140,10 @@
 (global-set-key (kbd "C-;") 'toggle-comment-on-line)
 
 (defun comment-pretty ()
-  "Insert a comment with '―' (Unicode character: U+2015) on each side."
+  "Insert a comment with '─' (C-x 8 RET BOX DRAWINGS LIGHT HORIZONTAL) on each side."
   (interactive)
-  (let* ((comment (read-from-minibuffer "Comment: "))
+  (let* ((comment-char "─")
+         (comment (read-from-minibuffer "Comment: "))
          (comment-length (length comment))
          (current-column-pos (current-column))
          (space-on-each-side (/ (- fill-column
@@ -161,14 +162,14 @@
         (when (equal comment-start ";")
           (insert comment-start))
         (insert " ")
-        (dotimes (_ space-on-each-side) (insert "─"))
+        (dotimes (_ space-on-each-side) (insert comment-char))
         (when (> comment-length 0) (insert " "))
         (insert comment)
         (when (> comment-length 0) (insert " "))
         (dotimes (_ (if (= (% comment-length 2) 0)
                         space-on-each-side
                       (- space-on-each-side 1)))
-          (insert "―"))))))
+          (insert comment-char))))))
 
 (global-set-key (kbd "C-c ;") 'comment-pretty)
 
@@ -219,7 +220,7 @@
 (server-start)
 
 
-;; ――――――――――――――――――――― Additional packages and their configurations ――――――――――――――――――――
+;; ───────────────────── Additional packages and their configurations ─────────────────────
 (require 'use-package)
 
 ;; Add `:doc' support for use-package so that we can use it like what a doc-strings is for
@@ -241,7 +242,7 @@
     (use-package-process-keywords name-symbol rest state)))
 
 
-;; ――――――――――――――――――――――――――――――――――― Generic packages ――――――――――――――――――――――――――――――――――
+;; ─────────────────────────────────── Generic packages ───────────────────────────────────
 (use-package uniquify
   :doc "Naming convention for files with same names"
   :config
@@ -353,15 +354,13 @@
   :ensure t
   :config
   (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
-  ;; ;; Have a way to save without indentation.
-  ;; (defun save-without-aggresive-indentation ()
-  ;;   (interactive)
-  ;;   (let ((hooks before-save-hook))
-  ;;     (setq before-save-hook (remove 'aggressive-indent-indent-defun before-save-hook))
-  ;;     (save-buffer)
-  ;;     (setq before-save-hook hooks)))
-  ;; :bind (("C-x s" . save-without-aggresive-indentation))
-  )
+  ;; Have a way to save without indentation.
+  (defun save-without-aggresive-indentation ()
+    (interactive)
+    (setq before-save-hook (remove 'aggressive-indent-indent-defun before-save-hook))
+    (save-buffer)
+    (add-hook 'before-save-hook 'aggressive-indent-indent-defun))
+  :bind (("C-x s" . save-without-aggresive-indentation)))
 
 (use-package git-gutter
   :doc "Shows modified lines"
@@ -438,13 +437,13 @@
   :ensure t)
 
 
-;; ――――――――――――――――――――――――――――――――――――― Code editing ――――――――――――――――――――――――――――――――――――
+;; ───────────────────────────────────── Code editing ─────────────────────────────────────
 (use-package company
   :doc "COMplete ANYthing"
   :ensure t
   :bind (:map
          global-map
-         ;; ("TAB" . company-complete-common-or-cycle)
+         ("TAB" . company-complete-common-or-cycle)
          ;; Use hippie expand as secondary auto complete. It is useful as it is
          ;; 'buffer-content' aware (it uses all buffers for that).
          ("M-/" . hippie-expand)
@@ -510,7 +509,7 @@
   :diminish nil)
 
 
-;; ―――――――――――――――――――――――――――――――― Programming languages ――――――――――――――――――――――――――――――
+;; ──────────────────────────────── Programming languages ───────────────────────────────
 (use-package clojure-mode
   :doc "A major mode for editing Clojure code"
   :ensure t
@@ -661,7 +660,7 @@
   :diminish nil)
 
 
-;; ―――――――――――――――――――――――――――――――――――― Look and feel ――――――――――――――――――――――――――――――――――
+;; ──────────────────────────────────── Look and feel ───────────────────────────────────
 (use-package monokai-alt-theme
   :doc "Just another theme"
   :ensure t
@@ -679,14 +678,14 @@
    '(font-lock-comment-face ((t (:foreground "tan3"))))
    '(font-lock-doc-face ((t (:foreground "tan3"))))
    '(mode-line ((t (:background "#9ce22e"
-                    :foreground "black"
-                    :box (:line-width 3 :color "#9ce22e")
-                    :weight normal))))
+                                :foreground "black"
+                                :box (:line-width 3 :color "#9ce22e")
+                                :weight normal))))
    '(mode-line-buffer-id ((t (:foreground "black" :weight bold))))
    '(mode-line-inactive ((t (:background "#9ce22e"
-                             :foreground "grey50"
-                             :box (:line-width 3 :color "#9ce22e")
-                             :weight normal))))
+                                         :foreground "grey50"
+                                         :box (:line-width 3 :color "#9ce22e")
+                                         :weight normal))))
    '(org-done ((t (:foreground "chartreuse1" :weight bold))))
    '(org-level-1 ((t (:foreground "RoyalBlue1" :weight bold))))
    '(org-tag ((t (:foreground "#9ce22e" :weight bold)))))
@@ -707,7 +706,7 @@
                           (:box nil :background "#dadada" :foreground "#9e9e9e"))))
    '(org-done ((((class color) (min-colors 89))
                 (:bold t :weight bold :foreground "#008700" :background "#d7ff87"
-                 :box (:line-width 1 :style none)))))
+                       :box (:line-width 1 :style none)))))
    '(org-level-1 ((((class color) (min-colors 89)) (:bold t :foreground "#5fafd7"))))
    '(org-tag ((((class color) (min-colors 89))
                (:background "#9e9e9e" :foreground "#ffffff" :bold t :weight bold))))))
@@ -774,7 +773,7 @@
   (add-hook 'after-init-hook #'global-emojify-mode))
 
 
-;; ―――――――――――――――――――――――――――――――――――――――― *ORG* ――――――――――――――――――――――――――――――――――――――
+;; ──────────────────────────────────────── *ORG* ───────────────────────────────────────
 (load-file "~/.emacs.d/org-setup.el")
 
 (provide 'init)
