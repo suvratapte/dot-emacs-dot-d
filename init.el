@@ -301,7 +301,7 @@
 (use-package ace-jump-mode
   :doc "Jump around the visible buffer using 'Head Chars'"
   :ensure t
-  :bind ("C-M-;" . ace-jump-mode))
+  :bind ("C-." . ace-jump-mode))
 
 (use-package dumb-jump
   :doc "Dumb ag version of M-."
@@ -357,7 +357,7 @@
   ;; Have a way to save without indentation.
   (defun save-without-aggresive-indentation ()
     (interactive)
-    (setq before-save-hook (remove 'aggressive-indent-indent-defun before-save-hook))
+    (remove-hook 'before-save-hook 'aggressive-indent-indent-defun)
     (save-buffer)
     (add-hook 'before-save-hook 'aggressive-indent-indent-defun))
   :bind (("C-x s" . save-without-aggresive-indentation)))
@@ -435,6 +435,17 @@
 (use-package diminish
   :doc "Hide minor modes from mode line"
   :ensure t)
+
+
+(use-package toggle-test
+  :doc "Switch between src and test files."
+  :ensure t
+  :config
+  (add-to-list 'tgt-projects '((:root-dir "~/workspace/moby")
+                               (:src-dirs "src")
+                               (:test-dirs "test")
+                               (:test-suffixes "_test")))
+  :bind ("C-c t" . tgt-toggle))
 
 
 ;; ───────────────────────────────────── Code editing ─────────────────────────────────────
