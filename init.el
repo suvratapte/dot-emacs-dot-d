@@ -346,8 +346,11 @@
   :doc "Ivy enhanced Emacs commands"
   :ensure t
   :bind (("M-x" . counsel-M-x)
-         ("C-c i" . counsel-imenu)
-         ("C-c s" . counsel-ag)))
+         ("C-x C-f" . counsel-find-file)
+         ("C-'" . counsel-imenu)
+         ("C-c s" . counsel-ag)
+         :map counsel-find-file-map
+         ("RET" . ivy-alt-done)))
 
 (use-package aggressive-indent
   :doc "Intended Indentation"
@@ -780,6 +783,7 @@
 (use-package emojify
   :doc "Display Emoji in Emacs."
   :ensure t
+  :disabled t
   :init
   (add-hook 'after-init-hook #'global-emojify-mode))
 
