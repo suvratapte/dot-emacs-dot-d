@@ -326,11 +326,14 @@
   :ensure t
   :config
   (ivy-mode t)
-  (setq ivy-wrap t)
-  (setq ivy-use-virtual-buffers t)
-  ;; Counsel starts all prompts with the default regex `^'.
-  ;; This is not needed.
-  (setq ivy-initial-inputs-alist nil)
+  (setq ivy-use-virtual-buffers t
+
+        ;; Display index and count both.
+        ivy-count-format "(%d/%d) "
+
+        ;; By default, all ivy prompts start with `^'. Disable that.
+        ivy-initial-inputs-alist nil)
+
   :bind (("C-x b" . ivy-switch-buffer)
          ("C-x B" . ivy-switch-buffer-other-window))
   :diminish nil)
@@ -348,7 +351,7 @@
   :bind (("M-x" . counsel-M-x)
          ("C-x C-f" . counsel-find-file)
          ("C-'" . counsel-imenu)
-         ("C-c s" . counsel-ag)
+         ("C-c s" . counsel-rg)
          :map counsel-find-file-map
          ("RET" . ivy-alt-done)))
 
