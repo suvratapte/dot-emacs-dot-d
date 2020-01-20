@@ -243,10 +243,15 @@
 
 
 ;; ─────────────────────────────────── Generic packages ───────────────────────────────────
+(use-package delight
+  :ensure t
+  :delight)
+
 (use-package uniquify
   :doc "Naming convention for files with same names"
   :config
-  (setq uniquify-buffer-name-style 'forward))
+  (setq uniquify-buffer-name-style 'forward)
+  :delight)
 
 (use-package recentf
   :doc "Recent buffers in a new Emacs session"
@@ -254,11 +259,13 @@
   (setq recentf-auto-cleanup 'never
         recentf-max-saved-items 1000
         recentf-save-file (concat user-emacs-directory ".recentf"))
-  (recentf-mode t))
+  (recentf-mode t)
+  :delight)
 
 (use-package ibuffer
   :doc "Better buffer management"
-  :bind ("C-x C-b" . ibuffer))
+  :bind ("C-x C-b" . ibuffer)
+  :delight)
 
 (use-package ido-completing-read+
   :doc "Allow ido usage in as many contexts as possible"
@@ -272,7 +279,8 @@
   (setq ido-enable-flex-matching t)
   (setq ido-use-filename-at-point nil)
   ;; Includes buffer names of recently opened files, even if they're not open now.
-  (setq ido-use-virtual-buffers t))
+  (setq ido-use-virtual-buffers t)
+  :delight)
 
 (use-package smex
   :doc "Enhance M-x to allow easier execution of commands"
@@ -282,7 +290,8 @@
   :config
   (setq smex-save-file (concat user-emacs-directory ".smex-items"))
   (smex-initialize)
-  :bind ("M-x" . smex))
+  :bind ("M-x" . smex)
+  :delight)
 
 (use-package projectile
   :doc "Project navigation"
@@ -291,35 +300,39 @@
   ;; Use it everywhere
   (projectile-mode t)
   :bind ("C-x f" . projectile-find-file)
-  :diminish nil)
+  :delight)
 
 (use-package magit
   :doc "Git integration for Emacs"
   :ensure t
-  :bind ("C-x g" . magit-status))
+  :bind ("C-x g" . magit-status)
+  :delight)
 
 (use-package ace-jump-mode
   :doc "Jump around the visible buffer using 'Head Chars'"
   :ensure t
-  :bind ("C-." . ace-jump-mode))
+  :bind ("C-." . ace-jump-mode)
+  :delight)
 
 (use-package dumb-jump
   :doc "Dumb ag version of M-."
   :ensure t
-  :bind ("C-M-." . dumb-jump-go))
+  :bind ("C-M-." . dumb-jump-go)
+  :delight)
 
 (use-package which-key
   :doc "Prompt the next possible key bindings after a short wait"
   :ensure t
   :config
   (which-key-mode t)
-  :diminish nil)
+  :delight)
 
 (use-package ido-vertical-mode
   :doc "Show ido vertically"
   :ensure t
   :config
-  (ido-vertical-mode t))
+  (ido-vertical-mode t)
+  :delight)
 
 (use-package ivy
   :doc "A generic completion mechanism"
@@ -336,14 +349,45 @@
 
   :bind (("C-x b" . ivy-switch-buffer)
          ("C-x B" . ivy-switch-buffer-other-window))
-  :diminish nil)
+  :delight)
+
+(use-package ivy-rich
+  :doc "Have additional information in empty space of ivy buffers."
+  :ensure t
+  :custom
+  (ivy-rich-path-style 'abbreviate)
+  :config
+  (setcdr (assq t ivy-format-functions-alist)
+          #'ivy-format-function-line)
+  (ivy-rich-mode 1)
+  :delight)
+
+(use-package ivy-posframe
+  :doc "Custom positions for ivy buffers."
+  :ensure t
+  :delight
+  :custom
+  (ivy-posframe-parameters
+   '((left-fringe . 2)
+     (right-fringe . 2)
+     (internal-border-width . 2)
+     (font . "Fira Code Retina")))
+  (ivy-posframe-display-functions-alist
+   '((complete-symbol . ivy-posframe-display-at-point)
+     (swiper . nil)
+     (swiper-isearch . nil)
+     (t . ivy-posframe-display-at-frame-center)))
+  :config
+  (ivy-posframe-mode 1)
+  :delight)
 
 (use-package swiper
   :doc "A better search"
   :ensure t
   :bind (("C-s" . swiper-isearch)
          ("C-M-s" . isearch-forward-regexp)
-         ("C-M-r" . isearch-backward-regexp)))
+         ("C-M-r" . isearch-backward-regexp))
+  :delight)
 
 (use-package counsel
   :doc "Ivy enhanced Emacs commands"
@@ -353,7 +397,8 @@
          ("C-'" . counsel-imenu)
          ("C-c s" . counsel-rg)
          :map counsel-find-file-map
-         ("RET" . ivy-alt-done)))
+         ("RET" . ivy-alt-done))
+  :delight)
 
 (use-package aggressive-indent
   :doc "Intended Indentation"
@@ -366,7 +411,8 @@
     (remove-hook 'before-save-hook 'aggressive-indent-indent-defun)
     (save-buffer)
     (add-hook 'before-save-hook 'aggressive-indent-indent-defun))
-  :bind (("C-x s" . save-without-aggresive-indentation)))
+  :bind (("C-x s" . save-without-aggresive-indentation))
+  :delight)
 
 (use-package git-gutter
   :doc "Shows modified lines"
@@ -378,17 +424,19 @@
   (set-face-foreground 'git-gutter:added "green")
   (set-face-foreground 'git-gutter:deleted "red")
   :bind (("C-x C-g" . git-gutter))
-  :diminish nil)
+  :delight)
 
 (use-package git-timemachine
   :doc "Go through git history in a file"
-  :ensure t)
+  :ensure t
+  :delight)
 
 (use-package region-bindings-mode
   :doc "Define bindings only when a region is selected."
   :ensure t
   :config
-  (region-bindings-mode-enable))
+  (region-bindings-mode-enable)
+  :delight)
 
 (use-package multiple-cursors
   :doc "A minor mode for editing with multiple cursors"
@@ -402,12 +450,14 @@
         ("C-<" . mc/mark-previous-like-this)
         ("C-c a" . mc/mark-all-like-this)
         ("C-c h" . mc-hide-unmatched-lines-mode)
-        ("C-c l" . mc/edit-lines)))
+        ("C-c l" . mc/edit-lines))
+  :delight)
 
 (use-package esup
   :doc "Emacs Start Up Profiler (esup) benchmarks Emacs
         startup time without leaving Emacs."
-  :ensure t)
+  :ensure t
+  :delight)
 
 (use-package pdf-tools
   :doc "Better pdf viewing"
@@ -416,12 +466,14 @@
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :bind (:map pdf-view-mode-map
               ("j" . image-next-line)
-              ("k" . image-previous-line)))
+              ("k" . image-previous-line))
+  :delight)
 
 (use-package define-word
   :doc "Dictionary in Emacs."
   :ensure t
-  :bind ("C-c w" . define-word-at-point))
+  :bind ("C-c w" . define-word-at-point)
+  :delight)
 
 (use-package exec-path-from-shell
   :doc "MacOS does not start a shell at login. This makes sure
@@ -436,12 +488,13 @@
      '("PATH" "ANDROID_HOME" "LEIN_USERNAME" "LEIN_PASSPHRASE"
        "LEIN_JVM_OPTS" "NPM_TOKEN" "LANGUAGE" "LANG" "LC_ALL"
        "MOBY_ENV" "JAVA_8_HOME" "JAVA_7_HOME" "JAVA_HOME" "PS1"
-       "NVM_DIR" "GPG_TTY"))))
+       "NVM_DIR" "GPG_TTY")))
+  :delight)
 
 (use-package diminish
   :doc "Hide minor modes from mode line"
-  :ensure t)
-
+  :ensure t
+  :delight)
 
 (use-package toggle-test
   :doc "Switch between src and test files."
@@ -451,7 +504,18 @@
                                (:src-dirs "src")
                                (:test-dirs "test")
                                (:test-suffixes "_test")))
-  :bind ("C-c t" . tgt-toggle))
+  :bind ("C-c t" . tgt-toggle)
+  :delight)
+
+(use-package darkroom
+  :doc "Focused editing."
+  :ensure t
+  :disabled
+  :commands (darkroom-mode
+             darkroom-tentative-mode)
+  :config
+  (setq darkroom-text-scale-increase 0)
+  :delight)
 
 
 ;; ───────────────────────────────────── Code editing ─────────────────────────────────────
@@ -471,6 +535,16 @@
   (setq company-idle-delay 0.1)
   (global-company-mode t)
 
+  (use-package company-emoji
+    :ensure t
+    :config
+    (add-to-list 'company-backends 'company-emoji)
+    (if (version< "27.0" emacs-version)
+        (set-fontset-font
+         "fontset-default" 'unicode "Apple Color Emoji" nil 'prepend)
+      (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
+                        nil 'prepend)))
+
   ;; Configure hippie expand as well.
   (setq hippie-expand-try-functions-list
         '(try-expand-dabbrev
@@ -479,7 +553,7 @@
           try-complete-lisp-symbol-partially
           try-complete-lisp-symbol))
 
-  :diminish nil)
+  :delight)
 
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
@@ -497,13 +571,14 @@
   (show-paren-mode t)
   :bind (("M-[" . paredit-wrap-square)
          ("M-{" . paredit-wrap-curly))
-  :diminish nil)
+  :delight)
 
 (use-package rainbow-delimiters
   :doc "Colorful paranthesis matching"
   :ensure t
   :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  :delight)
 
 (use-package highlight-symbol
   :doc "Highlight and jump to symbols"
@@ -514,7 +589,7 @@
   (add-hook 'prog-mode-hook 'highlight-symbol-mode)
   :bind (("M-n" . highlight-symbol-next)
          ("M-p" . highlight-symbol-prev))
-  :diminish nil)
+  :delight)
 
 (use-package yasnippet
   :ensure t
@@ -523,7 +598,7 @@
   (yas-global-mode t)
   (add-to-list 'hippie-expand-try-functions-list
                'yas-hippie-try-expand)
-  :diminish nil)
+  :delight)
 
 
 ;; ──────────────────────────────── Programming languages ───────────────────────────────
@@ -563,11 +638,13 @@
                                       "∈")
                       nil))))))
   (add-hook 'clojure-mode-hook 'prettify-sets)
-  (add-hook 'cider-repl-mode-hook 'prettify-sets))
+  (add-hook 'cider-repl-mode-hook 'prettify-sets)
+  :delight)
 
 (use-package clojure-mode-extra-font-locking
   :doc "Extra syntax highlighting for clojure"
-  :ensure t)
+  :ensure t
+  :delight)
 
 (use-package cider
   :doc "Integration with a Clojure REPL cider"
@@ -595,10 +672,10 @@
   ;; Enable logging client-server messaging in *nrepl-messages* buffer
   (setq nrepl-log-messages nil)
 
-  ;; REPL should expect input on the next line + λ ! :)
+  ;; REPL should expect input on the next line + λ and ♕ ! :)
   (defun cider-repl-prompt-custom (namespace)
     "Return a prompt string that mentions NAMESPACE."
-    (format "λ %s λ\n" namespace))
+    (format "🔥 %s 🔥 \n" namespace))
 
   (setq cider-repl-prompt-function 'cider-repl-prompt-custom)
 
@@ -608,17 +685,21 @@
          :map
          cider-repl-mode-map
          ("C-c M-o" . cider-repl-clear-buffer))
-  :diminish nil)
+  :delight)
 
 (use-package flycheck
   :ensure t
   :config
   (global-flycheck-mode)
-  :diminish nil)
+
+  ;; Do not display errors on left fringe.
+  (setq flycheck-indication-mode nil)
+  :delight)
 
 (use-package flycheck-joker
   :after clojure-mode
-  :ensure t)
+  :ensure t
+  :delight)
 
 (use-package flycheck-clj-kondo
   :ensure t
@@ -628,7 +709,8 @@
                       (clj-kondo-cljs . clojurescript-joker)
                       (clj-kondo-cljc . clojure-joker)
                       (clj-kondo-edn . edn-joker)))
-    (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers)))))
+    (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers))))
+  :delight)
 
 (use-package clj-refactor
   :ensure t
@@ -668,13 +750,13 @@
   :config
   (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
 
-  :diminish nil)
+  :delight)
 
 (use-package eldoc
   :doc "Easily accessible documentation for Elisp"
   :config
   (global-eldoc-mode t)
-  :diminish nil)
+  :delight)
 
 
 ;; ──────────────────────────────────── Look and feel ───────────────────────────────────
@@ -726,20 +808,23 @@
                        :box (:line-width 1 :style none)))))
    '(org-level-1 ((((class color) (min-colors 89)) (:bold t :foreground "#5fafd7"))))
    '(org-tag ((((class color) (min-colors 89))
-               (:background "#9e9e9e" :foreground "#ffffff" :bold t :weight bold))))))
+               (:background "#9e9e9e" :foreground "#ffffff" :bold t :weight bold)))))
+  :delight)
 
 (use-package ewal-spacemacs-themes
   :ensure t
   :config
   (setq-default spacemacs-theme-comment-bg nil
                 spacemacs-theme-comment-italic t)
-  (load-theme 'spacemacs-dark t))
+  (load-theme 'spacemacs-dark t)
+  :delight)
 
 (use-package powerline
   :doc "Better mode line"
   :ensure t
   :config
-  (powerline-center-theme))
+  (powerline-center-theme)
+  :delight)
 
 (use-package "faces"
   :config
@@ -788,7 +873,8 @@
   :ensure t
   :disabled t
   :init
-  (add-hook 'after-init-hook #'global-emojify-mode))
+  (add-hook 'after-init-hook #'global-emojify-mode)
+  :delight)
 
 
 ;; ──────────────────────────────────────── *ORG* ───────────────────────────────────────

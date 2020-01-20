@@ -155,14 +155,16 @@
          ("C-c g" . org-clock-goto)
          :map
          org-mode-map
-         ("C-M-g" . org-move-item-or-tree)))
+         ("C-M-g" . org-move-item-or-tree))
+  :delight)
 
 
 (use-package org-bullets
   :ensure t
   :config
   (add-hook 'org-mode-hook 'org-bullets-mode)
-  (setq org-bullets-bullet-list '("♕" "♖" "♗" "♘" "♙")))
+  (setq org-bullets-bullet-list '("♕" "♖" "♗" "♘" "♙"))
+  :delight)
 
 
 (provide 'org-setup)
