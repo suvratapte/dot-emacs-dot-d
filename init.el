@@ -370,12 +370,14 @@
   (ivy-posframe-parameters
    '((left-fringe . 2)
      (right-fringe . 2)
-     (internal-border-width . 2)
-     (font . "Fira Code Retina")))
+     (internal-border-width . 2)))
+  (when (member "Fira Code" (font-family-list))
+    (add-to-list 'ivy-posframe-parameters '(font . "Fira Code Retina")))
   (ivy-posframe-display-functions-alist
    '((complete-symbol . ivy-posframe-display-at-point)
      (swiper . nil)
      (swiper-isearch . nil)
+     (counsel-rg . nil)
      (t . ivy-posframe-display-at-frame-center)))
   :config
   (ivy-posframe-mode 1)
@@ -535,16 +537,6 @@
   (setq company-idle-delay 0.1)
   (global-company-mode t)
 
-  (use-package company-emoji
-    :ensure t
-    :config
-    (add-to-list 'company-backends 'company-emoji)
-    (if (version< "27.0" emacs-version)
-        (set-fontset-font
-         "fontset-default" 'unicode "Apple Color Emoji" nil 'prepend)
-      (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
-                        nil 'prepend)))
-
   ;; Configure hippie expand as well.
   (setq hippie-expand-try-functions-list
         '(try-expand-dabbrev
@@ -554,6 +546,16 @@
           try-complete-lisp-symbol))
 
   :delight)
+
+(use-package company-emoji
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-emoji)
+  (if (version< "27.0" emacs-version)
+      (set-fontset-font
+       "fontset-default" 'unicode "Apple Color Emoji" nil 'prepend)
+    (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
+                      nil 'prepend)))
 
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
