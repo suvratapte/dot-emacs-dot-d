@@ -353,6 +353,7 @@
 
 (use-package ivy-rich
   :doc "Have additional information in empty space of ivy buffers."
+  :disabled t
   :ensure t
   :custom
   (ivy-rich-path-style 'abbreviate)
@@ -365,22 +366,22 @@
 (use-package ivy-posframe
   :doc "Custom positions for ivy buffers."
   :ensure t
-  :delight
-  :custom
-  (ivy-posframe-parameters
-   '((left-fringe . 2)
-     (right-fringe . 2)
-     (internal-border-width . 2)))
-  (when (member "Fira Code" (font-family-list))
-    (add-to-list 'ivy-posframe-parameters '(font . "Fira Code Retina")))
-  (ivy-posframe-display-functions-alist
-   '((complete-symbol . ivy-posframe-display-at-point)
-     (swiper . nil)
-     (swiper-isearch . nil)
-     (counsel-rg . nil)
-     (t . ivy-posframe-display-at-frame-center)))
   :config
+
+  (setq ivy-posframe-parameters
+        '((left-fringe . 8)
+          (right-fringe . 8)
+          (font . "Fira Code Retina")))
+
+  (setq ivy-posframe-display-functions-alist
+        '((complete-symbol . ivy-posframe-display-at-point)
+          (swiper . nil)
+          (swiper-isearch . nil)
+          (counsel-rg . nil)
+          (t . ivy-posframe-display-at-frame-center)))
+
   (ivy-posframe-mode 1)
+
   :delight)
 
 (use-package swiper
@@ -408,25 +409,27 @@
   :config
   (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
   ;; Have a way to save without indentation.
-  (defun save-without-aggresive-indentation ()
-    (interactive)
-    (remove-hook 'before-save-hook 'aggressive-indent-indent-defun)
-    (save-buffer)
-    (add-hook 'before-save-hook 'aggressive-indent-indent-defun))
-  :bind (("C-x s" . save-without-aggresive-indentation))
+  ;; (defun save-without-aggresive-indentation ()
+  ;;   (interactive)
+  ;;   (remove-hook 'before-save-hook 'aggressive-indent-indent-defun)
+  ;;   (save-buffer)
+  ;;   (add-hook 'before-save-hook 'aggressive-indent-indent-defun))
+  ;; :bind (("C-x s" . save-without-aggresive-indentation))
   :delight)
 
 (use-package git-gutter
   :doc "Shows modified lines"
   :ensure t
   :config
-  (global-git-gutter-mode t)
   (setq git-gutter:modified-sign "|")
+  (setq git-gutter:added-sign "|")
+  (setq git-gutter:deleted-sign "|")
   (set-face-foreground 'git-gutter:modified "grey")
   (set-face-foreground 'git-gutter:added "green")
   (set-face-foreground 'git-gutter:deleted "red")
-  :bind (("C-x C-g" . git-gutter))
+  (global-git-gutter-mode t)
   :delight)
+
 
 (use-package git-timemachine
   :doc "Go through git history in a file"
@@ -654,27 +657,35 @@
   ;; download cider-0.18.0 by checking out the tag on github and place it in
   ;; `~/.emacs.d/elpa/` so that the `load-path` tag below, works.
   ;; :load-path "~/.emacs.d/elpa/cider-0.18.0"
+
   :init
   ;; Enable minibuffer documentation
   (add-hook 'cider-mode-hook 'eldoc-mode)
+
   :config
   ;; Go right to the REPL buffer when it's finished connecting
   (setq cider-repl-pop-to-buffer-on-connect t)
+
   ;; When there's a cider error, show its buffer and switch to it
   (setq cider-show-error-buffer t)
   (setq cider-auto-select-error-buffer t)
+
   ;; Where to store the cider history.
   (setq cider-repl-history-file "~/.emacs.d/cider-history")
+
   ;; Wrap when navigating history.
   (setq cider-repl-wrap-history t)
+
   ;; Attempt to jump at the symbol under the point without having to press RET
   (setq cider-prompt-for-symbol nil)
+
   ;; Always pretty print
   (setq cider-repl-use-pretty-printing t)
+
   ;; Enable logging client-server messaging in *nrepl-messages* buffer
   (setq nrepl-log-messages nil)
 
-  ;; REPL should expect input on the next line + λ and ♕ ! :)
+  ;; REPL should expect input on the next line + some unnecessary fire!
   (defun cider-repl-prompt-custom (namespace)
     "Return a prompt string that mentions NAMESPACE."
     (format "🔥 %s 🔥 \n" namespace))
