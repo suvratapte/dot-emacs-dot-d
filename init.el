@@ -93,8 +93,6 @@
 
 ;; ─────────────────────────── Disable unnecessary UI elements ──────────────────────────
 (progn
-  ;; Do not show menu bar.
-  (menu-bar-mode -1)
 
   ;; Do not show tool bar.
   (when (fboundp 'tool-bar-mode)
@@ -682,7 +680,7 @@
   ;; Always pretty print
   (setq cider-repl-use-pretty-printing t)
 
-  ;; Enable logging client-server messaging in *nrepl-messages* buffer
+  ;; Log client-server messaging in *nrepl-messages* buffer
   (setq nrepl-log-messages nil)
 
   ;; REPL should expect input on the next line + some unnecessary fire!
