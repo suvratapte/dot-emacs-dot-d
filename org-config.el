@@ -33,8 +33,8 @@
    ;; '!' after the hotkey tells org-mode to add a LOGBOOK entry for every
    ;; status change.
    org-todo-keywords '((sequence
-                        "TODO(t!)" "WORKING(w!)" "WAITING(W!)" "NEXT(n!)"
-                        "|" "DONE(d@!)"))
+                        "TODO(t!)" "WORKING(w!)" "NEXT(n!)"
+                        "|" "DONE(d!)"))
 
    ;; Use logbook
    org-log-into-drawer t
@@ -71,23 +71,23 @@
      ("NEXT" :foreground "#ebcb8b" :weight bold)
      ("DONE" :foreground "#a3be8c" :weight bold))
 
-   org-todo-keyword-faces
-   org-todo-keyword-faces-nord-theme
+   org-todo-keyword-faces org-todo-keyword-faces-nord-theme
 
+   org-enforce-todo-dependencies t
+   org-enforce-todo-checkbox-dependencies t
+
+   org-habit-show-habits-only-for-today nil
 
    org-agenda-custom-commands
    '(("i" "My Agenda"
       ((agenda ""
                ((org-agenda-overriding-header "Agenda")
-                (org-agenda-span 2)))
+                (org-agenda-span 3)))
+
        (todo "WORKING"
              ((org-agenda-overriding-header "Currently working")))
-       (todo "NEXT"
-             ((org-agenda-overriding-header "Next tasks")))
-       (alltodo ""
-                ((org-agenda-overriding-header "Unscheduled")
-                 (org-agenda-skip-function
-                  '(org-agenda-skip-entry-if 'scheduled)))))
+
+       (alltodo ""))
       nil nil))
 
    ;; Capture directories

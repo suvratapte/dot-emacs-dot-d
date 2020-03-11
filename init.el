@@ -171,22 +171,6 @@
 
 (global-set-key (kbd "C-c ;") 'comment-pretty)
 
-;; Flyspell should be able to learn a word without the
-;; `flyspell-correct-word-before-point` pop up.
-
-;; Refer:
-;; https://stackoverflow.com/questions/22107182/in-emacs-flyspell-mode-how-to-add-new-word-to-dictionary
-(defun flyspell-learn-word-at-point ()
-  "Add word at point to list of correct words."
-  (interactive)
-  (let ((current-location (point))
-        (word (flyspell-get-word)))
-    (when (consp word)
-      (flyspell-do-correct 'save nil
-                           (car word) current-location
-                           (cadr word) (caddr word)
-                           current-location))))
-
 (global-set-key (kbd "C-c l") 'flyspell-learn-word-at-point)
 
 ;; Thanks to - Narendra Joshi (https://gitlab.com/narendraj9/dot-emacs)
@@ -494,6 +478,28 @@
   (setq darkroom-text-scale-increase 1.5)
   :bind ("C-c d" darkroom-mode)
   :delight)
+
+(use-package flyspell
+  :config
+
+  ;; Flyspell should be able to learn a word without the
+  ;; `flyspell-correct-word-before-point` pop up.
+
+  ;; Refer:
+  ;; https://stackoverflow.com/questions/22107182/in-emacs-flyspell-mode-how-to-add-new-word-to-dictionary
+  (defun flyspell-learn-word-at-point ()
+    "Add word at point to list of correct words."
+    (interactive)
+    (let ((current-location (point))
+          (word (flyspell-get-word)))
+      (when (consp word)
+        (flyspell-do-correct 'save nil
+                             (car word) current-location
+                             (cadr word) (caddr word)
+                             current-location))))
+
+  ;; This color is specific to `nord` theme.
+  (set-face-attribute 'flyspell-incorrect nil :underline '(:style line :color "#bf616a")))
 
 
 ;; ───────────────────────────────────── Code editing ─────────────────────────────────────
@@ -810,6 +816,9 @@
   :ensure t
   :config
   (load-theme 'nord t)
+
+  (set-face-attribute 'flycheck-error nil :underline '(:style line :color "#bf616a"))
+  (set-face-attribute 'flycheck-warning nil :underline '(:style line :color "#ebcb8b"))
   :delight)
 
 (use-package powerline
@@ -871,7 +880,7 @@
 
 
 ;; ──────────────────────────────────────── *ORG* ───────────────────────────────────────
-(load-file "~/.emacs.d/org-setup.el")
+(load-file "~/.emacs.d/org-config.el")
 
 (provide 'init)
 
