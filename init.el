@@ -265,32 +265,6 @@
   :bind ("C-x C-b" . ibuffer)
   :delight)
 
-(use-package ido-completing-read+
-  :doc "Allow ido usage in as many contexts as possible"
-  :ensure t
-  :config
-  ;; This enables ido in all contexts where it could be useful, not just
-  ;; for selecting buffer and file names
-  (ido-mode t)
-  (ido-everywhere t)
-  ;; This allows partial matches, e.g. "uzh" will match "Ustad Zakir Hussain"
-  (setq ido-enable-flex-matching t)
-  (setq ido-use-filename-at-point nil)
-  ;; Includes buffer names of recently opened files, even if they're not open now.
-  (setq ido-use-virtual-buffers t)
-  :delight)
-
-(use-package smex
-  :doc "Enhance M-x to allow easier execution of commands"
-  :ensure t
-  ;; Using counsel-M-x for now. Remove this permanently if counsel-M-x works better.
-  :disabled t
-  :config
-  (setq smex-save-file (concat user-emacs-directory ".smex-items"))
-  (smex-initialize)
-  :bind ("M-x" . smex)
-  :delight)
-
 (use-package projectile
   :doc "Project navigation"
   :ensure t
@@ -351,7 +325,7 @@
 
 (use-package ivy-rich
   :doc "Have additional information in empty space of ivy buffers."
-  :disabled t
+  ;; :disabled t
   :ensure t
   :custom
   (ivy-rich-path-style 'abbreviate)
@@ -517,11 +491,13 @@
   :commands (darkroom-mode
              darkroom-tentative-mode)
   :config
-  (setq darkroom-text-scale-increase 0)
+  (setq darkroom-text-scale-increase 1.5)
+  :bind ("C-c d" darkroom-mode)
   :delight)
 
 
 ;; ───────────────────────────────────── Code editing ─────────────────────────────────────
+
 (use-package company
   :doc "COMplete ANYthing"
   :ensure t
@@ -578,6 +554,7 @@
 
 (use-package rainbow-delimiters
   :doc "Colorful paranthesis matching"
+  :disabled t ;; This is not really needed when you use paredit
   :ensure t
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
@@ -651,10 +628,7 @@
 
 (use-package cider
   :doc "Integration with a Clojure REPL cider"
-  ;; Cider has reached 0.20.x but clj-refactor only supports upto 0.18.0. Manually
-  ;; download cider-0.18.0 by checking out the tag on github and place it in
-  ;; `~/.emacs.d/elpa/` so that the `load-path` tag below, works.
-  ;; :load-path "~/.emacs.d/elpa/cider-0.18.0"
+  :ensure t
 
   :init
   ;; Enable minibuffer documentation
@@ -724,6 +698,7 @@
   :delight)
 
 (use-package clj-refactor
+  :disabled t
   :ensure t
   :preface
   (defun clean-all-modified-ns ()
@@ -823,11 +798,18 @@
   :delight)
 
 (use-package ewal-spacemacs-themes
+  :disabled t
   :ensure t
   :config
   (setq-default spacemacs-theme-comment-bg nil
                 spacemacs-theme-comment-italic t)
   (load-theme 'spacemacs-dark t)
+  :delight)
+
+(use-package nord-theme
+  :ensure t
+  :config
+  (load-theme 'nord t)
   :delight)
 
 (use-package powerline

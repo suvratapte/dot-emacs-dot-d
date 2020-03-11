@@ -59,12 +59,21 @@
    ;; C-{a,e} should behave differently on headings
    org-special-ctrl-a/e t
 
-   org-todo-keyword-faces
+   org-todo-keyword-faces-spacemacs-theme
    '(("TODO" :foreground "red" :weight bold)
      ("WORKING" :foreground "#a45bad" :weight bold)
-     ("WAITING" :foreground "#9f8766" :weight bold)
      ("NEXT" :foreground "cyan1" :weight bold)
      ("DONE" :foreground "#2d9574" :weight bold))
+
+   org-todo-keyword-faces-nord-theme
+   '(("TODO" :foreground "#bf616a" :weight bold)
+     ("WORKING" :foreground "#b48ead" :weight bold)
+     ("NEXT" :foreground "#ebcb8b" :weight bold)
+     ("DONE" :foreground "#a3be8c" :weight bold))
+
+   org-todo-keyword-faces
+   org-todo-keyword-faces-nord-theme
+
 
    org-agenda-custom-commands
    '(("i" "My Agenda"
