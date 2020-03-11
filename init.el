@@ -325,7 +325,7 @@
 
 (use-package ivy-rich
   :doc "Have additional information in empty space of ivy buffers."
-  ;; :disabled t
+  :disabled t
   :ensure t
   :custom
   (ivy-rich-path-style 'abbreviate)
@@ -339,11 +339,8 @@
   :doc "Custom positions for ivy buffers."
   :ensure t
   :config
-
   (setq ivy-posframe-parameters
-        '((left-fringe . 8)
-          (right-fringe . 8)
-          (font . "Fira Code Retina")))
+        '((font . "Fira Code Retina")))
 
   (setq ivy-posframe-display-functions-alist
         '((complete-symbol . ivy-posframe-display-at-point)
@@ -353,6 +350,9 @@
           (t . ivy-posframe-display-at-frame-center)))
 
   (ivy-posframe-mode 1)
+
+  ;; Due to a bug in macOS, changing ivy-posframe-border background color does not
+  ;; work. Instead, go to the elisp file and change the background color to black.
 
   :delight)
 
