@@ -76,6 +76,10 @@
    org-enforce-todo-dependencies t
    org-enforce-todo-checkbox-dependencies t
 
+   ;; When dependencies are enforced (by both vars above), agenda views highlight tasks
+   ;; highlights blocked tasks i.e. tasks with incomplete sub tasks.
+   org-agenda-dim-blocked-tasks nil
+
    org-habit-show-habits-only-for-today nil
 
    org-agenda-custom-commands
@@ -87,8 +91,15 @@
        (todo "WORKING"
              ((org-agenda-overriding-header "Currently working")))
 
-       (alltodo ""))
+       (alltodo ""
+                ((org-agenda-skip-function
+                  '(org-agenda-skip-entry-if 'scheduled)))))
       nil nil))
+
+   org-agenda-block-separator
+   (propertize
+    "────────────────────────────────────────────────────────────────────────"
+    'face '(:foreground "#81a1c1"))
 
    ;; Capture directories
    org-personal-directory "~/workspace/repository-of-things/personal"
@@ -137,6 +148,33 @@
    ;; Do not show clock in the modeline. It hides other important things.
    org-clock-clocked-in-display 'frame-title)
 
+  (defun custom-agenda-view ()
+    "Show my custom agenda view."
+    (interactive)
+    (org-agenda nil "i")
+    (org-fit-window-to-buffer)
+    (org-agenda-redo))
+
+  (defun jump-to-org-agenda ()
+    "Jump to the agenda buffer.
+     Credits: John Wigley."
+    (interactive)
+    (when (not (minibufferp))
+      (let ((buf (get-buffer "*Org Agenda*"))
+            wind)
+        (if buf
+            (if (setq wind (get-buffer-window buf))
+                (select-window wind)
+              (if (called-interactively-p 'interactive)
+                  (progn
+                    (select-window (display-buffer buf t t))
+                    (org-fit-window-to-buffer)
+                    (org-agenda-redo))
+                (with-selected-window (display-buffer buf)
+                  (org-fit-window-to-buffer)
+                  (org-agenda-redo))))
+          (custom-agenda-view)))))
+
   (defun org-move-item-or-tree ()
     (interactive)
     (message "Use f, b, n, p to move items with subtrees. %s %s"
@@ -162,6 +200,7 @@
          ("C-c c" . org-capture)
          ("C-c a" . org-agenda)
          ("C-c g" . org-clock-goto)
+         ("C-c o" . jump-to-org-agenda)
          :map
          org-mode-map
          ("C-M-g" . org-move-item-or-tree))
@@ -174,7 +213,6 @@
   (add-hook 'org-mode-hook 'org-bullets-mode)
   (setq org-bullets-bullet-list '("♕" "♖" "♗" "♘" "♙"))
   :delight)
-
 
 (provide 'org-setup)
 

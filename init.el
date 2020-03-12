@@ -171,9 +171,7 @@
 
 (global-set-key (kbd "C-c ;") 'comment-pretty)
 
-(global-set-key (kbd "C-c l") 'flyspell-learn-word-at-point)
-
-;; Thanks to - Narendra Joshi (https://gitlab.com/narendraj9/dot-emacs)
+;; Thanks to Narendra Joshi.
 (defun upload-region (beg end)
   "Upload the contents of the selected region in current buffer.
 
@@ -484,7 +482,6 @@
 
   ;; Flyspell should be able to learn a word without the
   ;; `flyspell-correct-word-before-point` pop up.
-
   ;; Refer:
   ;; https://stackoverflow.com/questions/22107182/in-emacs-flyspell-mode-how-to-add-new-word-to-dictionary
   (defun flyspell-learn-word-at-point ()
@@ -499,7 +496,10 @@
                              current-location))))
 
   ;; This color is specific to `nord` theme.
-  (set-face-attribute 'flyspell-incorrect nil :underline '(:style line :color "#bf616a")))
+  (set-face-attribute 'flyspell-incorrect nil :underline '(:style line :color "#bf616a"))
+  (set-face-attribute 'flyspell-duplicate nil :underline '(:style line :color "#bf616a"))
+
+  :bind ("C-c l" . flyspell-learn-word-at-point))
 
 
 ;; ───────────────────────────────────── Code editing ─────────────────────────────────────
