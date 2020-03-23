@@ -281,13 +281,6 @@
   (which-key-mode t)
   :delight)
 
-(use-package ido-vertical-mode
-  :doc "Show ido vertically"
-  :ensure t
-  :config
-  (ido-vertical-mode t)
-  :delight)
-
 (use-package ivy
   :doc "A generic completion mechanism"
   :ensure t
@@ -663,10 +656,10 @@
   ;; Log client-server messaging in *nrepl-messages* buffer
   (setq nrepl-log-messages nil)
 
-  ;; REPL should expect input on the next line + some unnecessary fire!
+  ;; REPL should expect input on the next line + unnecessary palm trees!
   (defun cider-repl-prompt-custom (namespace)
     "Return a prompt string that mentions NAMESPACE."
-    (format "🔥 %s 🔥 \n" namespace))
+    (format "🌴 %s 🌴 \n" namespace))
 
   (setq cider-repl-prompt-function 'cider-repl-prompt-custom)
 
@@ -754,8 +747,8 @@
 ;; ──────────────────────────────────── Look and feel ───────────────────────────────────
 (use-package monokai-alt-theme
   :doc "Just another theme"
-  :ensure t
   :disabled t
+  :ensure t
   :config
   (load-theme 'monokai-alt t)
   ;; The cursor color in this theme is very confusing.
