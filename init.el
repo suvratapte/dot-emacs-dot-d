@@ -72,7 +72,8 @@
 
 ;; Make the command key behave as 'meta'
 (when (eq system-type 'darwin)
-  (setq mac-command-modifier 'meta))
+  (setq mac-command-modifier 'meta)
+  (setq mac-right-command-modifier 'hyper))
 
 ;; `C-x o' is a 2 step key binding. `M-o' is much easier.
 (global-set-key (kbd "M-o") 'other-window)
@@ -492,7 +493,7 @@
   (set-face-attribute 'flyspell-incorrect nil :underline '(:style line :color "#bf616a"))
   (set-face-attribute 'flyspell-duplicate nil :underline '(:style line :color "#bf616a"))
 
-  :bind ("C-c l" . flyspell-learn-word-at-point))
+  :bind ("H-l" . flyspell-learn-word-at-point))
 
 
 ;; ───────────────────────────────────── Code editing ─────────────────────────────────────

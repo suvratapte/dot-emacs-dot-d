@@ -33,7 +33,7 @@
    ;; '!' after the hotkey tells org-mode to add a LOGBOOK entry for every
    ;; status change.
    org-todo-keywords '((sequence
-                        "TODO(t!)" "WORKING(w!)" "NEXT(n!)"
+                        "TODO(t!)" "WORKING(w!)" "WAITING(W!)"
                         "|" "DONE(d!)"))
 
    ;; Use logbook
@@ -62,13 +62,13 @@
    org-todo-keyword-faces-spacemacs-theme
    '(("TODO" :foreground "red" :weight bold)
      ("WORKING" :foreground "#a45bad" :weight bold)
-     ("NEXT" :foreground "cyan1" :weight bold)
+     ("WAITING" :foreground "cyan1" :weight bold)
      ("DONE" :foreground "#2d9574" :weight bold))
 
    org-todo-keyword-faces-nord-theme
    '(("TODO" :foreground "#bf616a" :weight bold)
      ("WORKING" :foreground "#b48ead" :weight bold)
-     ("NEXT" :foreground "#ebcb8b" :weight bold)
+     ("WAITING" :foreground "#ebcb8b" :weight bold)
      ("DONE" :foreground "#a3be8c" :weight bold))
 
    org-todo-keyword-faces org-todo-keyword-faces-nord-theme
@@ -90,17 +90,9 @@
                ((org-agenda-overriding-header "Agenda")
                 (org-agenda-span 3)))
 
-       (todo "WORKING"
-             ((org-agenda-overriding-header "Currently working")))
-
        (tags-todo "STYLE=\"habit\""
                   ((org-agenda-files (list org-habits-file))
-                   (org-agenda-overriding-header "Habits")))
-
-       ;; (alltodo ""
-       ;;          ((org-agenda-skip-function
-       ;;            '(org-agenda-skip-entry-if 'scheduled))))
-       )
+                   (org-agenda-overriding-header "Habits"))))
       nil nil))
 
    org-agenda-block-separator
@@ -182,6 +174,10 @@
                   (org-agenda-redo))))
           (custom-agenda-view)))))
 
+  (run-with-idle-timer 120 t (lambda ()
+                               (jump-to-org-agenda)
+                               (delete-other-windows)))
+
   (defun org-move-item-or-tree ()
     (interactive)
     (message "Use f, b, n, p to move items with subtrees. %s %s"
@@ -238,10 +234,23 @@ has no effect."
 
   (advice-add #'org-agenda-finalize :before #'my/org-agenda-mark-habits)
 
+  ;; org clock in and out should trigger state changes automatically.
+  ;; This is extremely useful! :)
+  ;; TODO: Figure out how this works.
+
+  (defadvice org-clock-in (after wicked activate)
+    "Set this task's status to 'WORKING'."
+    (org-todo "WORKING"))
+
+  (defadvice org-clock-out (after wicked activate)
+    "Set this task's status to 'WAITING'."
+    (org-todo "WAITING"))
+
   :bind (:map
          global-map
          ("C-c c" . org-capture)
          ("C-c a" . org-agenda)
+         ("C-c l" . org-stored-links)
          ("C-c g" . org-clock-goto)
          ("C-c o" . jump-to-org-agenda)
          :map
