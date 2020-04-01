@@ -174,9 +174,7 @@
                   (org-agenda-redo))))
           (custom-agenda-view)))))
 
-  (run-with-idle-timer 120 t (lambda ()
-                               (jump-to-org-agenda)
-                               (delete-other-windows)))
+  (run-with-idle-timer 20 t 'jump-to-org-agenda)
 
   (defun org-move-item-or-tree ()
     (interactive)
@@ -255,7 +253,10 @@ has no effect."
          ("C-c o" . jump-to-org-agenda)
          :map
          org-mode-map
-         ("C-M-g" . org-move-item-or-tree))
+         ("C-M-g" . org-move-item-or-tree)
+         ("H-i" . org-clock-in)
+         ("H-o" . org-clock-out)
+         ("H-p" . org-set-property))
   :delight)
 
 

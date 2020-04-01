@@ -78,6 +78,9 @@
 ;; `C-x o' is a 2 step key binding. `M-o' is much easier.
 (global-set-key (kbd "M-o") 'other-window)
 
+;; Unbind `save-buffers-kill-terminal` to avoid accidentally quiting Emacs.
+(global-unset-key (kbd "C-x C-c"))
+
 ;; Delete whitespace just when a file is saved.
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -336,8 +339,7 @@
   :doc "A better search"
   :ensure t
   :bind (("C-s" . swiper-isearch)
-         ("C-M-s" . isearch-forward-regexp)
-         ("C-M-r" . isearch-backward-regexp))
+         ("H-s" . isearch-forward-regexp))
   :delight)
 
 (use-package counsel
@@ -875,6 +877,10 @@
 
 ;; ──────────────────────────────────────── *ORG* ───────────────────────────────────────
 (load-file "~/.emacs.d/org-config.el")
+
+;; Open agenda view when Emacs is started.
+(jump-to-org-agenda)
+(delete-other-windows)
 
 (provide 'init)
 
