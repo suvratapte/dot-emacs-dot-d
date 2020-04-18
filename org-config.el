@@ -174,7 +174,7 @@
                   (org-agenda-redo))))
           (custom-agenda-view)))))
 
-  (run-with-idle-timer 20 t 'jump-to-org-agenda)
+  (run-with-idle-timer 300 t 'jump-to-org-agenda)
 
   (defun org-move-item-or-tree ()
     (interactive)

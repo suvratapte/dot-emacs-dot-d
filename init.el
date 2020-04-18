@@ -88,6 +88,10 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 
+(global-set-key (kbd "H-d") 'narrow-to-defun)
+(global-set-key (kbd "H-t") 'narrow-to-defun)
+(global-set-key (kbd "H-w") 'widen)
+
 ;; Display column number in mode line.
 (column-number-mode t)
 
@@ -380,7 +384,6 @@
   (global-git-gutter-mode t)
   :delight)
 
-
 (use-package git-timemachine
   :doc "Go through git history in a file"
   :ensure t
@@ -668,7 +671,8 @@
 
   :bind (:map
          cider-mode-map
-         ("C-c d" . cider-debug-defun-at-point)
+         ("H-t" . cider-test-run-test)
+         ("H-n" . cider-test-run-ns-tests)
          :map
          cider-repl-mode-map
          ("C-c M-o" . cider-repl-clear-buffer))
