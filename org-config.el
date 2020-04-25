@@ -33,7 +33,7 @@
    ;; '!' after the hotkey tells org-mode to add a LOGBOOK entry for every
    ;; status change.
    org-todo-keywords '((sequence
-                        "TODO(t!)" "WORKING(w!)" "WAITING(W!)"
+                        "TODO(t)" "WORKING(w)" "WAITING(W)"
                         "|" "DONE(d!)"))
 
    ;; Use logbook
