@@ -65,7 +65,10 @@
  auto-save-default nil
 
  ;; Allow commands to be run on minibuffers.
- enable-recursive-minibuffers t)
+ enable-recursive-minibuffers t
+
+ ;; Do not ring bell
+ ring-bell-function 'ignore)
 
 ;; Change all yes/no questions to y/n type
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -91,9 +94,6 @@
 (global-set-key (kbd "H-d") 'narrow-to-defun)
 (global-set-key (kbd "H-t") 'narrow-to-defun)
 (global-set-key (kbd "H-w") 'widen)
-
-;; Display column number in mode line.
-(column-number-mode t)
 
 ;; Automatically update buffers if file content on the disk has changed.
 (global-auto-revert-mode t)
@@ -378,9 +378,6 @@
   (setq git-gutter:modified-sign "|")
   (setq git-gutter:added-sign "|")
   (setq git-gutter:deleted-sign "|")
-  (set-face-foreground 'git-gutter:modified "grey")
-  (set-face-foreground 'git-gutter:added "green")
-  (set-face-foreground 'git-gutter:deleted "red")
   (global-git-gutter-mode t)
   :delight)
 
@@ -500,6 +497,16 @@
 
   :bind ("H-l" . flyspell-learn-word-at-point))
 
+(use-package company-emoji
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-emoji)
+  (if (version< "27.0" emacs-version)
+      (set-fontset-font
+       "fontset-default" 'unicode "Apple Color Emoji" nil 'prepend)
+    (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
+                      nil 'prepend)))
+
 
 ;; ───────────────────────────────────── Code editing ─────────────────────────────────────
 
@@ -528,16 +535,6 @@
           try-complete-lisp-symbol))
 
   :delight)
-
-(use-package company-emoji
-  :ensure t
-  :config
-  (add-to-list 'company-backends 'company-emoji)
-  (if (version< "27.0" emacs-version)
-      (set-fontset-font
-       "fontset-default" 'unicode "Apple Color Emoji" nil 'prepend)
-    (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
-                      nil 'prepend)))
 
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
@@ -584,6 +581,12 @@
   (add-to-list 'hippie-expand-try-functions-list
                'yas-hippie-try-expand)
   :delight)
+
+
+(use-package expand-region
+  :doc "Better navigation between nested expressions."
+  :ensure t
+  :bind ("C-c =" . er/expand-region))
 
 
 ;; ──────────────────────────────── Programming languages ───────────────────────────────
@@ -831,7 +834,6 @@
 (use-package "faces"
   :config
   (set-face-attribute 'default nil :height 140)
-
   ;; Use the 'Fira Code' if available
   (when (not (eq system-type 'windows-nt))
     (when (member "Fira Code" (font-family-list))

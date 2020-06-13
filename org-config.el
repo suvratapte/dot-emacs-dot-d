@@ -1,4 +1,4 @@
-;;; org-setup.el --- My Org mode configuration.
+;;; org-config.el --- My Org mode configuration.
 ;;; Commentary:
 ;;; Author: Suvrat Apte
 ;;; Created on: 02 November 2015
@@ -54,7 +54,10 @@
                  org-irc
                  org-mhe
                  org-rmail
-                 org-w3m)
+                 org-w3m
+                 ;; After version 9.2, "<{char} TAB" expansion has been moved to
+                 ;; `org-tempo`.
+                 org-tempo)
 
    ;; C-{a,e} should behave differently on headings
    org-special-ctrl-a/e t
@@ -101,8 +104,9 @@
     'face '(:foreground "#81a1c1"))
 
    ;; Capture directories
-   org-personal-directory "~/workspace/repository-of-things/personal"
-   org-work-directory "~/workspace/repository-of-things/work"
+   org-directory "~/workspace/repository-of-things"
+   org-personal-directory (concat org-directory "/personal")
+   org-work-directory (concat org-directory "/work")
 
    ;; Capture files
    org-reading-list-file (concat org-personal-directory "/reading-list.org")
@@ -115,9 +119,9 @@
 
    org-capture-templates
    '(("r" "Reading list item" entry (file org-reading-list-file)
-      "* TODO %^{Description}\n  %?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
+      "* TODO %^{Description}\n  :LOGBOOK:\n  - Added: %U\n  :END:\n  %?")
      ("o" "Oncall ticket" entry (file org-oncall-file)
-      "* TODO %^{Type|ONCALL|CSR}-%^{Ticket number} - %^{Description}
+      "* TODO %^{Type|HSBUG|AUTO|ONCALL}-%^{Ticket number} - %^{Description}
   :PROPERTIES:
   :LINK:     https://helpshift.atlassian.net/browse/%\\1-%\\2
   :END:
@@ -129,11 +133,13 @@
   :END:
   :LOGBOOK:\n  - Added - %U\n  :END:" :prepend t)
      ("m" "Meeting notes" entry (file org-meeting-notes-file)
-      "* %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
-  - Date: %U\n  - Notes:\n    + %?\n  - Action items [/]\n    + [ ] ")
-     ("p" "Personal todo item" entry (file org-personal-todo-file)
+      "* TODO %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
+  - Date: %U\n  - Notes:\n    + %?\n  - Action items [/]\n    + [ ] "
+      :clock-in t
+      :clock-resume t)
+     ("t" "Personal todo item" entry (file org-personal-todo-file)
       "* TODO %^{Description}%?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
-     ("t" "Today I learnt" entry (file org-til-file)
+     ("l" "Today I learnt" entry (file org-til-file)
       "* %^{Description}\n  - Source: %?\n  -"))
 
    org-agenda-files (list org-oncall-file
@@ -267,6 +273,6 @@ has no effect."
   (setq org-bullets-bullet-list '("♕" "♖" "♗" "♘" "♙"))
   :delight)
 
-(provide 'org-setup)
+(provide 'org-config)
 
-;;; org-setup.el ends here
+;;; org-config.el ends here
