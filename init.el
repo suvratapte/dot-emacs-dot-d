@@ -70,6 +70,9 @@
  ;; Do not ring bell
  ring-bell-function 'ignore)
 
+;; Load `custom-file` manually as we have modified the default path.
+(load-file custom-file)
+
 ;; Change all yes/no questions to y/n type
 (fset 'yes-or-no-p 'y-or-n-p)
 
