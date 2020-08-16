@@ -335,7 +335,7 @@
           (counsel-rg . nil)
           (t . ivy-posframe-display-at-frame-center)))
 
-  (ivy-posframe-mode 1)
+  (ivy-posframe-mode t)
 
   ;; Due to a bug in macOS, changing ivy-posframe-border background color does not
   ;; work. Instead, go to the elisp file and change the background color to black.

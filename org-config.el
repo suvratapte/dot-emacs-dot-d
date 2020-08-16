@@ -273,6 +273,28 @@ has no effect."
   (setq org-bullets-bullet-list '("♕" "♖" "♗" "♘" "♙"))
   :delight)
 
+
+(use-package org-super-agenda
+  :ensure t
+  :config
+  ;; Configure this.
+  (setq org-super-agenda-groups
+        '((:name "Today"
+                 :scheduled today
+                 :deadline today)
+          (:name "Overdue"
+                 :deadline past)
+          (:name "Personal"
+                 :tag "personal")
+          (:name "Personal"
+                 :tag "personal")
+          (:name "Work"
+                 :tag "work")
+          (:name "Habits"
+                 :tag "habit")
+          (:habit t))))
+
+
 (provide 'org-config)
 
 ;;; org-config.el ends here
