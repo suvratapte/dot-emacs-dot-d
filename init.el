@@ -21,7 +21,7 @@
 
 ;; Add melpa to package archives.
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
 
 ;; Load and activate emacs packages. Do this first so that the packages are loaded before
 ;; you start trying to modify them.  This also sets the load path.
