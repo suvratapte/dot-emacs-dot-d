@@ -48,7 +48,9 @@
  fill-column 90
 
  ;; Use your name in the frame title. :)
- frame-title-format (format "%s's Emacs" (capitalize user-login-name))
+ frame-title-format (format "%s's Emacs" (if (equal user-login-name "suvratapte")
+                                             "Suvrat"
+                                           (capitalize user-login-name)))
 
  ;; Do not create lockfiles.
  create-lockfiles nil
@@ -332,9 +334,9 @@
 
   (setq ivy-posframe-display-functions-alist
         '((complete-symbol . ivy-posframe-display-at-point)
-          (swiper . nil)
-          (swiper-isearch . nil)
-          (counsel-rg . nil)
+          (swiper . ivy-display-function-fallback)
+          (swiper-isearch . ivy-display-function-fallback)
+          (counsel-rg . ivy-display-function-fallback)
           (t . ivy-posframe-display-at-frame-center)))
 
   (ivy-posframe-mode t)
