@@ -12,3 +12,4 @@ backups
 /eshell/
 /themes/
 /.mc-lists.el
+transient/

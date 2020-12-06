@@ -325,8 +325,10 @@
   :doc "Custom positions for ivy buffers."
   :ensure t
   :config
-  (setq ivy-posframe-parameters
-        '((font . "Fira Code Retina")))
+
+  (when (member "Fira Code" (font-family-list))
+    (setq ivy-posframe-parameters
+          '((font . "Fira Code"))))
 
   (setq ivy-posframe-display-functions-alist
         '((complete-symbol . ivy-posframe-display-at-point)
@@ -873,7 +875,7 @@
           (set-char-table-range composition-function-table (car char-regexp)
                                 `([,(cdr char-regexp) 0 font-shape-gstring]))))
 
-      (set-frame-font "Fira Code Retina"))))
+      (set-frame-font "Fira Code"))))
 
 (use-package emojify
   :doc "Display Emoji in Emacs."
