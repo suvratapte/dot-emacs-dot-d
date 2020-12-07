@@ -90,17 +90,17 @@
    org-agenda-custom-commands
    '(("i" "My Agenda"
       ((agenda ""
-               ((org-agenda-overriding-header "Agenda")
+               ((org-agenda-overriding-header "Agenda\n")
                 (org-agenda-span 3)))
 
        (tags-todo "STYLE=\"habit\""
                   ((org-agenda-files (list org-habits-file))
-                   (org-agenda-overriding-header "Habits"))))
+                   (org-agenda-overriding-header "Habits\n"))))
       nil nil))
 
    org-agenda-block-separator
    (propertize
-    "────────────────────────────────────────────────────────────────────────"
+    "────────────────────────────────────────────────────────────────────────\n"
     'face '(:foreground "#81a1c1"))
 
    ;; Capture directories
@@ -116,6 +116,7 @@
    org-personal-todo-file (concat org-personal-directory "/todo.org")
    org-habits-file (concat org-personal-directory "/habits.org")
    org-til-file (concat org-personal-directory "/til.org")
+   org-facts-file (concat org-personal-directory "/facts.org")
 
    org-capture-templates
    '(("r" "Reading list item" entry (file org-reading-list-file)
@@ -140,7 +141,9 @@
      ("t" "Personal todo item" entry (file org-personal-todo-file)
       "* TODO %^{Description}%?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
      ("l" "Today I learnt" entry (file org-til-file)
-      "* %^{Description}\n  - Source: %?\n  -"))
+      "* %^{Description}\n  - Source: %?\n  -")
+     ("f" "Facts" entry (file org-facts-file)
+      "* %^{Fact}\n"))
 
    org-agenda-files (list org-oncall-file
                           ;; Excluding the reading list file since it has many TODOs.
@@ -180,7 +183,7 @@
                   (org-agenda-redo))))
           (custom-agenda-view)))))
 
-  (run-with-idle-timer 300 t 'jump-to-org-agenda)
+  ;; (run-with-idle-timer 300 t 'jump-to-org-agenda)
 
   (defun org-move-item-or-tree ()
     (interactive)
@@ -257,6 +260,7 @@ has no effect."
          ("C-c l" . org-stored-links)
          ("C-c g" . org-clock-goto)
          ("C-c o" . jump-to-org-agenda)
+         ("C-c b" . org-switchb)
          :map
          org-mode-map
          ("C-M-g" . org-move-item-or-tree)
@@ -285,14 +289,17 @@ has no effect."
           (:name "Overdue"
                  :deadline past)
           (:name "Personal"
-                 :tag "personal")
-          (:name "Personal"
-                 :tag "personal")
+                 :and (:tag "personal" :not (:tag "long_running")))
+          (:name "Personal - Long Running"
+                 :and (:tag "personal" :tag "long_running"))
           (:name "Work"
-                 :tag "work")
-          (:name "Habits"
-                 :tag "habit")
-          (:habit t))))
+                 :and (:tag "work" :not (:tag "long_running")))
+          (:name "Work - Long Running"
+                 :and (:tag "work" :tag "long_running"))
+          (:name "Habits - Today"
+                 :tag "habit")))
+  ;; (org-super-agenda-mode t)
+  )
 
 
 (provide 'org-config)
