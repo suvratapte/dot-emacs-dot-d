@@ -16,7 +16,7 @@
 ;;; Code:
 
 
-;; ―――――――――――――――――――――――――――――――――――――――― *ORG* ――――――――――――――――――――――――――――――――――――――
+;; ─────────────────────────────────────── *ORG* ──────────────────────────────────────
 (use-package org
   :config
   ;; Enable spell check in org
@@ -180,7 +180,8 @@
                   (org-agenda-redo))))
           (custom-agenda-view)))))
 
-  (run-with-idle-timer 300 t 'jump-to-org-agenda)
+  ;; Temporarily disabled. It is not proving out to be useful enough.
+  ;; (run-with-idle-timer 300 t 'jump-to-org-agenda)
 
   (defun org-move-item-or-tree ()
     (interactive)
