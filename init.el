@@ -766,6 +766,23 @@
   (global-eldoc-mode t)
   :delight)
 
+(use-package python
+  :ensure t
+  :custom
+  (python-indent-offset 4))
+
+(use-package anaconda-mode
+  :ensure t
+  :diminish anaconda-mode
+  :hook python-mode
+  :custom (python-indent-offset 4))
+
+(use-package company-anaconda
+  :ensure t
+  :after (company anaconda-mode)
+  :config (add-hook 'python-mode-hook
+                    (lambda () (add-to-list 'company-backends 'company-anaconda))))
+
 
 ;; ──────────────────────────────────── Look and feel ───────────────────────────────────
 (use-package monokai-alt-theme
