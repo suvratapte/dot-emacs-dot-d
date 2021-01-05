@@ -333,6 +333,8 @@
     (setq ivy-posframe-parameters
           '((font . "Fira Code"))))
 
+  (setq ivy-posframe-border-width 5)
+
   (setq ivy-posframe-display-functions-alist
         '((complete-symbol . ivy-posframe-display-at-point)
           (swiper . ivy-display-function-fallback)
