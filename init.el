@@ -508,11 +508,8 @@
   :ensure t
   :config
   (add-to-list 'company-backends 'company-emoji)
-  (if (version< "27.0" emacs-version)
-      (set-fontset-font
-       "fontset-default" 'unicode "Apple Color Emoji" nil 'prepend)
-    (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
-                      nil 'prepend)))
+  (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
+                    nil 'prepend))
 
 
 ;; ───────────────────────────────────── Code editing ─────────────────────────────────────
