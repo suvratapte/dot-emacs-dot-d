@@ -16,7 +16,7 @@
 ;;; Code:
 
 
-;; ―――――――――――――――――――――――――――――――――――――――― *ORG* ――――――――――――――――――――――――――――――――――――――
+;; ─────────────────────────────────────── *ORG* ──────────────────────────────────────
 (use-package org
   :config
   ;; Enable spell check in org
@@ -86,6 +86,10 @@
    org-habit-show-habits-only-for-today t
 
    org-agenda-skip-scheduled-if-done t
+
+   org-agenda-skip-scheduled-if-deadline-is-shown t
+
+   org-agenda-skip-deadline-if-done t
 
    org-agenda-custom-commands
    '(("i" "My Agenda"
@@ -183,6 +187,7 @@
                   (org-agenda-redo))))
           (custom-agenda-view)))))
 
+  ;; Temporarily disabled. It is not proving out to be useful enough.
   ;; (run-with-idle-timer 300 t 'jump-to-org-agenda)
 
   (defun org-move-item-or-tree ()

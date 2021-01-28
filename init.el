@@ -45,7 +45,7 @@
  custom-file "~/.emacs.d/custom-file.el"
 
  ;; 72 is too less for the fontsize that I use.
- fill-column 90
+ fill-column 80
 
  ;; Use your name in the frame title. :)
  frame-title-format (format "%s's Emacs" (if (equal user-login-name "suvratapte")
@@ -96,9 +96,10 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 
+(global-set-key (kbd "H-r") 'narrow-to-region)
 (global-set-key (kbd "H-d") 'narrow-to-defun)
-(global-set-key (kbd "H-t") 'narrow-to-defun)
 (global-set-key (kbd "H-w") 'widen)
+(global-set-key (kbd "H-c") 'calendar)
 
 ;; Automatically update buffers if file content on the disk has changed.
 (global-auto-revert-mode t)
@@ -332,6 +333,8 @@
     (setq ivy-posframe-parameters
           '((font . "Fira Code"))))
 
+  (setq ivy-posframe-border-width 5)
+
   (setq ivy-posframe-display-functions-alist
         '((complete-symbol . ivy-posframe-display-at-point)
           (swiper . ivy-display-function-fallback)
@@ -510,6 +513,11 @@
   (add-to-list 'company-backends 'company-emoji)
   (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
                     nil 'prepend))
+
+(use-package markdown-mode
+  :ensure t
+  :mode (("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)))
 
 
 ;; ───────────────────────────────────── Code editing ─────────────────────────────────────
