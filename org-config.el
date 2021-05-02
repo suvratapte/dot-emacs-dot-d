@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Author: Suvrat Apte
 ;;; Created on: 02 November 2015
-;;; Copyright (c) 2019 Suvrat Apte <suvratapte@gmail.com>
+;;; Copyright (c) 2021 Suvrat Apte <suvratapte@gmail.com>
 
 ;; This file is not part of GNU Emacs.
 
@@ -15,9 +15,13 @@
 
 ;;; Code:
 
+;; My org mode setup is not generic yet. So I have added checks to make it
+;; execute only if it's my computer.
+
 
 ;; ─────────────────────────────────────── *ORG* ──────────────────────────────────────
 (use-package org
+  :if (equal user-login-name "suvratapte")
   :config
   ;; Enable spell check in org
   (add-hook 'org-mode-hook 'turn-on-flyspell)
@@ -276,6 +280,7 @@ has no effect."
 
 
 (use-package org-bullets
+  :if (equal user-login-name "suvratapte")
   :ensure t
   :config
   (add-hook 'org-mode-hook 'org-bullets-mode)
@@ -284,6 +289,7 @@ has no effect."
 
 
 (use-package org-super-agenda
+  :if (equal user-login-name "suvratapte")
   :ensure t
   :config
   ;; Configure this.
