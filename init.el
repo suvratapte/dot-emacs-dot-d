@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Author: Suvrat Apte
 ;;; Created on: 02 November 2015
-;;; Copyright (c) 2019 Suvrat Apte <suvratapte@gmail.com>
+;;; Copyright (c) 2021 Suvrat Apte <suvratapte@gmail.com>
 
 ;; This file is not part of GNU Emacs.
 
