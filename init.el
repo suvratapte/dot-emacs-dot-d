@@ -70,7 +70,10 @@
  enable-recursive-minibuffers t
 
  ;; Do not ring bell
- ring-bell-function 'ignore)
+ ring-bell-function 'ignore
+
+ ;; Delete selection when you type or yank
+ delete-selection-mode t)
 
 ;; Load `custom-file` manually as we have modified the default path.
 (load-file custom-file)
@@ -442,8 +445,8 @@
 
 (use-package exec-path-from-shell
   :doc "MacOS does not start a shell at login. This makes sure
-          that the env variable of shell and GUI Emacs look the
-          same."
+        that the env variable of shell and GUI Emacs look the
+        same."
   :ensure t
   :if (eq system-type 'darwin)
   :config
@@ -505,7 +508,8 @@
   (set-face-attribute 'flyspell-incorrect nil :underline '(:style line :color "#bf616a"))
   (set-face-attribute 'flyspell-duplicate nil :underline '(:style line :color "#bf616a"))
 
-  :bind ("H-l" . flyspell-learn-word-at-point))
+  :bind ("H-l" . flyspell-learn-word-at-point)
+  :delight)
 
 (use-package company-emoji
   :ensure t
