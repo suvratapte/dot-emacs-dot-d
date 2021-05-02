@@ -210,8 +210,9 @@
                            (kill-buffer (current-buffer))))))
     (url-retrieve upload-url url-callback)))
 
-;; Start Emacsserver so that emacsclient can be used
-(server-start)
+;; Start Emacsserver so that emacsclient can be used.
+;; I'm not using the server these days so commenting this out.
+;; (server-start)
 
 
 ;; ───────────────────── Additional packages and their configurations ─────────────────────
@@ -295,6 +296,16 @@
   (which-key-mode t)
   :delight)
 
+(use-package smex
+  :doc "Enhance M-x to allow easier execution of commands"
+  :ensure t
+  ;; Using counsel-M-x for now. But smex is still useful for history of M-x.
+  :disabled t
+  :config
+  (setq smex-save-file (concat user-emacs-directory ".smex-items"))
+  (smex-initialize)
+  :delight)
+
 (use-package ivy
   :doc "A generic completion mechanism"
   :ensure t
@@ -309,7 +320,8 @@
         ivy-initial-inputs-alist nil)
 
   :bind (("C-x b" . ivy-switch-buffer)
-         ("C-x B" . ivy-switch-buffer-other-window))
+         ("C-x B" . ivy-switch-buffer-other-window)
+         ("C-c C-r" . ivy-resume))
   :delight)
 
 (use-package ivy-rich
@@ -356,6 +368,13 @@
          ("H-s" . isearch-forward-regexp))
   :delight)
 
+(use-package swiper
+  :doc "A better search"
+  :ensure t
+  :bind (("C-s" . swiper-isearch)
+         ("H-s" . isearch-forward-regexp))
+  :delight)
+
 (use-package counsel
   :doc "Ivy enhanced Emacs commands"
   :ensure t
@@ -363,6 +382,7 @@
          ("C-x C-f" . counsel-find-file)
          ("C-'" . counsel-imenu)
          ("C-c s" . counsel-rg)
+         ("M-y" . counsel-yank-pop)
          :map counsel-find-file-map
          ("RET" . ivy-alt-done))
   :delight)
@@ -475,17 +495,13 @@
 (use-package darkroom
   :doc "Focused editing."
   :ensure t
-  :disabled
-  :commands (darkroom-mode
-             darkroom-tentative-mode)
   :config
   (setq darkroom-text-scale-increase 1.5)
-  :bind ("C-c d" darkroom-mode)
+  :bind ("C-c d" . darkroom-mode)
   :delight)
 
 (use-package flyspell
   :config
-
   ;; Flyspell should be able to learn a word without the
   ;; `flyspell-correct-word-before-point` pop up.
   ;; Refer:
@@ -596,7 +612,6 @@
   (add-to-list 'hippie-expand-try-functions-list
                'yas-hippie-try-expand)
   :delight)
-
 
 (use-package expand-region
   :doc "Better navigation between nested expressions."
@@ -785,6 +800,11 @@
   :config (add-hook 'python-mode-hook
                     (lambda () (add-to-list 'company-backends 'company-anaconda))))
 
+(use-package lsp-haskell
+  :config
+  (add-hook 'haskell-mode-hook #'lsp)
+  (add-hook 'haskell-literate-mode-hook #'lsp))
+
 
 ;; ──────────────────────────────────── Look and feel ───────────────────────────────────
 (use-package monokai-alt-theme
@@ -858,6 +878,7 @@
 
 (use-package powerline
   :doc "Better mode line"
+  :disabled t
   :ensure t
   :config
   (powerline-center-theme)
@@ -917,8 +938,10 @@
 (load-file "~/.emacs.d/org-config.el")
 
 ;; Open agenda view when Emacs is started.
-(jump-to-org-agenda)
-(delete-other-windows)
+;; Do it only if it's Suvrat's computer.
+(when (equal user-login-name "suvratapte")
+  (jump-to-org-agenda)
+  (delete-other-windows))
 
 (provide 'init)
 
