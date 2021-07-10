@@ -70,10 +70,10 @@
  enable-recursive-minibuffers t
 
  ;; Do not ring bell
- ring-bell-function 'ignore
+ ring-bell-function 'ignore)
 
- ;; Delete selection when you type or yank
- delete-selection-mode t)
+;; Delete regions
+(cua-selection-mode t)
 
 ;; Load `custom-file` manually as we have modified the default path.
 (load-file custom-file)
@@ -127,10 +127,6 @@
 (setq-default
  ;; Makes killing/yanking interact with the clipboard.
  x-select-enable-clipboard t
-
- ;; To understand why this is done, read `X11 Copy & Paste to/from Emacs' section here:
- ;; https://www.emacswiki.org/emacs/CopyAndPaste.
- x-select-enable-primary t
 
  ;; Save clipboard strings into kill ring before replacing them. When
  ;; one selects something in another program to paste it into Emacs, but
