@@ -13,3 +13,4 @@ backups
 /themes/
 /.mc-lists.el
 transient/
+smex-items
