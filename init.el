@@ -528,12 +528,14 @@
   :config
   (add-to-list 'company-backends 'company-emoji)
   (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
-                    nil 'prepend))
+                    nil 'prepend)
+  :delight)
 
 (use-package markdown-mode
   :ensure t
   :mode (("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)))
+         ("\\.markdown\\'" . markdown-mode))
+  :delight)
 
 
 ;; ───────────────────────────────────── Code editing ─────────────────────────────────────
@@ -613,7 +615,8 @@
 (use-package expand-region
   :doc "Better navigation between nested expressions."
   :ensure t
-  :bind ("C-c =" . er/expand-region))
+  :bind ("C-c =" . er/expand-region)
+  :delight)
 
 
 ;; ──────────────────────────────── Programming languages ───────────────────────────────
@@ -783,24 +786,28 @@
 (use-package python
   :ensure t
   :custom
-  (python-indent-offset 4))
+  (python-indent-offset 4)
+  :delight)
 
 (use-package anaconda-mode
   :ensure t
   :diminish anaconda-mode
   :hook python-mode
-  :custom (python-indent-offset 4))
+  :custom (python-indent-offset 4)
+  :delight)
 
 (use-package company-anaconda
   :ensure t
   :after (company anaconda-mode)
   :config (add-hook 'python-mode-hook
-                    (lambda () (add-to-list 'company-backends 'company-anaconda))))
+                    (lambda () (add-to-list 'company-backends 'company-anaconda)))
+  :delight)
 
 (use-package lsp-haskell
   :config
   (add-hook 'haskell-mode-hook #'lsp)
-  (add-hook 'haskell-literate-mode-hook #'lsp))
+  (add-hook 'haskell-literate-mode-hook #'lsp)
+  :delight)
 
 
 ;; ──────────────────────────────────── Look and feel ───────────────────────────────────
