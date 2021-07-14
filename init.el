@@ -48,7 +48,8 @@
  fill-column 80
 
  ;; Use your name in the frame title. :)
- frame-title-format (format "%s's Emacs" (if (equal user-login-name "suvratapte")
+ frame-title-format (format "%s's Emacs" (if (or (equal user-login-name "suvratapte")
+                                                 (equal user-login-name "suvrat.apte"))
                                              "Suvrat"
                                            (capitalize user-login-name)))
 
