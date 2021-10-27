@@ -85,7 +85,8 @@
 ;; Make the command key behave as 'meta'
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta)
-  (setq mac-right-command-modifier 'hyper))
+  (setq mac-right-command-modifier 'hyper)
+  (setq mac-option-modifier 'super))
 
 ;; `C-x o' is a 2 step key binding. `M-o' is much easier.
 (global-set-key (kbd "M-o") 'other-window)
@@ -341,11 +342,11 @@
   :ensure t
   :config
 
-  (when (member "Fira Code" (font-family-list))
+  (when (member "Hasklig" (font-family-list))
     (setq ivy-posframe-parameters
-          '((font . "Fira Code"))))
+          '((font . "Hasklig"))))
 
-  (setq ivy-posframe-border-width 5)
+  (setq ivy-posframe-border-width 10)
 
   (setq ivy-posframe-display-functions-alist
         '((complete-symbol . ivy-posframe-display-at-point)
@@ -382,7 +383,8 @@
          ("C-x C-f" . counsel-find-file)
          ("C-'" . counsel-imenu)
          ("C-c s" . counsel-rg)
-         ("M-y" . counsel-yank-pop)
+         ;; Not using this these days.
+         ;; ("M-y" . counsel-yank-pop)
          :map counsel-find-file-map
          ("RET" . ivy-alt-done))
   :delight)
@@ -391,7 +393,7 @@
   :doc "Intended Indentation"
   :ensure t
   :config
-  (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
+  ;; (add-hook 'before-save-hook 'aggressive-indent-indent-defun)
   ;; Have a way to save without indentation.
   ;; (defun save-without-aggresive-indentation ()
   ;;   (interactive)
@@ -402,6 +404,7 @@
   :delight)
 
 (use-package git-gutter
+  :disabled t
   :doc "Shows modified lines"
   :ensure t
   :config
@@ -541,6 +544,8 @@
 
 ;; ───────────────────────────────────── Code editing ─────────────────────────────────────
 
+(global-display-line-numbers-mode)
+
 (use-package company
   :doc "COMplete ANYthing"
   :ensure t
@@ -579,6 +584,8 @@
   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
   (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
   (add-hook 'scheme-mode-hook #'enable-paredit-mode)
+  (add-hook 'haskell-mode-hook #'enable-paredit-mode)
+  (add-hook 'haskell-interactive-mode-hook #'enable-paredit-mode)
   :config
   (show-paren-mode t)
   :bind (("M-[" . paredit-wrap-square)
@@ -804,6 +811,12 @@
                     (lambda () (add-to-list 'company-backends 'company-anaconda)))
   :delight)
 
+(use-package haskell-mode
+  :ensure t
+  :config
+  :bind (("C-c M-o" . haskell-interactive-mode-clear)
+         ("C-c C-z" . haskell-interactive-switch)))
+
 (use-package lsp-haskell
   :config
   (add-hook 'haskell-mode-hook #'lsp)
@@ -889,46 +902,26 @@
   (powerline-center-theme)
   :delight)
 
-(use-package "faces"
+(use-package fira-code-mode
+  :doc "Fira code + ligatures"
+  ;; Using `hasklig` these days.
+  :disabled t
   :config
-  (set-face-attribute 'default nil :height 140)
-  ;; Use the 'Fira Code' if available
-  (when (not (eq system-type 'windows-nt))
-    (when (member "Fira Code" (font-family-list))
+  (setq fira-code-mode-disabled-ligatures '("x" "[]"))
+  (global-fira-code-mode)
+  :delight)
 
-      ;; Fira code legatures
-      (let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
-                     (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
-                     (36 . ".\\(?:>\\)")
-                     (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
-                     (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
-                     ;; (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
-                     (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
-                     ;; Causes "error in process filter: Attempt to shape unibyte text".
-                     (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
-                     ;; Fira code page said that this causes an error in Mojave.
-                     ;; (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
-                     (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
-                     (48 . ".\\(?:x[a-zA-Z]\\)")
-                     ;; Grouping ';' and ':' in groups of 3 causes occur to break. Disable it.
-                     ;; (58 . ".\\(?:::\\|[:=]\\)")
-                     ;; (59 . ".\\(?:;;\\|;\\)")
-                     (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
-                     ;; (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
-                     (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
-                     (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
-                     (91 . ".\\(?:]\\)")
-                     (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
-                     (94 . ".\\(?:=\\)")
-                     (119 . ".\\(?:ww\\)")
-                     (123 . ".\\(?:-\\)")
-                     (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
-                     (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)"))))
-        (dolist (char-regexp alist)
-          (set-char-table-range composition-function-table (car char-regexp)
-                                `([,(cdr char-regexp) 0 font-shape-gstring]))))
-
-      (set-frame-font "Fira Code"))))
+(use-package hasklig-mode
+  :ensure t
+  :hook haskell-mode
+  :config
+  (set-face-attribute 'default nil
+                    :family "Hasklig"
+                    :height 150
+                    :weight 'normal
+                    :width 'normal)
+  (hasklig-mode)
+  :delight)
 
 (use-package emojify
   :doc "Display Emoji in Emacs."

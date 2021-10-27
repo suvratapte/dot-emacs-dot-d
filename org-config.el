@@ -21,8 +21,12 @@
 
 ;; ─────────────────────────────────────── *ORG* ──────────────────────────────────────
 (use-package org
-  :if (equal user-login-name "suvratapte")
+  :if (or (equal user-login-name "suvratapte")
+          (equal user-login-name "suvrat.apte"))
   :config
+
+  (setq suv-org-env (if (equal user-login-name "suvratapte") 'home 'klarna))
+
   ;; Enable spell check in org
   (add-hook 'org-mode-hook 'turn-on-flyspell)
 
@@ -280,7 +284,8 @@ has no effect."
 
 
 (use-package org-bullets
-  :if (equal user-login-name "suvratapte")
+  :if (or (equal user-login-name "suvratapte")
+          (equal user-login-name "suvrat.apte"))
   :ensure t
   :config
   (add-hook 'org-mode-hook 'org-bullets-mode)
