@@ -339,6 +339,7 @@
 
 (use-package ivy-posframe
   :doc "Custom positions for ivy buffers."
+  :disabled t
   :ensure t
   :config
 
@@ -877,15 +878,16 @@
   :delight)
 
 (use-package ewal-spacemacs-themes
-  :disabled t
+;;  :disabled t
   :ensure t
   :config
   (setq-default spacemacs-theme-comment-bg nil
                 spacemacs-theme-comment-italic t)
-  (load-theme 'spacemacs-dark t)
+  (load-theme 'spacemacs-light t)
   :delight)
 
 (use-package nord-theme
+  :disabled t
   :ensure t
   :config
   (load-theme 'nord t)
@@ -913,13 +915,12 @@
 
 (use-package hasklig-mode
   :ensure t
-  :hook haskell-mode
   :config
   (set-face-attribute 'default nil
-                    :family "Hasklig"
-                    :height 150
-                    :weight 'normal
-                    :width 'normal)
+                      :family "Hasklig"
+                      :height 150
+                      :weight 'normal
+                      :width 'normal)
   (hasklig-mode)
   :delight)
 
