@@ -180,8 +180,8 @@
         (insert comment)
         (when (> comment-length 0) (insert " "))
         (dotimes (_ (if (= (% comment-length 2) 0)
-                        space-on-each-side
-                      (- space-on-each-side 1)))
+                      (- space-on-each-side 1)
+                      space-on-each-side))
           (insert comment-char))))))
 
 (global-set-key (kbd "C-c ;") 'comment-pretty)
