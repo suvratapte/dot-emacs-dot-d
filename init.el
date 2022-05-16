@@ -16,7 +16,7 @@
 ;;; Code:
 
 
-;; ─────────────────────────────────── Set up 'package' ───────────────────────────────────
+;; ────────────────────────────── Set up 'package' ─────────────────────────────
 (require 'package)
 
 ;; Add melpa to package archives.
@@ -33,7 +33,7 @@
   (package-install 'use-package))
 
 
-;; ───────────────────────────────── Use better defaults ────────────────────────────────
+;; ──────────────────────────── Use better defaults ────────────────────────────
 (setq-default
  ;; Don't use the compiled code if its the older package.
  load-prefer-newer t
@@ -110,7 +110,7 @@
 (global-auto-revert-mode t)
 
 
-;; ─────────────────────────── Disable unnecessary UI elements ──────────────────────────
+;; ────────────────────── Disable unnecessary UI elements ──────────────────────
 (progn
 
   ;; Do not show tool bar.
@@ -125,7 +125,7 @@
   (global-hl-line-mode t))
 
 
-;; ───────────────────────── Better interaction with X clipboard ────────────────────────
+;; ──────────────────── Better interaction with X clipboard ────────────────────
 (setq-default
  ;; Makes killing/yanking interact with the clipboard.
  x-select-enable-clipboard t
@@ -144,7 +144,7 @@
  mouse-yank-at-point t)
 
 
-;; ──────────────────────── Added functionality (Generic usecases) ────────────────────────
+;; ─────────────────── Added functionality (Generic usecases) ──────────────────
 (defun toggle-comment-on-line ()
   "Comment or uncomment current line."
   (interactive)
@@ -216,7 +216,7 @@
 ;; (server-start)
 
 
-;; ───────────────────── Additional packages and their configurations ─────────────────────
+;; ──────────────── Additional packages and their configurations ───────────────
 (require 'use-package)
 
 ;; Add `:doc' support for use-package so that we can use it like what a doc-strings is for
@@ -238,7 +238,7 @@
     (use-package-process-keywords name-symbol rest state)))
 
 
-;; ─────────────────────────────────── Generic packages ───────────────────────────────────
+;; ────────────────────────────── Generic packages ─────────────────────────────
 (use-package delight
   :ensure t
   :delight)
@@ -543,7 +543,7 @@
   :delight)
 
 
-;; ───────────────────────────────────── Code editing ─────────────────────────────────────
+;; ──────────────────────────────── Code editing ───────────────────────────────
 
 (global-display-line-numbers-mode)
 
@@ -628,7 +628,7 @@
   :delight)
 
 
-;; ──────────────────────────────── Programming languages ───────────────────────────────
+;; ─────────────────────────── Programming languages ───────────────────────────
 (use-package clojure-mode
   :doc "A major mode for editing Clojure code"
   :ensure t
@@ -825,7 +825,7 @@
   :delight)
 
 
-;; ──────────────────────────────────── Look and feel ───────────────────────────────────
+;; ─────────────────────────────── Look and feel ───────────────────────────────
 (use-package monokai-alt-theme
   :doc "Just another theme"
   :disabled t
@@ -933,7 +933,7 @@
   :delight)
 
 
-;; ──────────────────────────────────────── *ORG* ───────────────────────────────────────
+;; ─────────────────────────────────── *ORG* ───────────────────────────────────
 (load-file "~/.emacs.d/org-config.el")
 
 ;; Open agenda view when Emacs is started.
