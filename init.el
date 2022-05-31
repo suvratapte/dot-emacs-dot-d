@@ -878,16 +878,15 @@
   :delight)
 
 (use-package ewal-spacemacs-themes
-;;  :disabled t
+  :disabled t
   :ensure t
   :config
   (setq-default spacemacs-theme-comment-bg nil
                 spacemacs-theme-comment-italic t)
-  (load-theme 'spacemacs-light t)
+  (load-theme 'spacemacs-dark t)
   :delight)
 
 (use-package nord-theme
-  :disabled t
   :ensure t
   :config
   (load-theme 'nord t)
@@ -906,22 +905,15 @@
 
 (use-package fira-code-mode
   :doc "Fira code + ligatures"
-  ;; Using `hasklig` these days.
-  :disabled t
-  :config
-  (setq fira-code-mode-disabled-ligatures '("x" "[]"))
-  (global-fira-code-mode)
-  :delight)
-
-(use-package hasklig-mode
   :ensure t
   :config
+  (setq fira-code-mode-disabled-ligatures '("x" "[]"))
   (set-face-attribute 'default nil
-                      :family "Hasklig"
-                      :height 150
+                      :family "Fira Code"
+                      :height 170
                       :weight 'normal
                       :width 'normal)
-  (hasklig-mode)
+  (global-fira-code-mode)
   :delight)
 
 (use-package emojify
