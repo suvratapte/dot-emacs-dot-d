@@ -906,15 +906,24 @@
 (use-package fira-code-mode
   :doc "Fira code + ligatures"
   :ensure t
+  :disabled t
   :config
   (setq fira-code-mode-disabled-ligatures '("x" "[]"))
   (set-face-attribute 'default nil
                       :family "Fira Code"
-                      :height 170
-                      :weight 'normal
+                      :height 150
+                      :weight 'light
                       :width 'normal)
   (global-fira-code-mode)
   :delight)
+
+(use-package hasklig-mode
+  :hook (find-file after-change-major-mode)
+  ;; This ^ is a hack to enable hasklig-mode for all buffers. There is no global
+  ;; hasklig mode. :(
+  :init
+  (when (member "Hasklig" (font-family-list))
+    (set-face-attribute 'default nil :font "Hasklig-15")))
 
 (use-package emojify
   :doc "Display Emoji in Emacs."
