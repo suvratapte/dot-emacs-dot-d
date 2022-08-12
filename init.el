@@ -894,6 +894,7 @@
 
   (set-face-attribute 'flycheck-error nil :underline '(:style line :color "#bf616a"))
   (set-face-attribute 'flycheck-warning nil :underline '(:style line :color "#ebcb8b"))
+  (set-face-attribute 'flycheck-info nil :underline '(:style line :color "#b48ead"))
   :delight)
 
 (use-package powerline
