@@ -343,7 +343,6 @@
 
 (use-package ivy-posframe
   :doc "Custom positions for ivy buffers."
-  :disabled t
   :ensure t
   :config
 
