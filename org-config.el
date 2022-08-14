@@ -157,13 +157,16 @@
      ("f" "Facts" entry (file org-facts-file)
       "* %^{Fact}\n"))
 
-   org-agenda-files (list org-oncall-file
-                          ;; Excluding the reading list file since it has many TODOs.
-                          ;; org-reading-list-file
-                          org-meeting-notes-file
-                          org-hscore-file
-                          org-personal-todo-file
-                          org-habits-file)
+   org-agenda-files (if (eq suv-org-env 'home)
+                        (list org-oncall-file
+                              ;; Excluding the reading list file since it has many TODOs.
+                              ;; org-reading-list-file
+                              org-meeting-notes-file
+                              org-hscore-file
+                              org-personal-todo-file
+                              org-habits-file)
+                      ;; TODO: Put work files here.
+                      )
 
    ;; Do not show clock in the modeline. It hides other important things.
    org-clock-clocked-in-display 'frame-title)
