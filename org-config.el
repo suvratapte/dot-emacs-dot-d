@@ -159,7 +159,7 @@
    org-agenda-files (list org-oncall-file
                           ;; Excluding the reading list file since it has many TODOs.
                           ;; org-reading-list-file
-                          org-meeting-notes-file
+                          org-personal-meeting-notes-file
                           org-hscore-file
                           org-personal-todo-file
                           org-habits-file)
