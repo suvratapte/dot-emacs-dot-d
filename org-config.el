@@ -25,8 +25,6 @@
           (equal user-login-name "suvrat.apte"))
   :config
 
-  (setq suv-org-env (if (equal user-login-name "suvratapte") 'home 'klarna))
-
   ;; Enable spell check in org
   (add-hook 'org-mode-hook 'turn-on-flyspell)
 
@@ -123,7 +121,8 @@
    ;; Capture files
    org-reading-list-file (concat org-personal-directory "/reading-list.org")
    org-oncall-file (concat org-work-directory "/oncall.org")
-   org-meeting-notes-file (concat org-work-directory "/meeting-notes.org")
+   org-work-meeting-notes-file (concat org-work-directory "/meeting-notes.org")
+   org-personal-meeting-notes-file (concat org-personal-directory "/meeting-notes.org")
    org-hscore-file (concat org-work-directory "/hscore.org")
    org-personal-todo-file (concat org-personal-directory "/todo.org")
    org-habits-file (concat org-personal-directory "/habits.org")
@@ -145,7 +144,7 @@
   :LINK:     https://helpshift.atlassian.net/browse/%\\1-%\\2
   :END:
   :LOGBOOK:\n  - Added - %U\n  :END:" :prepend t)
-     ("m" "Meeting notes" entry (file org-meeting-notes-file)
+     ("m" "Meeting notes" entry (file org-personal-meeting-notes-file)
       "* TODO %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
   - Date: %U\n  - Notes:\n    + %?\n  - Action items [/]\n    + [ ] "
       :clock-in t
@@ -157,16 +156,13 @@
      ("f" "Facts" entry (file org-facts-file)
       "* %^{Fact}\n"))
 
-   org-agenda-files (if (eq suv-org-env 'home)
-                        (list org-oncall-file
-                              ;; Excluding the reading list file since it has many TODOs.
-                              ;; org-reading-list-file
-                              org-meeting-notes-file
-                              org-hscore-file
-                              org-personal-todo-file
-                              org-habits-file)
-                      ;; TODO: Put work files here.
-                      )
+   org-agenda-files (list org-oncall-file
+                          ;; Excluding the reading list file since it has many TODOs.
+                          ;; org-reading-list-file
+                          org-meeting-notes-file
+                          org-hscore-file
+                          org-personal-todo-file
+                          org-habits-file)
 
    ;; Do not show clock in the modeline. It hides other important things.
    org-clock-clocked-in-display 'frame-title)
@@ -319,6 +315,22 @@ has no effect."
                  :tag "habit")))
   ;; (org-super-agenda-mode t)
   )
+
+
+(use-package org-roam
+  :ensure t
+  :config
+  (setq org-roam-directory (concat org-personal-directory "/org-roam"))
+  (setq org-roam-completion-everywhere t)
+
+  (org-roam-db-autosync-enable)
+
+  :bind (("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)))
+
+
+(use-package org-roam-ui
+  :ensure t)
 
 
 (provide 'org-config)
