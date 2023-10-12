@@ -215,6 +215,7 @@
                            (kill-buffer (current-buffer))))))
     (url-retrieve upload-url url-callback)))
 
+
 ;; Start Emacsserver so that emacsclient can be used.
 ;; I'm not using the server these days so commenting this out.
 ;; (server-start)
@@ -481,11 +482,6 @@
        "LEIN_JVM_OPTS" "NPM_TOKEN" "LANGUAGE" "LANG" "LC_ALL"
        "MOBY_ENV" "JAVA_8_HOME" "JAVA_7_HOME" "JAVA_HOME" "PS1"
        "NVM_DIR" "GPG_TTY")))
-  :delight)
-
-(use-package diminish
-  :doc "Hide minor modes from mode line"
-  :ensure t
   :delight)
 
 (use-package toggle-test
@@ -899,7 +895,6 @@
 
 (use-package powerline
   :doc "Better mode line"
-  :disabled t
   :ensure t
   :config
   (powerline-center-theme)
