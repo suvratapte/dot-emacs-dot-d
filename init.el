@@ -908,7 +908,8 @@
   (setq fira-code-mode-disabled-ligatures '("x" "[]"))
   (set-face-attribute 'default nil
                       :family "Fira Code"
-                      :height 150
+                      ;; Font size
+                      :height 170
                       :weight 'light
                       :width 'normal)
   (global-fira-code-mode)
