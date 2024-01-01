@@ -907,9 +907,9 @@
   :config
   (setq fira-code-mode-disabled-ligatures '("x" "[]"))
   (set-face-attribute 'default nil
-                      :family "Fira Code"
+                      :family "Source Code Pro for Powerline"
                       ;; Font size
-                      :height 170
+                      :height 200
                       :weight 'light
                       :width 'normal)
   (global-fira-code-mode)
@@ -920,6 +920,7 @@
   ;; This ^ is a hack to enable hasklig-mode for all buffers. There is no global
   ;; hasklig mode. :(
   :init
+  :disabled t
   (when (member "Hasklig" (font-family-list))
     (set-face-attribute 'default nil :font "Hasklig-15")))
 
