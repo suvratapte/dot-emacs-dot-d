@@ -22,7 +22,7 @@
 ;; ─────────────────────────────────────── *ORG* ──────────────────────────────────────
 (use-package org
   :if (or (equal user-login-name "suvratapte")
-          (equal user-login-name "suvrat.apte"))
+          (equal user-login-name "suvrat"))
   :config
 
   ;; Enable spell check in org
