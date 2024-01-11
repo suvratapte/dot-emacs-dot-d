@@ -30,6 +30,7 @@
 
   (setq-default
    org-list-demote-modify-bullet '(("+" . "-") ("-" . "+"))
+
    ;; Hide leading stars
    org-hide-leading-stars t
 
@@ -103,9 +104,10 @@
                ((org-agenda-overriding-header "Agenda\n")
                 (org-agenda-span 3)))
 
-       (tags-todo "STYLE=\"habit\""
-                  ((org-agenda-files (list org-habits-file))
-                   (org-agenda-overriding-header "Habits\n"))))
+       ;; (tags-todo "STYLE=\"habit\""
+       ;;            ((org-agenda-files (list org-habits-file))
+       ;;             (org-agenda-overriding-header "Habits\n")))
+       )
       nil nil))
 
    org-agenda-block-separator
@@ -114,55 +116,62 @@
     'face '(:foreground "#81a1c1"))
 
    ;; Capture directories
-   org-directory "~/workspace/repository-of-things"
+   org-directory "~/workspace/org"
    org-personal-directory (concat org-directory "/personal")
-   org-work-directory (concat org-directory "/work")
+   org-work-directory (concat org-directory "/vara")
 
    ;; Capture files
-   org-reading-list-file (concat org-personal-directory "/reading-list.org")
+   org-personal-reading-list-file (concat org-personal-directory "/reading-list.org")
+   org-work-reading-list-file (concat org-work-directory "/reading-list.org")
    org-oncall-file (concat org-work-directory "/oncall.org")
    org-work-meeting-notes-file (concat org-work-directory "/meeting-notes.org")
    org-personal-meeting-notes-file (concat org-personal-directory "/meeting-notes.org")
-   org-hscore-file (concat org-work-directory "/hscore.org")
-   org-personal-todo-file (concat org-personal-directory "/todo.org")
-   org-habits-file (concat org-personal-directory "/habits.org")
+   ;; org-hscore-file (concat org-work-directory "/hscore.org")
+   org-work-todo-file (concat org-work-directory "/todo.org")
+   ;; org-habits-file (concat org-personal-directory "/habits.org")
    org-til-file (concat org-personal-directory "/til.org")
-   org-facts-file (concat org-personal-directory "/facts.org")
 
    org-capture-templates
-   '(("r" "Reading list item" entry (file org-reading-list-file)
+   '(("t" "Work todo item" entry (file org-work-todo-file)
+      "* TODO %^{Description}%?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
+     ("T" "Work todo item" entry (file org-personal-todo-file)
+      "* TODO %^{Description}%?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
+     ("m" "Work meeting notes" entry (file org-work-meeting-notes-file)
+      "* TODO %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
+  - Date: %U\n  - Notes:\n    + %?\n  - Action items [/]\n    + [ ] ")
+     ("M" "Personal meeting notes" entry (file org-personal-meeting-notes-file)
+      "* TODO %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
+  - Date: %U\n  - Notes:\n    + %?\n  - Action items [/]\n    + [ ] ")
+     ("r" "Work reading list item" entry (file org-work-reading-list-file)
+      "* TODO %^{Description}\n  :LOGBOOK:\n  - Added: %U\n  :END:\n  %x")
+     ("R" "Personal reading list item" entry (file org-personal-reading-list-file)
       "* TODO %^{Description}\n  :LOGBOOK:\n  - Added: %U\n  :END:\n  %?")
      ("o" "Oncall ticket" entry (file org-oncall-file)
-      "* TODO %^{Type|HSBUG|AUTO|ONCALL}-%^{Ticket number} - %^{Description}
+      "* TODO %^{Description}
   :PROPERTIES:
-  :LINK:     https://helpshift.atlassian.net/browse/%\\1-%\\2
   :END:
   :LOGBOOK:\n  - Added - %U\n  :END:" :prepend t)
-     ("h" "HSCore task" entry (file org-hscore-file)
-      "* TODO %^{Type|HSC}-%^{Ticket number} - %^{Description}
-  :PROPERTIES:
-  :LINK:     https://helpshift.atlassian.net/browse/%\\1-%\\2
-  :END:
-  :LOGBOOK:\n  - Added - %U\n  :END:" :prepend t)
-     ("m" "Meeting notes" entry (file org-personal-meeting-notes-file)
-      "* TODO %^{Agenda}\n  - Attendees: %^{Attendees}, Suvrat
-  - Date: %U\n  - Notes:\n    + %?\n  - Action items [/]\n    + [ ] "
-      :clock-in t
-      :clock-resume t)
-     ("t" "Personal todo item" entry (file org-personal-todo-file)
-      "* TODO %^{Description}%?\n  :LOGBOOK:\n  - Added: %U\n  :END:")
+  ;;    ("h" "HSCore task" entry (file org-hscore-file)
+  ;;     "* TODO %^{Type|HSC}-%^{Ticket number} - %^{Description}
+  ;; :PROPERTIES:
+  ;; :LINK:     https://helpshift.atlassian.net/browse/%\\1-%\\2
+  ;; :END:
+  ;; :LOGBOOK:\n  - Added - %U\n  :END:" :prepend t)
+
+
      ("l" "Today I learnt" entry (file org-til-file)
-      "* %^{Description}\n  - Source: %?\n  -")
-     ("f" "Facts" entry (file org-facts-file)
-      "* %^{Fact}\n"))
+      "* %^{Description}\n  - Source: %?\n  -"))
 
    org-agenda-files (list org-oncall-file
                           ;; Excluding the reading list file since it has many TODOs.
                           ;; org-reading-list-file
+                          org-work-todo-file
+                          org-work-meeting-notes-file
+                          org-work-reading-list-file
                           org-personal-meeting-notes-file
-                          org-hscore-file
                           org-personal-todo-file
-                          org-habits-file)
+                          ;; org-habits-file
+                          )
 
    ;; Do not show clock in the modeline. It hides other important things.
    org-clock-clocked-in-display 'frame-title)
