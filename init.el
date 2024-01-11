@@ -95,6 +95,16 @@
 ;; `C-x o' is a 2 step key binding. `M-o' is much easier.
 (global-set-key (kbd "M-o") 'other-window)
 
+;; Set font and a binding to adjust the size globally
+(set-face-attribute 'default nil
+                    :family "Source Code Pro for Powerline"
+                    ;; Font size
+                    :height 180
+                    :weight 'light
+                    :width 'normal)
+(global-set-key (kbd "C-M-=") 'global-text-scale-adjust)
+
+
 ;; Unbind `save-buffers-kill-terminal` to avoid accidentally quiting Emacs.
 (global-unset-key (kbd "C-x C-c"))
 
@@ -907,12 +917,6 @@
   :disabled t
   :config
   (setq fira-code-mode-disabled-ligatures '("x" "[]"))
-  (set-face-attribute 'default nil
-                      :family "Source Code Pro for Powerline"
-                      ;; Font size
-                      :height 200
-                      :weight 'light
-                      :width 'normal)
   (global-fira-code-mode)
   :delight)
 
