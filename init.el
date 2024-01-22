@@ -230,6 +230,13 @@
 ;; I'm not using the server these days so commenting this out.
 ;; (server-start)
 
+(use-package edit-server
+  :ensure t
+  :config
+  (add-to-list 'load-path "~/.emacs.d/lisp")
+  (edit-server-start))
+
+
 
 ;; ──────────────── Additional packages and their configurations ───────────────
 (require 'use-package)
