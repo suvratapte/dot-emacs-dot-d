@@ -720,6 +720,8 @@
   ;; Log client-server messaging in *nrepl-messages* buffer
   (setq nrepl-log-messages nil)
 
+  (add-to-list 'cider-jack-in-nrepl-middlewares "cider.nrepl/cider-middleware")
+
   ;; REPL should expect input on the next line + unnecessary palm trees!
   (defun cider-repl-prompt-custom (namespace)
     "Return a prompt string that mentions NAMESPACE."
@@ -834,15 +836,9 @@
   :bind (("C-c M-o" . haskell-interactive-mode-clear)
          ("C-c C-z" . haskell-interactive-switch)))
 
-(use-package lsp-haskell
-  :config
-  :disable t
-  (add-hook 'haskell-mode-hook #'lsp)
-  (add-hook 'haskell-literate-mode-hook #'lsp)
-  :delight)
-
 
 ;; ─────────────────────────────── Look and feel ───────────────────────────────
+
 (use-package monokai-alt-theme
   :doc "Just another theme"
   :disabled t
