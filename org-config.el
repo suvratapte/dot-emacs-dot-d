@@ -128,6 +128,7 @@
    org-personal-meeting-notes-file (concat org-personal-directory "/meeting-notes.org")
    ;; org-hscore-file (concat org-work-directory "/hscore.org")
    org-work-todo-file (concat org-work-directory "/todo.org")
+   org-personal-todo-file (concat org-personal-directory "/todo.org")
    ;; org-habits-file (concat org-personal-directory "/habits.org")
    org-til-file (concat org-personal-directory "/til.org")
 
