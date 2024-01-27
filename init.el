@@ -645,10 +645,19 @@
 
 
 ;; ─────────────────────────── Programming languages ───────────────────────────
+
 (use-package clojure-mode
   :doc "A major mode for editing Clojure code"
   :ensure t
   :config
+  ;; Install Clojure LSP
+  (unless (executable-find "clojure-lsp")
+    (async-shell-command
+     (concat "cd /tmp;"
+             "curl -o install-clojure-lsp -sLO https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install;"
+             "chmod +x install-clojure-lsp;"
+             "./install-clojure-lsp --dir ~/.local/bin/;")))
+
   ;; This is useful for working with camel-case tokens, like names of
   ;; Java classes (e.g. JavaClassName)
   (add-hook 'clojure-mode-hook #'subword-mode)
@@ -682,6 +691,7 @@
                       nil))))))
   (add-hook 'clojure-mode-hook 'prettify-sets)
   (add-hook 'cider-repl-mode-hook 'prettify-sets)
+
   :delight)
 
 (use-package clojure-mode-extra-font-locking
@@ -698,27 +708,32 @@
   (add-hook 'cider-mode-hook 'eldoc-mode)
 
   :config
-  ;; Go right to the REPL buffer when it's finished connecting
-  (setq cider-repl-pop-to-buffer-on-connect t)
 
-  ;; When there's a cider error, show its buffer and switch to it
-  (setq cider-show-error-buffer t)
-  (setq cider-auto-select-error-buffer t)
+  (setq
+   ;; Go right to the REPL buffer when it's finished connecting
+   cider-repl-pop-to-buffer-on-connect t
 
-  ;; Where to store the cider history.
-  (setq cider-repl-history-file "~/.emacs.d/cider-history")
+   ;; When there's a cider error, show its buffer and switch to it
+   cider-show-error-buffer cider-auto-select-error-buffer
 
-  ;; Wrap when navigating history.
-  (setq cider-repl-wrap-history t)
+   ;; Where to store the cider history.
+   cider-repl-history-file "~/.emacs.d/cider-history"
 
-  ;; Attempt to jump at the symbol under the point without having to press RET
-  (setq cider-prompt-for-symbol nil)
+   ;; Wrap when navigating history.
+   cider-repl-wrap-history t
 
-  ;; Always pretty print
-  (setq cider-repl-use-pretty-printing t)
+   ;; Attempt to jump at the symbol under the point without having to press RET
+   cider-prompt-for-symbol nil
 
-  ;; Log client-server messaging in *nrepl-messages* buffer
-  (setq nrepl-log-messages nil)
+   ;; Always pretty print
+   cider-repl-use-pretty-printing t
+
+   ;; Log client-server messaging in *nrepl-messages* buffer
+   nrepl-log-messages nil
+
+   ;; Use xref
+   cider-use-xref t
+   cider-xref-fn-depth 100)
 
   (add-to-list 'cider-jack-in-nrepl-middlewares "cider.nrepl/cider-middleware")
 
@@ -726,7 +741,6 @@
   (defun cider-repl-prompt-custom (namespace)
     "Return a prompt string that mentions NAMESPACE."
     (format "🌴 %s 🌴 \n" namespace))
-
   (setq cider-repl-prompt-function 'cider-repl-prompt-custom)
 
   :bind (:map
