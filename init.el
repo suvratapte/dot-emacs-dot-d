@@ -45,7 +45,7 @@
  custom-file "~/.emacs.d/custom-file.el"
 
  ;; 72 is too less for the fontsize that I use.
- fill-column 80
+ fill-column 90
 
  ;; Use your name in the frame title. :)
  frame-title-format (format "%s's Emacs" (if (or (equal user-login-name "suvratapte")
@@ -94,12 +94,13 @@
 
 ;; `C-x o' is a 2 step key binding. `M-o' is much easier.
 (global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "H-o") 'other-frame)
 
 ;; Set font and a binding to adjust the size globally
 (set-face-attribute 'default nil
                     :family "Source Code Pro for Powerline"
                     ;; Font size
-                    :height 180
+                    :height 200
                     :weight 'light
                     :width 'normal)
 (global-set-key (kbd "C-M-=") 'global-text-scale-adjust)
@@ -245,6 +246,7 @@
 ;; functions.
 (eval-and-compile
   (add-to-list 'use-package-keywords :doc t)
+
   (defun use-package-handler/:doc (name-symbol _keyword _docstring rest state)
     "An identity handler for :doc.
      Currently, the value for this keyword is being ignored.
@@ -361,6 +363,7 @@
 
 (use-package ivy-posframe
   :doc "Custom positions for ivy buffers."
+  :disabled t
   :ensure t
   :config
 
@@ -556,6 +559,10 @@
   :ensure t
   :mode (("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
+  :delight)
+
+(use-package unfill
+  :ensure t
   :delight)
 
 
