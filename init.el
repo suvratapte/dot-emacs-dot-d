@@ -552,7 +552,9 @@
 (use-package company-emoji
   :ensure t
   :config
-  (add-to-list 'company-backends 'company-emoji)
+  ;; This interfered with Rust associated function auto completions
+  ;; after typing `::`.
+  ;; (add-to-list 'company-backends 'company-emoji)
   (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
                     nil 'prepend)
   :delight)
@@ -585,8 +587,15 @@
          ("C-n" . company-select-next)
          ("C-p" . company-select-previous))
   :config
-  (setq company-idle-delay 0.1)
+  (setq company-idle-delay 0.1
+        company-minimum-prefix-length 1
+        company-tooltip-align-annotations t)
+
   (global-company-mode t)
+
+  ;; LSP + company integration via capf
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-capf))
 
   ;; Configure hippie expand as well.
   (setq hippie-expand-try-functions-list
@@ -660,21 +669,28 @@
   :commands lsp
   :custom
   ;; what to use when checking on-save. "check" is default, I prefer clippy
-  (lsp-rust-analyzer-cargo-watch-command "clippy")
+  (lsp-rust-analyzer-cargo-waqtch-command "clippy")
   (lsp-eldoc-render-all t)
   (lsp-idle-delay 0.6)
+
+  ;; Performance
+  (lsp-restart 'auto-restart)
+
   ;; enable / disable the hints as you prefer:
   (lsp-inlay-hint-enable t)
+
   ;; These are optional configurations. See https://emacs-lsp.github.io/lsp-mode/page/lsp-rust-analyzer/#lsp-rust-analyzer-display-chaining-hints for a full list
-  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+  ;; (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
   (lsp-rust-analyzer-display-chaining-hints t)
-  (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
+  ;; (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
   (lsp-rust-analyzer-display-closure-return-type-hints t)
-  (lsp-rust-analyzer-display-parameter-hints nil)
-  (lsp-rust-analyzer-display-reborrow-hints nil)
+  ;; (lsp-rust-analyzer-display-parameter-hints nil)
+  ;; (lsp-rust-analyzer-display-reborrow-hints nil)
+
   ;; For integration with yasnippet
   (lsp-enable-snippet t)
   (lsp-completion-enable-additional-text-edit t)
+
   :config
   (add-to-list 'lsp-disabled-clients 'lsp-javascript)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
@@ -684,8 +700,7 @@
   :commands lsp-ui-mode
   :custom
   (lsp-ui-peek-always-show t)
-  (lsp-ui-sideline-show-hover t)
-  (lsp-ui-doc-enable nil))
+  (lsp-ui-sideline-show-hover t))
 
 
 ;; ─────────────────────────── Programming languages ───────────────────────────
@@ -695,12 +710,12 @@
   :ensure t
   :config
   ;; Install Clojure LSP
-  (unless (executable-find "clojure-lsp")
-    (async-shell-command
-     (concat "cd /tmp;"
-             "curl -o install-clojure-lsp -sLO https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install;"
-             "chmod +x install-clojure-lsp;"
-             "./install-clojure-lsp --dir ~/.local/bin/;")))
+  ;; (unless (executable-find "clojure-lsp")
+  ;;   (async-shell-command
+  ;;    (concat "cd /tmp;"
+  ;;            "curl -o install-clojure-lsp -sLO https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install;"
+  ;;            "chmod +x install-clojure-lsp;"
+  ;;            "./install-clojure-lsp --dir ~/.local/bin/;")))
 
   ;; This is useful for working with camel-case tokens, like names of
   ;; Java classes (e.g. JavaClassName)
