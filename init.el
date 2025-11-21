@@ -21,7 +21,9 @@
 
 ;; Add melpa to package archives.
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;; (add-to-list 'package-archives
+;;              '("melpa" . "https://melpa.org/packages/") t)
 
 ;; Load and activate emacs packages. Do this first so that the packages are loaded before
 ;; you start trying to modify them.  This also sets the load path.
@@ -630,18 +632,53 @@
 
 (use-package yasnippet
   :ensure t
-  :disabled t ;; I'm not using this at the moment.
+  :hook
+  ((prog-mode . yas-minor-mode)
+   (text-mode . yas-minor-mode))
   :config
-  (yas-global-mode t)
   (add-to-list 'hippie-expand-try-functions-list
                'yas-hippie-try-expand)
+  (yas-reload-all)
   :delight)
+
 
 (use-package expand-region
   :doc "Better navigation between nested expressions."
   :ensure t
   :bind ("C-c =" . er/expand-region)
   :delight)
+
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :custom
+  ;; what to use when checking on-save. "check" is default, I prefer clippy
+  (lsp-rust-analyzer-cargo-watch-command "clippy")
+  (lsp-eldoc-render-all t)
+  (lsp-idle-delay 0.6)
+  ;; enable / disable the hints as you prefer:
+  (lsp-inlay-hint-enable t)
+  ;; These are optional configurations. See https://emacs-lsp.github.io/lsp-mode/page/lsp-rust-analyzer/#lsp-rust-analyzer-display-chaining-hints for a full list
+  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+  (lsp-rust-analyzer-display-chaining-hints t)
+  (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
+  (lsp-rust-analyzer-display-closure-return-type-hints t)
+  (lsp-rust-analyzer-display-parameter-hints nil)
+  (lsp-rust-analyzer-display-reborrow-hints nil)
+  ;; For integration with yasnippet
+  (lsp-enable-snippet t)
+  (lsp-completion-enable-additional-text-edit t)
+  :config
+  (add-to-list 'lsp-disabled-clients 'lsp-javascript)
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode
+  :custom
+  (lsp-ui-peek-always-show t)
+  (lsp-ui-sideline-show-hover t)
+  (lsp-ui-doc-enable nil))
 
 
 ;; ─────────────────────────── Programming languages ───────────────────────────
@@ -849,6 +886,39 @@
   :config
   :bind (("C-c M-o" . haskell-interactive-mode-clear)
          ("C-c C-z" . haskell-interactive-switch)))
+
+(use-package rustic
+  :ensure t
+  :bind (:map rustic-mode-map
+              ("M-j" . lsp-ui-imenu)
+              ("M-?" . lsp-find-references)
+              ("C-c C-c l" . flycheck-list-errors)
+              ("C-c C-c a" . lsp-execute-code-action)
+              ("C-c C-c r" . lsp-rename)
+              ("C-c C-c q" . lsp-workspace-restart)
+              ("C-c C-c Q" . lsp-workspace-shutdown)
+              ("C-c C-c s" . lsp-rust-analyzer-status))
+  :config
+  ;; uncomment for less flashiness
+  (setq lsp-eldoc-hook nil)
+  (setq lsp-enable-symbol-highlighting nil)
+  (setq lsp-signature-auto-activate nil)
+
+  ;; comment to disable rustfmt on save
+  (setq rustic-format-on-save t)
+
+  (defun rustic-mode-hook ()
+    ;; so that run C-c C-c C-r works without having to confirm, but don't try to
+    ;; save rust buffers that are not file visiting. Once
+    ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+    ;; no longer be necessary.
+    (when buffer-file-name
+      (setq-local buffer-save-without-query t))
+    (add-hook 'before-save-hook 'lsp-format-buffer nil t))
+
+  (add-hook 'rustic-mode-hook 'rustic-mode-hook))
+
+
 
 
 ;; ─────────────────────────────── Look and feel ───────────────────────────────
