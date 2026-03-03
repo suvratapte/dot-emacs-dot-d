@@ -28,7 +28,21 @@
   ;; Enable spell check in org
   (add-hook 'org-mode-hook 'turn-on-flyspell)
 
-  (setq-default
+  ;; Custom directory and file path variables
+  (defvar org-personal-directory nil "Personal org directory.")
+  (defvar org-work-directory nil "Work org directory.")
+  (defvar org-personal-reading-list-file nil "Personal reading list file.")
+  (defvar org-work-reading-list-file nil "Work reading list file.")
+  (defvar org-oncall-file nil "Oncall tickets file.")
+  (defvar org-work-meeting-notes-file nil "Work meeting notes file.")
+  (defvar org-personal-meeting-notes-file nil "Personal meeting notes file.")
+  (defvar org-work-todo-file nil "Work todo file.")
+  (defvar org-personal-todo-file nil "Personal todo file.")
+  (defvar org-til-file nil "Today I learnt file.")
+  (defvar org-todo-keyword-faces-spacemacs-theme nil "TODO faces for spacemacs theme.")
+  (defvar org-todo-keyword-faces-nord-theme nil "TODO faces for nord theme.")
+
+  (setq
    org-list-demote-modify-bullet '(("+" . "-") ("-" . "+"))
 
    ;; Hide leading stars
@@ -51,6 +65,9 @@
 
    ;; Add 'closed' log when marked done
    org-log-done t
+
+   ;; New lines (etc) should start with proper indentation
+   org-adapt-indentation t
 
    org-modules '(org-bbdb
                  org-bibtex
@@ -83,7 +100,16 @@
 
    org-todo-keyword-faces org-todo-keyword-faces-nord-theme
 
+   org-hide-emphasis-markers t
+
+   org-ellipsis " ▾"
+
+   org-pretty-entities t
+
+   org-fontify-quote-and-verse-blocks t
+
    org-enforce-todo-dependencies t
+
    org-enforce-todo-checkbox-dependencies t
 
    ;; When dependencies are enforced (by both vars above), agenda views highlight tasks
@@ -116,9 +142,9 @@
     'face '(:foreground "#81a1c1"))
 
    ;; Capture directories
-   org-directory "~/workspace/org"
+   org-directory "~/work/org"
    org-personal-directory (concat org-directory "/personal")
-   org-work-directory (concat org-directory "/vara")
+   org-work-directory (concat org-directory "/artis")
 
    ;; Capture files
    org-personal-reading-list-file (concat org-personal-directory "/reading-list.org")
@@ -126,10 +152,8 @@
    org-oncall-file (concat org-work-directory "/oncall.org")
    org-work-meeting-notes-file (concat org-work-directory "/meeting-notes.org")
    org-personal-meeting-notes-file (concat org-personal-directory "/meeting-notes.org")
-   ;; org-hscore-file (concat org-work-directory "/hscore.org")
    org-work-todo-file (concat org-work-directory "/todo.org")
    org-personal-todo-file (concat org-personal-directory "/todo.org")
-   ;; org-habits-file (concat org-personal-directory "/habits.org")
    org-til-file (concat org-personal-directory "/til.org")
 
    org-capture-templates
@@ -152,13 +176,6 @@
   :PROPERTIES:
   :END:
   :LOGBOOK:\n  - Added - %U\n  :END:" :prepend t)
-  ;;    ("h" "HSCore task" entry (file org-hscore-file)
-  ;;     "* TODO %^{Type|HSC}-%^{Ticket number} - %^{Description}
-  ;; :PROPERTIES:
-  ;; :LINK:     https://helpshift.atlassian.net/browse/%\\1-%\\2
-  ;; :END:
-  ;; :LOGBOOK:\n  - Added - %U\n  :END:" :prepend t)
-
 
      ("l" "Today I learnt" entry (file org-til-file)
       "* %^{Description}\n  - Source: %?\n  -"))
@@ -171,11 +188,36 @@
                           org-work-reading-list-file
                           org-personal-meeting-notes-file
                           org-personal-todo-file
-                          ;; org-habits-file
                           )
 
    ;; Do not show clock in the modeline. It hides other important things.
    org-clock-clocked-in-display 'frame-title)
+
+  ;;;; ---------- Headline scaling ----------
+  (set-face-attribute 'org-level-1 nil :weight 'bold :height 1.25)
+  (set-face-attribute 'org-level-2 nil :weight 'bold :height 1.15)
+  (set-face-attribute 'org-level-3 nil :weight 'semi-bold :height 1.08)
+  (set-face-attribute 'org-level-4 nil :weight 'semi-bold)
+  (set-face-attribute 'org-level-5 nil :weight 'normal)
+
+  ;;;; ---------- Code blocks (nord0) ----------
+  (set-face-attribute 'org-block nil :background "#2E3440" :extend t)
+  (set-face-attribute 'org-block-begin-line nil :background "#2E3440" :foreground "#81A1C1" :extend t)
+  (set-face-attribute 'org-block-end-line nil :background "#2E3440" :foreground "#81A1C1" :extend t)
+  (set-face-attribute 'org-code nil :foreground "#88C0D0")
+  (set-face-attribute 'org-verbatim nil :foreground "#88C0D0")
+
+  ;;;; ---------- TODO / DONE ----------
+  (set-face-attribute 'org-todo nil :weight 'bold :foreground "#BF616A")
+  (set-face-attribute 'org-done nil :weight 'bold :foreground "#A3BE8C")
+
+  ;;;; ---------- Quotes & tables ----------
+  (set-face-attribute 'org-quote nil :inherit 'org-block :slant 'italic)
+  (set-face-attribute 'org-table nil :foreground "#81A1C1")
+
+  ;;;; ---------- Optional niceties ----------
+  (add-hook 'org-mode-hook #'visual-line-mode)
+  (add-hook 'org-mode-hook #'org-indent-mode)
 
   (defun custom-agenda-view ()
     "Show my custom agenda view."
@@ -267,13 +309,15 @@ has no effect."
   ;; This is extremely useful! :)
   ;; TODO: Figure out how this works.
 
-  (defadvice org-clock-in (after wicked activate)
+  (defun my/org-clock-in-set-working (&rest _)
     "Set this task's status to 'WORKING'."
     (org-todo "WORKING"))
+  (advice-add #'org-clock-in :after #'my/org-clock-in-set-working)
 
-  (defadvice org-clock-out (after wicked activate)
+  (defun my/org-clock-out-set-waiting (&rest _)
     "Set this task's status to 'WAITING'."
     (org-todo "WAITING"))
+  (advice-add #'org-clock-out :after #'my/org-clock-out-set-waiting)
 
   :bind (:map
          global-map
@@ -285,6 +329,7 @@ has no effect."
          ("C-c b" . org-switchb)
          :map
          org-mode-map
+         ("C-c M-." . org-timestamp-inactive)
          ("C-M-g" . org-move-item-or-tree)
          ("H-i" . org-clock-in)
          ("H-o" . org-clock-out)
@@ -294,7 +339,7 @@ has no effect."
 
 (use-package org-bullets
   :if (or (equal user-login-name "suvratapte")
-          (equal user-login-name "suvrat.apte"))
+          (equal user-login-name "suvrat"))
   :ensure t
   :config
   (add-hook 'org-mode-hook 'org-bullets-mode)
@@ -303,7 +348,8 @@ has no effect."
 
 
 (use-package org-super-agenda
-  :if (equal user-login-name "suvratapte")
+  :if (or (equal user-login-name "suvratapte")
+          (equal user-login-name "suvrat"))
   :ensure t
   :config
   ;; Configure this.
@@ -323,12 +369,12 @@ has no effect."
                  :and (:tag "work" :tag "long_running"))
           (:name "Habits - Today"
                  :tag "habit")))
-  ;; (org-super-agenda-mode t)
-  )
+  (org-super-agenda-mode t))
 
 
 (use-package org-roam
   :ensure t
+  :disabled t
   :config
   (setq org-roam-directory (concat org-personal-directory "/org-roam"))
   (setq org-roam-completion-everywhere t)
@@ -340,7 +386,8 @@ has no effect."
 
 
 (use-package org-roam-ui
-  :ensure t)
+  :ensure t
+  :disabled t)
 
 
 (provide 'org-config)
