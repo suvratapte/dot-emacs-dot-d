@@ -22,15 +22,18 @@
 ;; Add melpa to package archives.
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-;; (add-to-list 'package-archives
-;;              '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
 
 ;; Load and activate emacs packages. Do this first so that the packages are loaded before
 ;; you start trying to modify them.  This also sets the load path.
-(package-initialize)
+;; Called automatically since Emacs 27; keep for older versions.
+(when (< emacs-major-version 27)
+  (package-initialize))
 
-;; Install 'use-package' if it is not installed.
-(when (not (package-installed-p 'use-package))
+;; Install 'use-package' if it is not installed (built-in since Emacs 29).
+(when (and (< emacs-major-version 29)
+           (not (package-installed-p 'use-package)))
   (package-refresh-contents)
   (package-install 'use-package))
 
