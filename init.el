@@ -769,8 +769,7 @@
    nrepl-log-messages nil
 
    ;; Use xref
-   cider-use-xref t
-   cider-xref-fn-depth 100)
+   cider-use-xref t)
 
   (add-to-list 'cider-jack-in-nrepl-middlewares "cider.nrepl/cider-middleware")
 
