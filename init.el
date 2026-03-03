@@ -39,7 +39,7 @@
 
 
 ;; ──────────────────────────── Use better defaults ────────────────────────────
-(setq-default
+(setq
  ;; Don't use the compiled code if its the older package.
  load-prefer-newer t
 
@@ -49,9 +49,6 @@
  ;; Do not put 'customize' config in init.el; give it another file.
  custom-file "~/.emacs.d/custom-file.el"
 
- ;; 72 is too less for the fontsize that I use.
- fill-column 90
-
  ;; Use your name in the frame title. :)
  frame-title-format (format "%s's Emacs" (if (or (equal user-login-name "suvratapte")
                                                  (equal user-login-name "suvrat.apte"))
@@ -60,9 +57,6 @@
 
  ;; Do not create lockfiles.
  create-lockfiles nil
-
- ;; Don't use hard tabs
- indent-tabs-mode nil
 
  ;; Emacs can automatically create backup files. This tells Emacs to put all backups in
  ;; ~/.emacs.d/backups. More info:
@@ -78,6 +72,14 @@
  ;; Do not ring bell
  ring-bell-function 'ignore)
 
+;; Buffer-local defaults
+(setq-default
+ ;; 72 is too less for the fontsize that I use.
+ fill-column 90
+
+ ;; Don't use hard tabs
+ indent-tabs-mode nil)
+
 ;; Show (line,column) in mode-line
 (column-number-mode t)
 
@@ -89,7 +91,7 @@
 (load-file custom-file)
 
 ;; Change all yes/no questions to y/n type
-(fset 'yes-or-no-p 'y-or-n-p)
+(setopt use-short-answers t)
 
 ;; Make the command key behave as 'meta'
 (when (eq system-type 'darwin)
@@ -146,9 +148,9 @@
 
 
 ;; ──────────────────── Better interaction with X clipboard ────────────────────
-(setq-default
+(setq
  ;; Makes killing/yanking interact with the clipboard.
- x-select-enable-clipboard t
+ select-enable-clipboard t
 
  ;; Save clipboard strings into kill ring before replacing them. When
  ;; one selects something in another program to paste it into Emacs, but
@@ -215,7 +217,7 @@
    witha file.  Argument BEG beginning point for region.
    Argument END ending point for region."
   (interactive "r")
-  (let* ((file-path (buffer-file-name))
+  (let* ((file-path (or (buffer-file-name) "upload.txt"))
          (file-name (file-name-nondirectory file-path))
          (upload-url (format "https://transfer.sh/%s"
                              file-name))
@@ -269,14 +271,12 @@
 
 ;; ────────────────────────────── Generic packages ─────────────────────────────
 (use-package delight
-  :ensure t
-  :delight)
+  :ensure t)
 
 (use-package uniquify
   :doc "Naming convention for files with same names"
   :config
-  (setq uniquify-buffer-name-style 'forward)
-  :delight)
+  (setq uniquify-buffer-name-style 'forward))
 
 (use-package recentf
   :doc "Recent buffers in a new Emacs session"
@@ -289,8 +289,7 @@
 
 (use-package ibuffer
   :doc "Better buffer management"
-  :bind ("C-x C-b" . ibuffer)
-  :delight)
+  :bind ("C-x C-b" . ibuffer))
 
 (use-package projectile
   :doc "Project navigation"
@@ -304,20 +303,17 @@
 (use-package magit
   :doc "Git integration for Emacs"
   :ensure t
-  :bind ("C-x g" . magit-status)
-  :delight)
+  :bind ("C-x g" . magit-status))
 
 (use-package ace-jump-mode
   :doc "Jump around the visible buffer using 'Head Chars'"
   :ensure t
-  :bind ("C-." . ace-jump-mode)
-  :delight)
+  :bind ("C-." . ace-jump-mode))
 
 (use-package dumb-jump
   :doc "Dumb ag version of M-."
   :ensure t
-  :bind ("C-M-." . dumb-jump-go)
-  :delight)
+  :bind ("C-M-." . dumb-jump-go))
 
 (use-package which-key
   :doc "Prompt the next possible key bindings after a short wait"
@@ -396,15 +392,7 @@
   :doc "A better search"
   :ensure t
   :bind (("C-s" . swiper-isearch)
-         ("H-s" . isearch-forward-regexp))
-  :delight)
-
-(use-package swiper
-  :doc "A better search"
-  :ensure t
-  :bind (("C-s" . swiper-isearch)
-         ("H-s" . isearch-forward-regexp))
-  :delight)
+         ("H-s" . isearch-forward-regexp)))
 
 (use-package counsel
   :doc "Ivy enhanced Emacs commands"
@@ -417,7 +405,12 @@
          ;; ("M-y" . counsel-yank-pop)
          :map counsel-find-file-map
          ("RET" . ivy-alt-done))
-  :delight)
+  :config
+  (defun my/counsel-rg-hidden ()
+    (interactive)
+    (let ((counsel-rg-base-command
+           "rg -M 120 --with-filename --no-heading --line-number --color never --hidden %s ."))
+      (counsel-rg))))
 
 (use-package aggressive-indent
   :doc "Intended Indentation"
@@ -446,8 +439,7 @@
 
 (use-package git-timemachine
   :doc "Go through git history in a file"
-  :ensure t
-  :delight)
+  :ensure t)
 
 (use-package region-bindings-mode
   :doc "Define bindings only when a region is selected."
@@ -474,8 +466,7 @@
 (use-package esup
   :doc "Emacs Start Up Profiler (esup) benchmarks Emacs
         startup time without leaving Emacs."
-  :ensure t
-  :delight)
+  :ensure t)
 
 (use-package pdf-tools
   :doc "Better pdf viewing"
@@ -490,8 +481,7 @@
 (use-package define-word
   :doc "Dictionary in Emacs."
   :ensure t
-  :bind ("C-c w" . define-word-at-point)
-  :delight)
+  :bind ("C-c w" . define-word-at-point))
 
 (use-package exec-path-from-shell
   :doc "MacOS does not start a shell at login. This makes sure
@@ -506,19 +496,7 @@
      '("PATH" "ANDROID_HOME" "LEIN_USERNAME" "LEIN_PASSPHRASE"
        "LEIN_JVM_OPTS" "NPM_TOKEN" "LANGUAGE" "LANG" "LC_ALL"
        "MOBY_ENV" "JAVA_8_HOME" "JAVA_7_HOME" "JAVA_HOME" "PS1"
-       "NVM_DIR" "GPG_TTY")))
-  :delight)
-
-(use-package toggle-test
-  :doc "Switch between src and test files."
-  :ensure t
-  :config
-  (add-to-list 'tgt-projects '((:root-dir "~/workspace/moby")
-                               (:src-dirs "src")
-                               (:test-dirs "test")
-                               (:test-suffixes "_test")))
-  :bind ("C-c t" . tgt-toggle)
-  :delight)
+       "NVM_DIR" "GPG_TTY"))))
 
 (use-package darkroom
   :doc "Focused editing."
@@ -559,18 +537,15 @@
   ;; after typing `::`.
   ;; (add-to-list 'company-backends 'company-emoji)
   (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji")
-                    nil 'prepend)
-  :delight)
+                    nil 'prepend))
 
 (use-package markdown-mode
   :ensure t
   :mode (("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :delight)
+         ("\\.markdown\\'" . markdown-mode)))
 
 (use-package unfill
-  :ensure t
-  :delight)
+  :ensure t)
 
 
 ;; ──────────────────────────────── Code editing ───────────────────────────────
@@ -597,8 +572,7 @@
   (global-company-mode t)
 
   ;; LSP + company integration via capf
-  (with-eval-after-load 'company
-    (add-to-list 'company-backends 'company-capf))
+  (add-to-list 'company-backends 'company-capf)
 
   ;; Configure hippie expand as well.
   (setq hippie-expand-try-functions-list
@@ -613,19 +587,23 @@
 (use-package paredit
   :doc "Better handling of paranthesis when writing Lisp"
   :ensure t
-  :init
-  (add-hook 'clojure-mode-hook #'enable-paredit-mode)
-  (add-hook 'cider-repl-mode-hook #'enable-paredit-mode)
-  (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-  (add-hook 'ielm-mode-hook #'enable-paredit-mode)
-  (add-hook 'lisp-mode-hook #'enable-paredit-mode)
-  (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-  (add-hook 'scheme-mode-hook #'enable-paredit-mode)
-  (add-hook 'haskell-mode-hook #'enable-paredit-mode)
-  (add-hook 'haskell-interactive-mode-hook #'enable-paredit-mode)
+  :hook ((clojure-mode
+          cider-repl-mode
+          emacs-lisp-mode
+          eval-expression-minibuffer-setup
+          ielm-mode
+          lisp-mode
+          lisp-interaction-mode
+          scheme-mode
+          haskell-mode
+          haskell-interactive-mode) . enable-paredit-mode)
   :config
   (show-paren-mode t)
+
+  (with-eval-after-load 'paredit
+    (define-key minibuffer-local-map (kbd "RET") #'exit-minibuffer)
+    (define-key minibuffer-local-map (kbd "<return>") #'exit-minibuffer))
+
   :bind (("M-[" . paredit-wrap-square)
          ("M-{" . paredit-wrap-curly))
   :delight)
@@ -664,15 +642,14 @@
 (use-package expand-region
   :doc "Better navigation between nested expressions."
   :ensure t
-  :bind ("C-c =" . er/expand-region)
-  :delight)
+  :bind ("C-c =" . er/expand-region))
 
 (use-package lsp-mode
   :ensure t
   :commands lsp
   :custom
   ;; what to use when checking on-save. "check" is default, I prefer clippy
-  (lsp-rust-analyzer-cargo-waqtch-command "clippy")
+  (lsp-rust-analyzer-cargo-watch-command "clippy")
   (lsp-eldoc-render-all t)
   (lsp-idle-delay 0.6)
 
@@ -752,14 +729,11 @@
                                       "∈")
                       nil))))))
   (add-hook 'clojure-mode-hook 'prettify-sets)
-  (add-hook 'cider-repl-mode-hook 'prettify-sets)
-
-  :delight)
+  (add-hook 'cider-repl-mode-hook 'prettify-sets))
 
 (use-package clojure-mode-extra-font-locking
   :doc "Extra syntax highlighting for clojure"
-  :ensure t
-  :delight)
+  :ensure t)
 
 (use-package cider
   :doc "Integration with a Clojure REPL cider"
@@ -776,7 +750,8 @@
    cider-repl-pop-to-buffer-on-connect t
 
    ;; When there's a cider error, show its buffer and switch to it
-   cider-show-error-buffer cider-auto-select-error-buffer
+   cider-show-error-buffer t
+   cider-auto-select-error-buffer t
 
    ;; Where to store the cider history.
    cider-repl-history-file "~/.emacs.d/cider-history"
@@ -825,8 +800,7 @@
 
 (use-package flycheck-joker
   :after clojure-mode
-  :ensure t
-  :delight)
+  :ensure t)
 
 (use-package flycheck-clj-kondo
   :ensure t
@@ -836,8 +810,7 @@
                       (clj-kondo-cljs . clojurescript-joker)
                       (clj-kondo-cljc . clojure-joker)
                       (clj-kondo-edn . edn-joker)))
-    (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers))))
-  :delight)
+    (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers)))))
 
 (use-package clj-refactor
   :disabled t
@@ -889,8 +862,7 @@
 (use-package python
   :ensure t
   :custom
-  (python-indent-offset 4)
-  :delight)
+  (python-indent-offset 4))
 
 (use-package anaconda-mode
   :ensure t
@@ -903,8 +875,7 @@
   :ensure t
   :after (company anaconda-mode)
   :config (add-hook 'python-mode-hook
-                    (lambda () (add-to-list 'company-backends 'company-anaconda)))
-  :delight)
+                    (lambda () (add-to-list 'company-backends 'company-anaconda))))
 
 (use-package haskell-mode
   :ensure t
@@ -932,16 +903,15 @@
   ;; comment to disable rustfmt on save
   (setq rustic-format-on-save t)
 
-  (defun rustic-mode-hook ()
+  (defun my/rustic-mode-setup ()
     ;; so that run C-c C-c C-r works without having to confirm, but don't try to
     ;; save rust buffers that are not file visiting. Once
     ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
     ;; no longer be necessary.
     (when buffer-file-name
-      (setq-local buffer-save-without-query t))
-    (add-hook 'before-save-hook 'lsp-format-buffer nil t))
+      (setq-local buffer-save-without-query t)))
 
-  (add-hook 'rustic-mode-hook 'rustic-mode-hook))
+  (add-hook 'rustic-mode-hook 'my/rustic-mode-setup))
 
 
 
@@ -1013,15 +983,13 @@
 
   (set-face-attribute 'flycheck-error nil :underline '(:style line :color "#bf616a"))
   (set-face-attribute 'flycheck-warning nil :underline '(:style line :color "#ebcb8b"))
-  (set-face-attribute 'flycheck-info nil :underline '(:style line :color "#b48ead"))
-  :delight)
+  (set-face-attribute 'flycheck-info nil :underline '(:style line :color "#b48ead")))
 
 (use-package powerline
   :doc "Better mode line"
   :ensure t
   :config
-  (powerline-center-theme)
-  :delight)
+  (powerline-center-theme))
 
 (use-package fira-code-mode
   :doc "Fira code + ligatures"
