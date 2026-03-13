@@ -38,6 +38,10 @@
   (package-install 'use-package))
 
 
+;; ────────────────────── Performance (LSP / long-running) ─────────────────────
+(setq gc-cons-threshold (* 100 1024 1024)     ; 100 MB -- reduce GC pauses for LSP
+      read-process-output-max (* 1024 1024))   ; 1 MB -- faster LSP communication
+
 ;; ──────────────────────────── Use better defaults ────────────────────────────
 (setq
  ;; Don't use the compiled code if its the older package.
@@ -647,6 +651,9 @@
 (use-package lsp-mode
   :ensure t
   :commands lsp
+  :hook ((clojure-mode . lsp)
+         (clojurescript-mode . lsp)
+         (clojurec-mode . lsp))
   :custom
   ;; what to use when checking on-save. "check" is default, I prefer clippy
   (lsp-rust-analyzer-cargo-watch-command "clippy")
@@ -671,6 +678,12 @@
   (lsp-enable-snippet t)
   (lsp-completion-enable-additional-text-edit t)
 
+  ;; Clojure: let CIDER handle indentation and completion
+  (lsp-enable-indentation nil)
+  (lsp-enable-completion-at-point nil)
+  ;; Avoid duplicate eldoc from LSP when CIDER is also providing it
+  (lsp-eldoc-enable-hover nil)
+
   :config
   (add-to-list 'lsp-disabled-clients 'lsp-javascript)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
@@ -689,14 +702,6 @@
   :doc "A major mode for editing Clojure code"
   :ensure t
   :config
-  ;; Install Clojure LSP
-  ;; (unless (executable-find "clojure-lsp")
-  ;;   (async-shell-command
-  ;;    (concat "cd /tmp;"
-  ;;            "curl -o install-clojure-lsp -sLO https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install;"
-  ;;            "chmod +x install-clojure-lsp;"
-  ;;            "./install-clojure-lsp --dir ~/.local/bin/;")))
-
   ;; This is useful for working with camel-case tokens, like names of
   ;; Java classes (e.g. JavaClassName)
   (add-hook 'clojure-mode-hook #'subword-mode)
@@ -731,9 +736,7 @@
   (add-hook 'clojure-mode-hook 'prettify-sets)
   (add-hook 'cider-repl-mode-hook 'prettify-sets))
 
-(use-package clojure-mode-extra-font-locking
-  :doc "Extra syntax highlighting for clojure"
-  :ensure t)
+;; clojure-mode-extra-font-locking removed: built into modern clojure-mode.
 
 (use-package cider
   :doc "Integration with a Clojure REPL cider"
@@ -768,8 +771,11 @@
    ;; Log client-server messaging in *nrepl-messages* buffer
    nrepl-log-messages nil
 
-   ;; Use xref
-   cider-use-xref t)
+   ;; Use xref for M-. navigation (works with clojure-lsp too)
+   cider-use-xref t
+
+   ;; Restore thread stop ability on Java 21+
+   cider-enable-nrepl-jvmti-agent t)
 
   (add-to-list 'cider-jack-in-nrepl-middlewares "cider.nrepl/cider-middleware")
 
@@ -797,60 +803,20 @@
   (setq flycheck-indication-mode nil)
   :delight)
 
-(use-package flycheck-joker
-  :after clojure-mode
-  :ensure t)
+;; flycheck-joker removed: clj-kondo (bundled in clojure-lsp) supersedes it.
 
 (use-package flycheck-clj-kondo
+  :doc "Standalone clj-kondo flycheck integration.
+        When clojure-lsp is running, LSP provides diagnostics via its
+        bundled clj-kondo. This package serves as fallback for when
+        LSP is not connected (e.g. editing a single file)."
   :ensure t
-  :after clojure-mode
-  :config
-  (dolist (checkers '((clj-kondo-clj . clojure-joker)
-                      (clj-kondo-cljs . clojurescript-joker)
-                      (clj-kondo-cljc . clojure-joker)
-                      (clj-kondo-edn . edn-joker)))
-    (flycheck-add-next-checker (car checkers) (cons 'error (cdr checkers)))))
+  :after clojure-mode)
 
-(use-package clj-refactor
-  :disabled t
-  :ensure t
-  :preface
-  (defun clean-all-modified-ns ()
-    "Cleans all the modified namespaces. The idea is to use this
-    before commiting, so that all the namespaces that you modify are
-    cleaned! :)"
-    (interactive)
-    (let ((extension ".clj")
-          ;; `shell-command-to-string` contains a "\n" at its end. `butlast` is used to
-          ;; get rid of the last empty string returned by `split-string`.
-          (modified-files
-           (butlast
-            (split-string
-             (shell-command-to-string
-              "git diff --name-only && git diff --name-only --staged")
-             "\n"))))
-      (if (= (length modified-files) 0)
-          (message "No files have changed.")
-        (progn
-          (dolist (file modified-files)
-            (when (string-equal (substring file (- (length file) (length extension)))
-                                extension)
-              (when (not (string-equal (first (last (split-string file "/")))
-                                       "project.clj"))
-                (with-current-buffer (find-file-noselect (concat (cljr--project-dir) file))
-                  (cljr--clean-ns)
-                  (save-buffer)))))
-          (message "Namespaces cleaned! :)")))))
-
-  (defun my-clojure-mode-hook ()
-    (clj-refactor-mode 1)
-    (yas-minor-mode 1) ;; for adding require/use/import statements
-    ;; This choice of keybinding leaves cider-macroexpand-1 unbound
-    (cljr-add-keybindings-with-prefix "C-c C-m"))
-  :config
-  (add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
-
-  :delight)
+;; clj-refactor: disabled -- clojure-lsp handles most refactorings
+;; (rename, extract function, clean ns, add missing require, thread/unthread, etc.)
+;; via lsp-execute-code-action. Enable clj-refactor only if you need its
+;; REPL-dependent features (e.g. hotload dependency).
 
 (use-package eldoc
   :doc "Easily accessible documentation for Elisp"
