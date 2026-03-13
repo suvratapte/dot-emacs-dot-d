@@ -106,6 +106,10 @@
 
    org-pretty-entities t
 
+   ;; Only interpret sub/superscripts when braces are used: _{sub} ^{super}
+   ;; Without this, `hello_world` renders "world" as subscript.
+   org-pretty-entities-include-sub-superscripts nil
+
    org-fontify-quote-and-verse-blocks t
 
    org-enforce-todo-dependencies t
@@ -337,14 +341,27 @@ has no effect."
   :delight)
 
 
-(use-package org-bullets
+(use-package org-modern
   :if (or (equal user-login-name "suvratapte")
           (equal user-login-name "suvrat"))
   :ensure t
+  :custom
+  (org-modern-star 'replace)
+  (org-modern-replace-stars '("♕" "♖" "♗" "♘" "♙"))
   :config
-  (add-hook 'org-mode-hook 'org-bullets-mode)
-  (setq org-bullets-bullet-list '("♕" "♖" "♗" "♘" "♙"))
-  :delight)
+  (set-face-attribute 'org-modern-date-inactive nil :height 1.5)
+  (global-org-modern-mode))
+
+(unless (package-installed-p 'org-modern-indent)
+  (package-vc-install "https://github.com/jdtsmith/org-modern-indent"))
+
+(use-package org-modern-indent
+  :doc "Vertical line on the left of source blocks when org-indent-mode is active"
+  :if (or (equal user-login-name "suvratapte")
+          (equal user-login-name "suvrat"))
+  :after org-modern
+  :config
+  (add-hook 'org-mode-hook 'org-modern-indent-mode 90))
 
 
 (use-package org-super-agenda
